@@ -75,6 +75,8 @@
     <string name="multi_delete"></string>
     
    <string name="no_record">"亲，你还没有添加任何记事哦！"</string>
+   <string name="search_result_empty">"没有符合搜索条件的记录"</string>
+   
    
    <string name="retry">"重试"</string>
    <string name="next">"继续"</string>

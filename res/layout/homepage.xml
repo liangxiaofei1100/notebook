@@ -4,15 +4,14 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView 
+    <TextView
         android:id="@+id/tips"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-       android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="@string/no_record"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/add_tips_btn"
@@ -30,5 +29,14 @@
         android:layout_height="wrap_content"
         android:drawSelectorOnTop="false"
         android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/tv_homepage_search_result_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/search_result_empty"
+        android:visibility="gone" />
 
 </RelativeLayout>

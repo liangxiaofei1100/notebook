@@ -58,6 +58,7 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 	private ListView mListView;
 	private TextView mTipsView;
 	private ImageView mAddTipsBtn;
+	private TextView mSearchResultEmptyTextView;
 
 	private NoteAdapter2 mAdapter2;
 
@@ -71,6 +72,7 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 
 	private SearchView mSearchView;
 	private String mSearchString;
+	private boolean mIsSearchMode = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 		mTipsView = (TextView) findViewById(R.id.tips);
 		mAddTipsBtn = (ImageView) findViewById(R.id.add_tips_btn);
 		mAddTipsBtn.setOnClickListener(this);
+		mSearchResultEmptyTextView = (TextView) findViewById(R.id.tv_homepage_search_result_empty);
 
 		getLoaderManager().initLoader(0, null, this);
 	}
@@ -286,6 +289,7 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 	@Override
 	public boolean onQueryTextChange(String newText) {
 		mSearchString = !TextUtils.isEmpty(newText) ? newText : null;
+		mAdapter2.setSearchString(newText);
 		getLoaderManager().restartLoader(0, null, this);
 		return true;
 	}
@@ -313,11 +317,20 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
 		if (cursor.getCount() <= 0) {
-			mTipsView.setVisibility(View.VISIBLE);
-			mAddTipsBtn.setVisibility(View.VISIBLE);
+			if (mIsSearchMode) {
+				mSearchResultEmptyTextView.setVisibility(View.VISIBLE);
+			} else {
+				mTipsView.setVisibility(View.VISIBLE);
+				mAddTipsBtn.setVisibility(View.VISIBLE);
+			}
 		} else {
-			mTipsView.setVisibility(View.GONE);
-			mAddTipsBtn.setVisibility(View.GONE);
+			if (mIsSearchMode) {
+				mSearchResultEmptyTextView.setVisibility(View.GONE);
+			} else {
+				mTipsView.setVisibility(View.GONE);
+				mAddTipsBtn.setVisibility(View.GONE);
+			}
+
 		}
 
 		// TODO for compatibility, init mList.
@@ -340,16 +353,21 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onViewAttachedToWindow(View v) {
-		// don't care.
+		mIsSearchMode = true;
 	}
 
 	@Override
 	public void onViewDetachedFromWindow(View v) {
+		mIsSearchMode = false;
 		if (!TextUtils.isEmpty(mSearchString)) {
 			mSearchString = null;
+			mAdapter2.setSearchString(null);
 			getLoaderManager().restartLoader(0, null, this);
 		}
-
+		
+		if(mSearchResultEmptyTextView.getVisibility() == View.VISIBLE) {
+			mSearchResultEmptyTextView.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
