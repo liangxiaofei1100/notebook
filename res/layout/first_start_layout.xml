@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainRLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000" >
+    <!-- 自定义滑动空间 -->
+    <com.yuri.notebook.start.ScrollLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ScrollLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="visible"
+        >
+        <!-- 每一页的布局均以一个RelativeLayout来控制，后面类似，-->
+<!--         <RelativeLayout -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="fill_parent" -->
+<!--             android:background="@drawable/first" > -->
+<!--         </RelativeLayout>  1 -->
+<!--         <RelativeLayout -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="fill_parent" -->
+<!--             android:background="@drawable/time" > -->
+<!--         </RelativeLayout>   2 -->
+<!--         <RelativeLayout -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="fill_parent" -->
+<!--             android:background="@drawable/city" > -->
+<!--        </RelativeLayout>   3 -->
+<!--        <RelativeLayout -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="fill_parent" -->
+<!--             android:background="@drawable/time_2"> -->
+<!--        </RelativeLayout>   4 -->
+<!--        <RelativeLayout -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="fill_parent" -->
+<!--             android:background="@drawable/zhuhe"> -->
+<!--         </RelativeLayout>  5 -->
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ffffffff"
+            >
+		 <Button
+                android:id="@+id/startBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="90dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/button_bg"
+                android:text="开始体验"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+        </RelativeLayout>  <!-- 6 -->
+    </com.yuri.notebook.start.ScrollLayout>
+    <!-- 这个布局是下面显示的小圆点的布局，其中ImageView的数量要与上面RelativeLayout的数量对应 -->
+    <LinearLayout
+        android:id="@+id/llayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:orientation="horizontal"
+        android:visibility="visible" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:padding="5dp"
+            android:src="@drawable/page_indicator_bg" />
+
+<!--         <ImageView -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_gravity="center_vertical" -->
+<!--             android:clickable="true" -->
+<!--             android:padding="5dp" -->
+<!--             android:src="@drawable/page_indicator_bg" /> -->
+
+<!--         <ImageView -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_gravity="center_vertical" -->
+<!--             android:clickable="true" -->
+<!--             android:padding="5dp" -->
+<!--             android:src="@drawable/page_indicator_bg" /> -->
+
+<!--         <ImageView -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_gravity="center_vertical" -->
+<!--             android:clickable="true" -->
+<!--             android:padding="5dp" -->
+<!--             android:src="@drawable/page_indicator_bg" /> -->
+<!--         <ImageView -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_gravity="center_vertical" -->
+<!--             android:clickable="true" -->
+<!--             android:padding="5dp" -->
+<!--             android:src="@drawable/page_indicator_bg" /> -->
+<!--         <ImageView -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_gravity="center_vertical" -->
+<!--             android:clickable="true" -->
+<!--             android:padding="5dp" -->
+<!--             android:src="@drawable/page_indicator_bg" /> -->
+    </LinearLayout>
+
+</RelativeLayout>

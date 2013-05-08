@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="5dip"
+    android:paddingLeft="11dip"
+    android:paddingRight="11dip" >
+
+    <TextView
+        android:id="@+id/id_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+<!--     <RelativeLayout -->
+<!--         android:id="@+id/RelativeLayout01" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:paddingBottom="5dip" -->
+<!--         android:paddingLeft="11dip" -->
+<!--         android:paddingRight="11dip" > -->
+
+<!-- <LinearLayout -->
+<!--     android:id="@+id/layout01" -->
+<!--     android:layout_width="wrap_content" -->
+<!--     android:layout_height="wrap_content" -->
+<!--     android:paddingBottom="5dip" -->
+<!--     android:paddingLeft="11dip" -->
+<!--     android:paddingRight="11dip" -->
+<!--     android:orientation="vertical" -->
+<!--      > -->
+
+            <TextView
+            android:id="@+id/ItemTitle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="20sp"
+            android:paddingLeft="11dip"
+             />
+
+    <CheckBox
+        android:id="@+id/select_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+
+</LinearLayout>

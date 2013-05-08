@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="5dip"
+    android:paddingLeft="11dip"
+    android:paddingRight="11dip" >
+
+    <TextView
+        android:id="@+id/id_text"
+        android:layout_width="20dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="20."
+         />
+    <View
+        android:layout_width="2dip"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
+        android:background="@android:drawable/divider_horizontal_textfield" />
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dip"
+        android:paddingLeft="11dip"
+        android:paddingRight="11dip" >
+
+        <TextView
+            android:id="@+id/ItemTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/ItemText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ItemTitle" 
+            android:textColor="#a9a9a9"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+    <TextView 
+        android:id="@+id/hidetext"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="HIDETEXT"
+        android:layout_marginBottom="25dip"
+        />
+    <com.yuri.notebook.login.LockPatternView
+         xmlns:app="http://schemas.android.com/apk/res/com.wgs.jiesuo"
+         android:id="@+id/lpv_lock"
+         android:background="#3D3D3D"
+         android:layout_width="300dp"
+         android:layout_height="300dp"
+        />
+    <LinearLayout 
+        android:id="@+id/button_layout"
+         style="@style/SecurityPreferenceButtonContainer"
+    	android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/left_button"
+            style="@style/SecurityPreferenceButton"
+            android:text="@string/retry" />
+
+        <Button
+            android:id="@+id/right_button"
+            style="@style/SecurityPreferenceButton"
+            android:text="@string/confirm" />
+
+    </LinearLayout>
+</LinearLayout>

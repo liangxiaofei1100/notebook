@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <string-array name="entries_list_preference">
+        <item>@string/login_model_pattern</item>
+        <item>@string/login_model_pw</item>
+    </string-array>
+    
+    <string-array name="entryvalues_list_preference">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    
+    <string-array name="font_entries">
+        <item>@string/large_font</item>
+        <item>@string/middle_font</item>
+        <item>@string/little_font</item>
+    </string-array>
+    
+    <string-array name="font_entryvalues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    
+    <string-array name="color_entries">
+        <item>@string/gray</item>
+        <item>@string/pale_yellow</item>
+        <item>@string/pink</item>
+        <item>@string/blue</item>
+    </string-array>
+    
+    <string-array name="color_entryvalues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+</resources>

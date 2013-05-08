@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">  XG记事本</string>
+    
+    <string name="edit_hint">请输入密码</string>
+    <string name="login">登陆</string>
+    <string name="exit">退出</string>
+    <string name="modify">修改密码</string>
+    
+    <string name="setting">"设置"</string>
+    
+    <string name="login_model_pw">密码登陆</string>
+    <string name="login_model_pattern">图案登陆</string>
+    
+    <string name="pa_set_pw">设置密码</string>
+    <string name="pa_reset_pw">重置密码</string>
+    <string name="pa_check_pw">校验密码</string>
+    
+    <string name="pw_msg_01">密码为空,请设定登录密码</string>
+    <string name="pw_msg_02">亲，密码不能为空哦!</string>
+    <string name="pw_msg_03">设置成功</string>
+    <string name="pw_msg_04">亲，两次输入的密码不一致啊!</string>
+    <string name="pw_modify_tip">请修改密码</string>
+    <string name="pw_modify_ok">修改成功</string>
+    <string name="pw_old_error">旧密码输入错误</string>
+    <string name="pw_msg_08">旧密码输入错误</string>
+    <string name="new_password">"新密码"</string>
+    <string name="confirm_password">"确认密码"</string>
+    <string name="new_password_tip">"新密码不能为空"</string>
+    <string name="confirm_password_tip">"确认密码不能为空"</string>
+    <string name="error_password">"密码输入错误"</string>
+    
+    <string name="pattern_set_error">图案错误</string>
+    <string name="pattern_set_success">图案密码设置成功</string>
+    <string name="pattern_set_tip">请设置图案密码</string>
+    <string name="pattern_title">请输入正确的图案</string>
+    
+    <string name="tips_msg_01">"那一年，芦中见证了我们的友谊！"</string>
+    <string name="tips_msg_01_01">"那些年，欢声与笑语陪伴着我们。。。！"</string>
+    <string name="tips_msg_02">"那一年，我们被选择了各奔东西！"</string>
+    <string name="tips_msg_03">"那些年，城市拉开了我们之间的距离，却不曾减少我们之间的友谊！"</string>
+    <string name="tips_msg_05">"一个人找到一群对的人，总能快乐一时；一个人找到一个对的人，却能幸福一世！"</string>
+    <string name="tips_msg_06">"敏瑶，恭喜你找到了一个对的人，我带着大家的祝福，见证你开启人生的新里程！"</string>
+    <string name="tips_msg_07">"这个记事本，送给你，希望她能帮你记录生活中的点滴！"</string>
+
+   	<!-- Accessibility description sent when user starts drawing a lock pattern. [CHAR LIMIT=NONE] -->
+    <string name="lockscreen_access_pattern_start">Pattern started</string>
+    <!-- Accessibility description sent when the pattern times out and is cleared. [CHAR LIMIT=NONE] -->
+    <string name="lockscreen_access_pattern_cleared">Pattern cleared</string>
+    <!-- Accessibility description sent when user adds a cell to the pattern. [CHAR LIMIT=NONE]  -->
+    <string name="lockscreen_access_pattern_cell_added">Cell added</string>
+    <!-- Accessibility description sent when user completes drawing a pattern. [CHAR LIMIT=NONE] -->
+    <string name="lockscreen_access_pattern_detected">Pattern completed</string>
+    
+    <!-- menu -->
+    <string name="menu_title">"操作"</string>
+    <string name="menu_add">"新增"</string>
+    <string name="menu_edit">"编辑"</string>
+    <string name="menu_save">"保存"</string>
+    <string name="menu_delete">"删除"</string>
+    <string name="menu_delete_multi">"删除多条记事"</string>
+    <string name="menu_cancel">"取消"</string>
+    <string name="menu_open">"打开"</string>
+    <string name="menu_backup">"备份"</string>
+    <string name="menu_edit_title">"编辑标题"</string>
+    
+    <string name="add_note">"新增记事"</string>
+    <string name="edit_note">"修改记事"</string>
+    
+    <string name="delete_msg">"确定删除 “<xliff:g id="delete">%1$s</xliff:g>” 这一条记录？"</string>
+    <string name="delete_msg_2">"确定删除本条记录？"</string>
+    <string name="delete_msg_multi">"确定删除这<xliff:g id="delete_multi">%1$s</xliff:g>条记录？"</string>
+    <string name="multi_delete"></string>
+    
+   <string name="no_record">"亲，你还没有添加任何记事哦！"</string>
+   
+   <string name="retry">"重试"</string>
+   <string name="next">"继续"</string>
+   <string name="confirm">"确认"</string>
+   <string name="reset">"重新设定"</string>
+   
+   <string name="lock_msg_tip">"绘制图案解锁"</string>
+   <string name="lock_msg_init">"第一次登陆，请绘制图案"</string>
+   <string name="lock_draw_tip">"绘制解锁图案"</string>
+   <string name="lock_draw_tip2">"完成后松开手指"</string>
+   <string name="lock_msg_retry">"请重试"</string>
+   <string name="lock_msg_new">"您的新解锁图案"</string>
+   
+   <string name="reset_confirm">"确认重置密码？"</string>
+   <string name="reset_ok">"密码已重置，请重新设定"</string>
+   
+   <string name="mode_select">"选择登陆方式"</string>
+   
+   <string name="login_mode">"登陆方式"</string>
+   
+   <string name="title">"标题"</string>
+   <string name="content">"内容"</string>
+   
+   <string name="seleteall">"全选"</string>
+   <string name="cancelall">"取消全选"</string>
+   
+   <string name="title_cannot_null">"标题不能为空"</string>
+   <string name="back_msg">"是否放弃当前编辑？"</string>
+   
+   <string name="mail_backup">"备份邮箱"</string>
+   <string name="mail_not_setting">"未设置"</string>
+   <string name="mail_setting">"备份邮箱设置"</string>
+   <string name="mail_modify">"备份邮箱修改"</string>
+   <string name="tip_msg">"请至少选中一个！"</string>
+   
+   <string name="note_backup">"数据备份"</string>
+   <string name="backup_tip">"本地保存路径:/sdcard/Note/"</string>
+   <string name="note_restore">"数据恢复"</string>
+   <string name="note_restore_title">"选择要恢复的备份"</string>
+   <string name="restore_tip">"恢复操作将覆盖现有数据，请谨慎操作"</string>
+   <string name="crash_toast">"错误信息已发送，谢谢你的协助！"</string>
+   
+   <string name="font_set">"字体大小设置"</string>
+   <string name="large_font">"较大字体"</string>
+   <string name="middle_font">"中等字体"</string>
+   <string name="little_font">"较小字体"</string>
+   
+   <string name="background_color_set">"背景颜色设置"</string>
+   <string name="gray">"灰色"</string>
+   <string name="pale_yellow">"浅黄色"</string>
+   <string name="pink">"粉红色"</string>
+   <string name="blue">"蓝色"</string>
+   
+   <string name="year_sfd">"yyyy年M月d日 HH:mm"</string>
+    <string name="month_sfd">"M月d日 HH:mm"</string>
+    <string name="hours_sfd">"HH:mm"</string>
+    <string name="yestoday">"昨天  <xliff:g id="time">%1$s</xliff:g>"</string>
+   
+   <string name="about">"关于"</string>
+	<string name="about_introduce_title">"产品简介"</string>
+	<string name="about_introduce">"    XG记事本，只是一个简单的记事本，请勿要求她做太多的事情，请善待她。
+	    \n    她没有华丽的外表，但她有你需要的功能
+	    \n    当你需要她时，请记住，她就在你的手机里
+	    \n    感谢您的使用！"</string>
+	<string name="about_author">"©2013 Yuri_Xia"</string>
+	<string name="about_connection">"联系我"</string>
+	<string name="about_statement">"    如您在使用过程中有任何疑问或软件错误，您可以通过以下方式联系我，期待与您交流。"</string>
+	<string name="about_email">"邮箱：xlog2013@163.com"</string>
+	<string name="about_version">"版本"</string>
+	<string name="about_version_code">"v1.3"</string>
+</resources>

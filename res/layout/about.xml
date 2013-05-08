@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="30dip"
+        android:gravity="center_vertical|left"
+        android:textSize="20sp"
+        android:text="@string/about_introduce_title"
+        android:background="#CCE0EEE0"
+        />
+    <LinearLayout 
+        android:id="@+id/introduce"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <TextView 
+		    android:layout_width="fill_parent"
+       		android:layout_height="wrap_content"
+       		android:paddingTop="10dip"
+       		android:paddingLeft="10dip"
+       		android:paddingBottom="5dip"
+       		android:text="@string/about_introduce"
+		    />
+
+		<TextView
+		    android:id="@+id/author"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		   	android:paddingTop="10dip"
+       		android:paddingLeft="10dip"
+       		android:paddingBottom="5dip"
+		    android:gravity="center|center_vertical"
+		    android:text="@string/about_author" />
+
+    </LinearLayout>
+    
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="30dip"
+        android:gravity="center_vertical|left"
+        android:textSize="20sp"
+        android:background="#CCE0EEE0"
+        android:text="@string/about_connection" />
+    <LinearLayout 
+        android:id="@+id/about_connection"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+		<TextView 
+		    android:layout_width="fill_parent"
+       		android:layout_height="wrap_content"
+       		android:paddingTop="10dip"
+       		android:paddingLeft="10dip"
+       		android:paddingBottom="5dip"
+       		android:text="@string/about_statement"
+		    />
+
+		<TextView
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:paddingTop="10dip"
+       		android:paddingLeft="10dip"
+       		android:paddingBottom="5dip"
+       		android:autoLink="email"
+		    android:text="@string/about_email" />
+
+    </LinearLayout>
+    
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="30dip"
+        android:gravity="center_vertical|left"
+        android:textSize="20sp"
+        android:background="#CCE0EEE0"
+        android:text="@string/about_version" />
+    <LinearLayout 
+        android:id="@+id/about_version"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <ImageView
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:src="@drawable/app_ic_notebook" />
+
+		<TextView
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:gravity="center|center_vertical"
+		    android:text="@string/about_version_code" />
+
+    </LinearLayout>
+
+</LinearLayout>

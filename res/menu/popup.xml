@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/set_pw"
+          android:icon="@android:drawable/ic_menu_search"
+          android:title="@string/pa_set_pw" />
+    <item android:id="@+id/reset_pw"
+          android:icon="@android:drawable/ic_menu_add"
+          android:title="@string/pa_reset_pw" />
+    <item android:id="@+id/verify_pw"
+          android:icon="@android:drawable/ic_menu_edit"
+          android:title="@string/pa_check_pw">
+           <!-- sub menu -->
+<!--         <menu> -->
+<!--             <item android:id="@+id/share" -->
+<!--                   android:icon="@android:drawable/ic_menu_share" -->
+<!--                   android:title="@string/app_name" /> -->
+<!--         </menu> -->
+    </item>
+</menu>
