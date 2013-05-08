@@ -25,26 +25,9 @@ public class NoteAdapter2 extends CursorAdapter {
 				System.currentTimeMillis());
 	}
 
-	private Notes createNotebookFromCursor(Cursor cursor) {
-		int id = cursor.getInt(cursor
-				.getColumnIndex(NoteBookMetaData.NoteBook._ID));
-		String title = cursor.getString(cursor
-				.getColumnIndex(NoteBookMetaData.NoteBook.TITLE));
-		String content = cursor.getString(cursor
-				.getColumnIndex(NoteBookMetaData.NoteBook.CONTENT));
-		long time = cursor.getLong(cursor
-				.getColumnIndex(NoteBookMetaData.NoteBook.TIME));
-
-		Notes noteBook = new Notes(id);
-		noteBook.setTitle(title);
-		noteBook.setContent(content);
-		noteBook.setTime(time);
-		return noteBook;
-	}
-
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		Notes noteBook = createNotebookFromCursor(cursor);
+		Notes noteBook = Notes.createNotebookFromCursor(cursor);
 
 		TextView snTextView = (TextView) view.findViewById(R.id.id_text);
 		TextView titleTextView = (TextView) view.findViewById(R.id.ItemTitle);

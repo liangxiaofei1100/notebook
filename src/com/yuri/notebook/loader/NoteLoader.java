@@ -1,5 +1,6 @@
 package com.yuri.notebook.loader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.yuri.notebook.AppendNoteActivity;
@@ -61,7 +62,7 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 	private NoteAdapter2 mAdapter2;
 
 	// 临时性保存数据
-	public static List<Notes> mList;
+	public static List<Notes> mList = new ArrayList<Notes>();
 
 	private Context mContext;
 
@@ -248,6 +249,7 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 
 	/**
 	 * Open note with _id in database.
+	 * 
 	 * @param id
 	 */
 	public void openNote(long id) {
@@ -310,13 +312,23 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-		mAdapter2.swapCursor(cursor);
 		if (cursor.getCount() <= 0) {
 			mTipsView.setVisibility(View.VISIBLE);
 			mAddTipsBtn.setVisibility(View.VISIBLE);
 		} else {
 			mTipsView.setVisibility(View.GONE);
 			mAddTipsBtn.setVisibility(View.GONE);
+		}
+
+		// TODO for compatible, init mList.
+		loadNotesToList(cursor, mList);
+
+		mAdapter2.swapCursor(cursor);
+	}
+
+	private void loadNotesToList(Cursor cursor, List<Notes> list) {
+		while (cursor.moveToNext()) {
+			list.add(Notes.createNotebookFromCursor(cursor));
 		}
 	}
 

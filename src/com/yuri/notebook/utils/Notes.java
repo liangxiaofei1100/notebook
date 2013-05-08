@@ -1,5 +1,8 @@
 package com.yuri.notebook.utils;
 
+import com.yuri.notebook.db.NoteBookMetaData;
+
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -107,4 +110,20 @@ public class Notes implements Parcelable {
 		selected = in.readInt() == 1 ? true : false;
 	}
 
+	public static Notes createNotebookFromCursor(Cursor cursor) {
+		int id = cursor.getInt(cursor
+				.getColumnIndex(NoteBookMetaData.NoteBook._ID));
+		String title = cursor.getString(cursor
+				.getColumnIndex(NoteBookMetaData.NoteBook.TITLE));
+		String content = cursor.getString(cursor
+				.getColumnIndex(NoteBookMetaData.NoteBook.CONTENT));
+		long time = cursor.getLong(cursor
+				.getColumnIndex(NoteBookMetaData.NoteBook.TIME));
+
+		Notes noteBook = new Notes(id);
+		noteBook.setTitle(title);
+		noteBook.setContent(content);
+		noteBook.setTime(time);
+		return noteBook;
+	}
 }
