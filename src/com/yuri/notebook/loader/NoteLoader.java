@@ -320,7 +320,7 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 			mAddTipsBtn.setVisibility(View.GONE);
 		}
 
-		// TODO for compatible, init mList.
+		// TODO for compatibility, init mList.
 		loadNotesToList(cursor, mList);
 
 		mAdapter2.swapCursor(cursor);
