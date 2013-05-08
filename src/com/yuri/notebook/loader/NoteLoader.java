@@ -207,6 +207,10 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 													+ "/" + menuInfo.id);
 									getContentResolver()
 											.delete(uri, null, null);
+									// bug: When search string is not empty, the list can not update. Why?
+									if (mIsSearchMode && !TextUtils.isEmpty(mSearchString)) {
+										getLoaderManager().restartLoader(0, null, NoteLoader.this);
+									}
 								}
 							}).setNegativeButton(android.R.string.cancel, null)
 					.create().show();
@@ -242,6 +246,11 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 													+ "/" + menuInfo.id);
 									getContentResolver().update(uri, values,
 											null, null);
+									
+									// bug: When search string is not empty, the list can not update. Why?
+									if (mIsSearchMode && !TextUtils.isEmpty(mSearchString)) {
+										getLoaderManager().restartLoader(0, null, NoteLoader.this);
+									}
 								}
 							}).setNegativeButton(android.R.string.cancel, null)
 					.create().show();
@@ -316,12 +325,30 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-		if (cursor.getCount() <= 0) {
-			if (mIsSearchMode) {
+		Log.d(TAG, "onLoadFinished. count = " + cursor.getCount());
+		// TODO for compatibility, init mList.
+		loadNotesToList(cursor, mList);
+
+		mAdapter2.swapCursor(cursor);
+
+		updateTipsView(mAdapter2.getCount());
+	}
+
+	private void loadNotesToList(Cursor cursor, List<Notes> list) {
+		list.clear();
+		while (cursor.moveToNext()) {
+			list.add(Notes.createNotebookFromCursor(cursor));
+		}
+	}
+
+	private void updateTipsView(int resultCount) {
+		if (resultCount <= 0) {
+			if (mIsSearchMode && mTipsView.getVisibility() != View.VISIBLE) {
 				mSearchResultEmptyTextView.setVisibility(View.VISIBLE);
 			} else {
 				mTipsView.setVisibility(View.VISIBLE);
 				mAddTipsBtn.setVisibility(View.VISIBLE);
+				mSearchResultEmptyTextView.setVisibility(View.GONE);
 			}
 		} else {
 			if (mIsSearchMode) {
@@ -330,18 +357,6 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 				mTipsView.setVisibility(View.GONE);
 				mAddTipsBtn.setVisibility(View.GONE);
 			}
-
-		}
-
-		// TODO for compatibility, init mList.
-		loadNotesToList(cursor, mList);
-
-		mAdapter2.swapCursor(cursor);
-	}
-
-	private void loadNotesToList(Cursor cursor, List<Notes> list) {
-		while (cursor.moveToNext()) {
-			list.add(Notes.createNotebookFromCursor(cursor));
 		}
 	}
 
@@ -354,6 +369,7 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 	@Override
 	public void onViewAttachedToWindow(View v) {
 		mIsSearchMode = true;
+		updateTipsView(mAdapter2.getCount());
 	}
 
 	@Override
@@ -364,10 +380,8 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 			mAdapter2.setSearchString(null);
 			getLoaderManager().restartLoader(0, null, this);
 		}
-		
-		if(mSearchResultEmptyTextView.getVisibility() == View.VISIBLE) {
-			mSearchResultEmptyTextView.setVisibility(View.GONE);
-		}
+
+		updateTipsView(mAdapter2.getCount());
 	}
 
 	@Override

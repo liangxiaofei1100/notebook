@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.yuri.notebook.R;
-import com.yuri.notebook.db.NoteBookMetaData;
 import com.yuri.notebook.utils.DateFormatUtils;
 import com.yuri.notebook.utils.Notes;
 
