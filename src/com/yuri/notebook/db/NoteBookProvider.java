@@ -24,13 +24,15 @@ public class NoteBookProvider extends ContentProvider {
 	public static final int MAIL_COLLECTION = 3;
 	public static final int MAIL_SINGLE = 4;
 	
+	public static final int NOTEBOOK_FILTER = 5;
+	
 	public static final UriMatcher uriMatcher;
 	
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI(NoteBookMetaData.AUTHORITY, "notebooks", NOTEBOOK_COLLECTION);
 		uriMatcher.addURI(NoteBookMetaData.AUTHORITY, "notebooks/#", NOTEBOOK_SINGLE);
-		
+		uriMatcher.addURI(NoteBookMetaData.AUTHORITY, "notebooks_filter/*", NOTEBOOK_FILTER);
 		uriMatcher.addURI(NoteBookMetaData.AUTHORITY, "mails", MAIL_COLLECTION);
 		uriMatcher.addURI(NoteBookMetaData.AUTHORITY, "mails/#", MAIL_SINGLE);
 	}
@@ -167,6 +169,16 @@ public class NoteBookProvider extends ContentProvider {
 			qb.setTables(NoteBookMetaData.NoteBook.TABLE_NAME);
 			qb.appendWhere("_id=");
 			qb.appendWhere(uri.getPathSegments().get(1));
+			break;
+		case NOTEBOOK_FILTER:
+			qb.setTables(NoteBookMetaData.NoteBook.TABLE_NAME);
+
+			qb.appendWhere(NoteBookMetaData.NoteBook.TITLE + " like \'%"
+					+ uri.getPathSegments().get(1) + "%\'");
+			qb.appendWhere(" or ");
+
+			qb.appendWhere(NoteBookMetaData.NoteBook.CONTENT + " like \'%"
+					+ uri.getPathSegments().get(1) + "%\'");
 			break;
 		default:
 			throw new IllegalArgumentException("Unknow uri:" + uri);

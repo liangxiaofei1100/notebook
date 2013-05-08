@@ -55,6 +55,7 @@ public class NoteUtil {
 	public static final int MENU_EDIT_TITLE = 0x13;
 	public static final int MENU_RECOVER = 0x14;
 	public static final int MENU_SHARE = 0x15;
+	public static final int MENU_SEARCH = 0x16;
 
 	public static final String ITEM_ID_INDEX = "index";
 	public static final String NOTEBOOK = "notebook";

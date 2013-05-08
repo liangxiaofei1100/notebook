@@ -3,18 +3,18 @@ package com.yuri.notebook.utils;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Notes implements Parcelable{
+public class Notes implements Parcelable {
 
-	private int note_id;
+	private long note_id;
 	private String note_title;
 	private String note_content;
-//	private String note_time;
-	//use long time 
+	// private String note_time;
+	// use long time
 	private long note_time;
-	
-	//保存是否选中，在备份的时候用，该字段不保存到数据库中
+
+	// 保存是否选中，在备份的时候用，该字段不保存到数据库中
 	private boolean selected;
-	
+
 	public static final Parcelable.Creator<Notes> CREATOR = new Parcelable.Creator<Notes>() {
 
 		@Override
@@ -27,56 +27,56 @@ public class Notes implements Parcelable{
 			return new Notes[size];
 		}
 	};
-	
-	public  Notes(int id){
+
+	public Notes(long id) {
 		note_id = id;
 	}
-	
-	public Notes(String title){
+
+	public Notes(String title) {
 		note_title = title;
 	}
-	
-	private Notes(Parcel in){
+
+	private Notes(Parcel in) {
 		readFromParcel(in);
 	}
-	
-	public int getId(){
+
+	public long getId() {
 		return note_id;
 	}
-	
-	public void setId(int id){
+
+	public void setId(long id) {
 		note_id = id;
 	}
-	
-	public String getTitle(){
-		return  note_title;
+
+	public String getTitle() {
+		return note_title;
 	}
-	
-	public void setTitle(String title){
-		note_title  = title;
+
+	public void setTitle(String title) {
+		note_title = title;
 	}
-	
-	public String getContent(){
+
+	public String getContent() {
 		return note_content;
 	}
-	
-	public void setContent(String content){
+
+	public void setContent(String content) {
 		note_content = content;
 	}
-	
-	public long getTime(){
+
+	public long getTime() {
 		return note_time;
 	}
-	
-	public void setTime(long time){
+
+	public void setTime(long time) {
 		note_time = time;
 	}
-	
-	public boolean isSelected(){
+
+	public boolean isSelected() {
 		return selected;
 	}
-	
-	public void setSelected(boolean selected){
+
+	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
 
@@ -89,20 +89,20 @@ public class Notes implements Parcelable{
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		// TODO Auto-generated method stub
-		dest.writeInt(note_id);
-		
+		dest.writeLong(note_id);
+
 		dest.writeString(note_title);
 		dest.writeString(note_content);
-//		dest.writeString(note_time);
+		// dest.writeString(note_time);
 		dest.writeLong(note_time);
 		dest.writeInt(selected ? 1 : 0);
 	}
-	
-	public void readFromParcel(Parcel in){
-		note_id = in.readInt();
+
+	public void readFromParcel(Parcel in) {
+		note_id = in.readLong();
 		note_title = in.readString();
 		note_content = in.readString();
-//		note_time = in.readString();
+		// note_time = in.readString();
 		note_time = in.readLong();
 		selected = in.readInt() == 1 ? true : false;
 	}

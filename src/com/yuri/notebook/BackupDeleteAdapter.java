@@ -74,7 +74,7 @@ public class BackupDeleteAdapter extends ArrayAdapter<Notes>{
 	}
 	
 	//获得选中的Notebook id
-	public int getSelectedId(int position){
+	public long getSelectedId(int position){
 		return mList.get(position).getId();
 	}
 	

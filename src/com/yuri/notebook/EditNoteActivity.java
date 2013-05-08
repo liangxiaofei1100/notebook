@@ -23,7 +23,7 @@ public class EditNoteActivity extends Activity {
 	private TextView titleText,contentText;
 //	String time;
 	long time;
-	int itemId;
+	long itemId;
 	
 	private Notes mNoteBook;
 	
@@ -46,7 +46,7 @@ public class EditNoteActivity extends Activity {
 		contentEdit = (EditText)findViewById(R.id.content_edit);
 		
 		Intent intent = this.getIntent();
-		itemId = intent.getIntExtra(NoteUtil.ITEM_ID_INDEX, -1);
+		itemId = intent.getLongExtra(NoteUtil.ITEM_ID_INDEX, -1);
 		
 		mNoteBook = NoteManager.getNotesFromId(itemId,this);
 		

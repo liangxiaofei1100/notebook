@@ -13,6 +13,7 @@ public class NoteBookMetaData{
 	public static final class NoteBook implements BaseColumns{
 		public static final String TABLE_NAME = "notebooks";
 		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/notebooks");
+		public static final Uri CONTENT_FILTER_URI = Uri.parse("content://" + AUTHORITY + "/notebooks_filter");
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/notebooks";
 		public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/notebooks";
 		
@@ -21,9 +22,6 @@ public class NoteBookMetaData{
 		public static final String MAIL_CONTENT_TYPE = "vnd.android.cursor.dir/mails";
 		public static final String MAIL_CONTENT_TYPE_ITEM = "vnd.android.cursor.item/mails";
 		
-		/**order by _id ASC*/
-		public static final String SORT_ORDER_DEFAULT = _ID + "ASC"; 
-		
 		//items
 		/**note title. Type:String*/
 		public static final String TITLE = "title";
@@ -31,6 +29,11 @@ public class NoteBookMetaData{
 		public static final String CONTENT = "content";
 		/**note create time. Type:Long*/
 		public static final String TIME = "time";
+		
+		/**order by _id ASC*/
+		public static final String SORT_ORDER_DEFAULT = _ID + "ASC"; 
+		/**order by time ASC*/
+		public static final String SORT_ORDER_TIME = TIME + " DESC"; 
 		
 		//mail table
 		/**mail.Type:String*/

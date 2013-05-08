@@ -64,6 +64,7 @@
     <string name="menu_open">"打开"</string>
     <string name="menu_backup">"备份"</string>
     <string name="menu_edit_title">"编辑标题"</string>
+    <string name="menu_search">搜索</string>
     
     <string name="add_note">"新增记事"</string>
     <string name="edit_note">"修改记事"</string>

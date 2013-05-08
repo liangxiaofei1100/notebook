@@ -21,7 +21,7 @@ public class CheckNoteActivity extends Activity {
 	private static final String TAG = "CheckNote";
 	private TextView contentText;
 
-	private int itemId;
+	private long itemId;
 
 	private NoteManager mNoteManager;
 
@@ -42,7 +42,7 @@ public class CheckNoteActivity extends Activity {
 
 		contentText = (TextView) findViewById(R.id.note_content);
 		Intent intent = this.getIntent();
-		itemId = intent.getIntExtra(NoteUtil.ITEM_ID_INDEX, -1);
+		itemId = intent.getLongExtra(NoteUtil.ITEM_ID_INDEX, -1);
 
 		mNoteBook = NoteManager.getNotesFromId(itemId, this);
 		

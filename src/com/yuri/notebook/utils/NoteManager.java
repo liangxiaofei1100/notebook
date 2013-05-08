@@ -41,7 +41,7 @@ public class NoteManager {
 		mContext = context;
 	}
 	
-	public static Notes getNotesFromId(int id, Context context){
+	public static Notes getNotesFromId(long id, Context context){
 		Notes noteBook = new Notes(id);
 		Uri uri = Uri.parse(NoteBookMetaData.NoteBook.CONTENT_URI + "/" + id);
 		Cursor cur = null;
