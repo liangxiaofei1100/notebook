@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 import com.yuri.notebook.db.NoteBookMetaData;
@@ -35,7 +36,7 @@ public class AppendNoteActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.add);
+		setContentView(R.layout.add_note);
 		
 		// 标题栏返回
 		NoteUtil.setShowTitleBackButton(AppendNoteActivity.this);
@@ -45,11 +46,12 @@ public class AppendNoteActivity extends Activity {
 		sp = getSharedPreferences(NoteUtil.SHARED_NAME, MODE_PRIVATE);
 		
 		titleEdit = (EditText)findViewById(R.id.editbiaoti);
-//		NoteUtil.emulateShiftHeld(titleEdit);
-//		NoteUtil.onFocusChange(titleEdit, true);
-//		contentEdit = (LineEditText)findViewById(R.id.content_edit);
+		titleEdit.setHint("在此输入标题");
+		
 		contentEdit = (EditText) findViewById(R.id.content_edit);
 		contentEdit.setHint("在此输入笔记");
+		contentEdit.setFocusable(true);
+		contentEdit.requestFocus();
 		contentEdit.addTextChangedListener(watcher);
 //		NoteUtil.emulateShiftHeld(contentEdit);
 //		readFontSize();
@@ -115,6 +117,10 @@ public class AppendNoteActivity extends Activity {
 		 
 	    @Override
 	    public void afterTextChanged(Editable s) {
+	    	if (!("".equals(titleEdit.getText().toString()))) {
+				return;
+			}
+	    	
 	    	String title = contentEdit.getText().toString();
 	    	if (title.indexOf("\n") == -1) {
 			}else {

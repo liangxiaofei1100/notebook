@@ -10,33 +10,29 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/textbiaoti"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title" />
-
         <EditText
             android:id="@+id/editbiaoti"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/title_bg"
             android:inputType="text"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
     <com.yuri.notebook.LineEditText
         android:id="@+id/content_edit"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/content_bg"
         android:gravity="top"
         android:inputType="textMultiLine"
-        android:textColor="#555555"
-         />
+        android:textColor="#555555" />
 
-<!--     <EditText -->
-<!--     android:id="@+id/content_edit" -->
-<!--     android:layout_width="fill_parent" -->
-<!--     android:layout_height="match_parent" -->
-<!--     android:inputType="textMultiLine" /> -->
+    <!-- <EditText -->
+    <!-- android:id="@+id/content_edit" -->
+    <!-- android:layout_width="fill_parent" -->
+    <!-- android:layout_height="match_parent" -->
+    <!-- android:inputType="textMultiLine" /> -->
 
-</LinearLayout> <!-- </RelativeLayout> -->
+</LinearLayout>

@@ -31,19 +31,20 @@ public class EditNoteActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.add);
+		setContentView(R.layout.add_note);
 		
 		// 标题栏返回
 		NoteUtil.setShowTitleBackButton(EditNoteActivity.this);
 				
 		setTitle(R.string.edit_note);
-		titleText = (TextView)findViewById(R.id.textbiaoti);
-		titleText.setVisibility(View.GONE);
+//		titleText = (TextView)findViewById(R.id.textbiaoti);
+//		titleText.setVisibility(View.GONE);
 		titleEdit = (EditText)findViewById(R.id.editbiaoti);
 		titleEdit.setVisibility(View.GONE);
 //		contentText = (TextView)findViewById(R.id.content_text);
 //		contentText.setVisibility(View.GONE);
 		contentEdit = (EditText)findViewById(R.id.content_edit);
+		contentEdit.setSelection(contentEdit.getText().length());
 		
 		Intent intent = this.getIntent();
 		itemId = intent.getLongExtra(NoteUtil.ITEM_ID_INDEX, -1);
