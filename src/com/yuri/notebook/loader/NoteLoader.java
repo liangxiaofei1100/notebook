@@ -320,7 +320,7 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 					Uri.encode(mSearchString));
 		}
 		return new CursorLoader(this, uri, NoteUtil.COLUMNS, null, null,
-				NoteBookMetaData.NoteBook.SORT_ORDER_TIME);
+				NoteBookMetaData.NoteBook.SORT_ORDER_DEFAULT);
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class NoteBookMetaData{
 		public static final String TIME = "time";
 		
 		/**order by _id ASC*/
-		public static final String SORT_ORDER_DEFAULT = _ID + "ASC"; 
+		public static final String SORT_ORDER_DEFAULT = _ID + " DESC"; 
 		/**order by time ASC*/
 		public static final String SORT_ORDER_TIME = TIME + " DESC"; 
 		
