@@ -30,23 +30,18 @@ public class LineEditText2 extends EditText {
     	mRect = new Rect();
     	mPaint = new Paint();
     	mPaint.setStyle(Style.STROKE);
-    	mPaint.setColor(Color.GRAY);
+//    	mPaint.setColor(Color.GRAY);
+    	mPaint.setColor(0x800000ff);
     	mPaint.setAntiAlias(true);
     	this.setLineSpacing(add, mult);
     }
 
     protected void onDraw(Canvas paramCanvas) {
     	int count = getLineCount();//需要画多少条线
-//    	int j = getHeight();
-//        int k = getLineHeight();
-//        System.out.println("i=" + j + "k=" + k);
-//        int m = j / k;
-//        if (count < m)
-//        	count = m;
     	for (int i = 0; i < count; i++) {
 			getLineBounds(i, mRect);
 			int baseline = (i + 1) * getLineHeight();
-			paramCanvas.drawLine(mRect.left, baseline, mRect.right, baseline, mPaint);
+			paramCanvas.drawLine(mRect.left, baseline + 1, mRect.right, baseline + 1, mPaint);
 		}
     	super.onDraw(paramCanvas);
     }

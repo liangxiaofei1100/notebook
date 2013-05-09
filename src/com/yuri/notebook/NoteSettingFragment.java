@@ -88,7 +88,7 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 		editTextPreference = (EditTextPreference) findPreference("edit_mail_preference");
 		editTextPreference.setOnPreferenceChangeListener(this);
 		
-		if (!(editTextPreference.getText().equals(""))) {
+		if (null != editTextPreference.getText()) {
 			editTextPreference.setSummary(editTextPreference.getText());
 		}
 		

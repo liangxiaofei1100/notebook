@@ -14,13 +14,14 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
 
 import com.yuri.notebook.db.NoteBookMetaData;
 import com.yuri.notebook.utils.NoteManager;
 import com.yuri.notebook.utils.NoteUtil;
 
-public class AppendNoteActivity extends Activity {
+public class AppendNoteActivity extends Activity implements OnFocusChangeListener {
 	private static final String TAG = "AppendNoteActivity";
 	private EditText titleEdit,contentEdit;
 	Calendar calendar;
@@ -33,6 +34,8 @@ public class AppendNoteActivity extends Activity {
 	private int mFontSize;
 	// 设置背景颜色：0：灰色；1：浅黄色；2：粉红色；3：蓝色
 	private int mColorType;
+	
+	private boolean hasTitleEditFoucsed = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,10 +49,9 @@ public class AppendNoteActivity extends Activity {
 		sp = getSharedPreferences(NoteUtil.SHARED_NAME, MODE_PRIVATE);
 		
 		titleEdit = (EditText)findViewById(R.id.editbiaoti);
-		titleEdit.setHint("在此输入标题");
+		titleEdit.setOnFocusChangeListener(this);
 		
 		contentEdit = (EditText) findViewById(R.id.content_edit);
-		contentEdit.setHint("在此输入笔记");
 		contentEdit.setFocusable(true);
 		contentEdit.requestFocus();
 		contentEdit.addTextChangedListener(watcher);
@@ -117,16 +119,14 @@ public class AppendNoteActivity extends Activity {
 		 
 	    @Override
 	    public void afterTextChanged(Editable s) {
-	    	if (!("".equals(titleEdit.getText().toString()))) {
-				return;
+	    	if (!hasTitleEditFoucsed) {
+	    		String title = contentEdit.getText().toString();
+		    	if (title.indexOf("\n") == -1) {
+				}else {
+					title = title.substring(0, title.indexOf("\n"));
+				}
+		    	titleEdit.setText(title);
 			}
-	    	
-	    	String title = contentEdit.getText().toString();
-	    	if (title.indexOf("\n") == -1) {
-			}else {
-				title = title.substring(0, title.indexOf("\n"));
-			}
-	    	titleEdit.setText(title);
 	    }
 	 
 	    @Override
@@ -139,5 +139,19 @@ public class AppendNoteActivity extends Activity {
 	    }
 	     
 	};
+	
+	@Override
+	public void onFocusChange(View v, boolean hasFocus) {
+		if (titleEdit == v) {
+			if (titleEdit.getText().toString().equals("")) {
+				hasTitleEditFoucsed = false;
+			}else {
+				if (hasFocus) {
+					hasTitleEditFoucsed = true;
+				}
+			}
+			
+		}
+	}
 	
 }

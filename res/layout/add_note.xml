@@ -13,19 +13,30 @@
         <EditText
             android:id="@+id/editbiaoti"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/title_bg"
+            android:layout_height="45dp"
+            android:background="@drawable/content_bg"
             android:inputType="text"
+            android:maxLength="15"
+            android:hint="请输入标题"
             android:singleLine="true"
-            android:textColor="#ffffff" />
+             />
     </LinearLayout>
-
-    <com.yuri.notebook.LineEditText
+	<View 
+	    android:layout_width="fill_parent"
+	    android:layout_height="1dp"
+	    android:background="#0099cc"
+	    />
+    <com.yuri.notebook.LineEditText2
         android:id="@+id/content_edit"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/content_bg"
+        android:background="#c1c1c1"
+        android:hint="在此输入笔记"
         android:gravity="top"
+        android:textSize="22sp"
+        android:padding="5dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
         android:inputType="textMultiLine"
         android:textColor="#555555" />
 

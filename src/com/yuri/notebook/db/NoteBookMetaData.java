@@ -30,9 +30,9 @@ public class NoteBookMetaData{
 		/**note create time. Type:Long*/
 		public static final String TIME = "time";
 		
-		/**order by _id ASC*/
+		/**order by _id DESC*/
 		public static final String SORT_ORDER_DEFAULT = _ID + " DESC"; 
-		/**order by time ASC*/
+		/**order by time DESC*/
 		public static final String SORT_ORDER_TIME = TIME + " DESC"; 
 		
 		//mail table
