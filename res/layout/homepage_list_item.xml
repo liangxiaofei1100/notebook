@@ -12,7 +12,7 @@
         android:layout_width="20dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="20."
+        android:textIsSelectable="false"
          />
     <View
         android:layout_width="2dip"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="5dip"
         android:paddingLeft="11dip"
-        android:paddingRight="11dip" >
+         >
 
         <TextView
             android:id="@+id/ItemTitle"
@@ -35,15 +35,30 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:ellipsize="end"
+            android:textIsSelectable="false"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/ItemText"
+            android:id="@+id/ItemContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ItemTitle" 
+            android:textIsSelectable="false"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textColor="#a9a9a9"
             />
-    </RelativeLayout>
+        
+        <TextView
+            android:id="@+id/ItemTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/ItemTitle"
+            android:layout_alignParentRight="true"
+            android:singleLine="true"
+            android:textIsSelectable="false"
+            android:textColor="#a9a9a9" />
 
+    </RelativeLayout>
+    
 </LinearLayout>

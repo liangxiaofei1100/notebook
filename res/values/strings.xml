@@ -108,7 +108,7 @@
    <string name="back_msg">"是否放弃当前编辑？"</string>
    
    <string name="mail_backup">"备份邮箱"</string>
-   <string name="mail_not_setting">"未设置"</string>
+   <string name="mail_not_setting">"可以设置一个备份邮箱"</string>
    <string name="mail_setting">"备份邮箱设置"</string>
    <string name="mail_modify">"备份邮箱修改"</string>
    <string name="tip_msg">"请至少选中一个！"</string>

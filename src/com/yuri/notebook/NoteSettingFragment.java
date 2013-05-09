@@ -87,7 +87,10 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 		//set mail
 		editTextPreference = (EditTextPreference) findPreference("edit_mail_preference");
 		editTextPreference.setOnPreferenceChangeListener(this);
-		editTextPreference.setSummary(editTextPreference.getText());
+		
+		if (!(editTextPreference.getText().equals(""))) {
+			editTextPreference.setSummary(editTextPreference.getText());
+		}
 		
 		//backup
 		backupScreen = (PreferenceScreen) findPreference("backup_screen");

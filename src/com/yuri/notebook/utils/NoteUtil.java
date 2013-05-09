@@ -117,6 +117,8 @@ public class NoteUtil {
 	public static final int REQUEST_CODE_EDIT = 0x00121;
 
 	private static final String ZIP_PW = "xiayouli";
+	
+	public static final String ENTER = "\n";
 
 	public static class Color {
 		public static final int COLOR_1 = 0xCDCDCD;

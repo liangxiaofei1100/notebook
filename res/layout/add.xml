@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:gravity="top"
         android:inputType="textMultiLine"
-        android:textColor="#a9a9a9"
+        android:textColor="#555555"
          />
 
 <!--     <EditText -->

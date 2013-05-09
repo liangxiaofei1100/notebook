@@ -13,6 +13,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/**
+ * @deprecated
+ * use NoteAdapter2 instead 
+ */
 public class NoteAdapter extends BaseAdapter{
 	private final LayoutInflater mInflater;
 	
@@ -40,7 +44,7 @@ public class NoteAdapter extends BaseAdapter{
              holder = new ViewHolder();
              holder.snTextView = (TextView)view.findViewById(R.id.id_text);
              holder.titleTextView = (TextView)view.findViewById(R.id.ItemTitle);
-             holder.timeTextView = (TextView)view.findViewById(R.id.ItemText);
+             holder.timeTextView = (TextView)view.findViewById(R.id.ItemTime);
              
              view.setTag(holder);
          } else {
