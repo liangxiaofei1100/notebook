@@ -21,6 +21,7 @@ import android.content.SharedPreferences.Editor;
 import android.database.SQLException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -41,10 +42,14 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 	private ListPreference mColorSetPref;
 	private ListPreference mFontSetPref;
 	private SharedPreferences sp;
+	private CheckBoxPreference mUsePwPref;
 	
 	private PreferenceScreen backupScreen;
 	
-	/**设置登陆方式。0：图案登陆， 1：密码登陆; 默认登陆方式为图案登陆*/
+	
+	/**设置是否需要密码登陆，ture & false, default is false*/
+	private boolean mUsePassword = false;
+	/**设置密码登陆方式。0：图案登陆， 1：密码登陆; 默认登陆方式为图案登陆*/
 	private String mLoginMode;
 	//设置字体，0：较大字体；1：中等字体；2：较小字体
 	private int mFont;
@@ -63,6 +68,12 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 		addPreferencesFromResource(R.xml.note_setting_config);
 		
 		sp = getActivity().getSharedPreferences(NoteUtil.SHARED_NAME, Context.MODE_PRIVATE);
+		
+		mUsePassword = sp.getBoolean(NoteUtil.USE_PASSWORD, false);
+		
+		mUsePwPref = (CheckBoxPreference) findPreference("parent_need_pw_preference");
+		mUsePwPref.setOnPreferenceClickListener(this);
+		mUsePwPref.setChecked(mUsePassword);
 		
 		listPreference = (ListPreference) findPreference("list_preference");
 		listPreference.setOnPreferenceChangeListener(this);
@@ -154,7 +165,6 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 			Editor editor = sp.edit();
 			editor.putInt(NoteUtil.COLOR_SET, index);
 			editor.commit();
-			System.out.println("index=" + index);
 		}
 		return false;
 	}
@@ -169,8 +179,12 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 			if (restores == null || restore_values == null) {
 //				Toast.show
 			}
+		}else if (mUsePwPref == preference) {
+			Editor editor = sp.edit();
+			editor.putBoolean(NoteUtil.USE_PASSWORD, mUsePwPref.isChecked());
+			editor.commit();
 		}
-		return false;
+		return true;
 	}
 	
 	private void getBackupsFromSdCard(String path){

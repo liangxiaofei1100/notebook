@@ -10,6 +10,7 @@
     
     <string name="setting">"设置"</string>
     
+    <string name="set_password">设置密码登陆</string>
     <string name="login_model_pw">密码登陆</string>
     <string name="login_model_pattern">图案登陆</string>
     

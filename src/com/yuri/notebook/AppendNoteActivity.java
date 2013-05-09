@@ -47,7 +47,8 @@ public class AppendNoteActivity extends Activity {
 		titleEdit = (EditText)findViewById(R.id.editbiaoti);
 //		NoteUtil.emulateShiftHeld(titleEdit);
 //		NoteUtil.onFocusChange(titleEdit, true);
-		contentEdit = (LineEditText)findViewById(R.id.content_edit);
+//		contentEdit = (LineEditText)findViewById(R.id.content_edit);
+		contentEdit = (EditText) findViewById(R.id.content_edit);
 		contentEdit.setHint("在此输入笔记");
 		contentEdit.addTextChangedListener(watcher);
 //		NoteUtil.emulateShiftHeld(contentEdit);

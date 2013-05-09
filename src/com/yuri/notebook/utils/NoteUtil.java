@@ -99,6 +99,8 @@ public class NoteUtil {
 	public static final String SHARED_NAME = "note_share";
 	// 判断是否设置图案密码. Type:boolean
 	public static final String PATTERN_INIT_KEY = "pattern_inited";
+	//设置是否需要设置密码登陆. Type：boolean
+	public static final String USE_PASSWORD = "user_password";
 	// 设定登陆方式. Type:int
 	public static final String LOGIN_MODE = "login_mode";
 	// 保存密码. Type:String

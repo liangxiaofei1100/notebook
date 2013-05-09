@@ -33,10 +33,10 @@
         android:textColor="#a9a9a9"
          />
 
-    <!-- <EditText -->
-    <!-- android:id="@+id/content_edit" -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:inputType="textMultiLine" /> -->
+<!--     <EditText -->
+<!--     android:id="@+id/content_edit" -->
+<!--     android:layout_width="fill_parent" -->
+<!--     android:layout_height="match_parent" -->
+<!--     android:inputType="textMultiLine" /> -->
 
 </LinearLayout> <!-- </RelativeLayout> -->

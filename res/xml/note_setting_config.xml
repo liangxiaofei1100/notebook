@@ -2,8 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings" >
 
+    <CheckBoxPreference
+                android:key="parent_need_pw_preference"
+                android:title="@string/set_password"
+                />
+    
     <ListPreference
         android:defaultValue="0"
+        android:dependency="parent_need_pw_preference"
         android:dialogTitle="@string/mode_select"
         android:entries="@array/entries_list_preference"
         android:entryValues="@array/entryvalues_list_preference"
