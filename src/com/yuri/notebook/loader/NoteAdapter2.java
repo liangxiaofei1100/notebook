@@ -28,8 +28,69 @@ public class NoteAdapter2 extends CursorAdapter {
 	private String mSearchString;
 	private Pattern mPattern;
 	
-	private static final int SHOW_LENGTH = 20;
+	private static final int THEME_COLOR_DEFAULT = 0x7F33b5e5;
+	
+	private int mCount = 0;
+	
+	//default is normal mode
+	private int mMode = 0;
+	
+	// 定义一个数组，保存每一个item是否被选中
+	private boolean mCheckedArray[] = null;
 
+	/** 被选中的数量 */
+	private int mCheckedCount = 0;
+
+	private static final int SHOW_LENGTH = 20;
+	
+	//for menu
+	public void setMode(int mode){
+		this.mMode = mode;
+	}
+	
+	public boolean isMode(int mode){
+		return mMode == mode;
+	}
+	
+//	public int getSelectedPoition(){
+//		
+//	}
+	
+	public void setChecked(int position){
+		mCheckedArray[position] = !mCheckedArray[position];
+		System.out.println("mCheckedArray[" + position + "]=" + mCheckedArray[position]);
+		notifyDataSetChanged();
+	}
+	
+	public int getCheckedItemCount(){
+		int selectedCount = 0;
+		for (int i = 0; i < mCount; i++) {
+			if (mCheckedArray[i]) {
+				selectedCount ++;
+			}
+		}
+		System.out.println("getCheckedItemCount = " + mCheckedCount);
+		return selectedCount;
+	}
+	
+	public void unSelectedAll(){
+		for (int i = 0; i < mCount; i++) {
+			mCheckedArray[i] = false;
+		}
+		notifyDataSetChanged();
+	}
+	
+	public void selectAll(){
+		for (int i = 0; i < mCount; i++) {
+			mCheckedArray[i] = true;
+		}
+		notifyDataSetChanged();
+	}
+	
+	public boolean isSelected(int position){
+		return mCheckedArray[position];
+	}
+	//for menu
 	public String getSearchString() {
 		return mSearchString;
 	}
@@ -51,12 +112,11 @@ public class NoteAdapter2 extends CursorAdapter {
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		Notes noteBook = Notes.createNotebookFromCursor(cursor);
-
+		
 		TextView snTextView = (TextView) view.findViewById(R.id.id_text);
 		TextView titleTextView = (TextView) view.findViewById(R.id.ItemTitle);
 		TextView contentTextView = (TextView) view.findViewById(R.id.ItemContent);
 		TextView timeTextView = (TextView) view.findViewById(R.id.ItemTime);
-
 		snTextView.setText(String.valueOf(cursor.getPosition() + 1));
 		String title = noteBook.getTitle();
 		String content = noteBook.getContent();
@@ -76,11 +136,31 @@ public class NoteAdapter2 extends CursorAdapter {
 			contentTextView.setText(content);
 		}
 		
+		if (mMode == NoteUtil.MODE_MENU) {
+			updateBackout(cursor.getPosition(), view);
+		}else {
+			// do nothing
+			view.setBackgroundColor(Color.TRANSPARENT);
+		}
+		
 		timeTextView.setText(mDateFormatUtils.getDateFormatString(noteBook.getTime()));
+	}
+	
+	private void updateBackout(int position, View view){
+		if (mCheckedArray[position]) {
+			view.setBackgroundColor(THEME_COLOR_DEFAULT);
+		}else {
+			view.setBackgroundColor(Color.TRANSPARENT);
+		}
 	}
 
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
+		mCount = cursor.getCount();
+		mCheckedArray = new boolean[mCount];
+		for (int i = 0; i < mCount; i++) {
+			mCheckedArray[i] = false;
+		}
 		return mInflater.inflate(R.layout.homepage_list_item, parent, false);
 	}
 	

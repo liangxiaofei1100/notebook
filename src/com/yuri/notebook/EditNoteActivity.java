@@ -48,7 +48,7 @@ public class EditNoteActivity extends Activity {
 		
 		Intent intent = this.getIntent();
 		itemId = intent.getLongExtra(NoteUtil.ITEM_ID_INDEX, -1);
-		
+		System.out.println("itemid="+ itemId);
 		mNoteBook = NoteManager.getNotesFromId(itemId,this);
 		
 		setTitle(mNoteBook.getTitle());

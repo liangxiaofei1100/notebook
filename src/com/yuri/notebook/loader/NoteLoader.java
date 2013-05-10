@@ -14,8 +14,8 @@ import com.yuri.notebook.utils.NoteManager;
 import com.yuri.notebook.utils.NoteUtil;
 import com.yuri.notebook.utils.Notes;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentValues;
 import android.content.Context;
@@ -29,9 +29,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -39,18 +42,23 @@ import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.Toast;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
-public class NoteLoader extends Activity implements OnItemClickListener,
+public class NoteLoader extends ListActivity implements OnItemClickListener,
 		OnItemLongClickListener, OnClickListener, OnQueryTextListener,
 		LoaderCallbacks<Cursor>, OnAttachStateChangeListener {
 	private static final String TAG = "NoteLoader";
@@ -81,9 +89,14 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 		setContentView(R.layout.homepage);
 
 		mContext = this;
-		mListView = (ListView) findViewById(R.id.ListViewAppend);
+//		mListView = (ListView) findViewById(R.id.ListViewAppend);
+		mListView = getListView();
 		mListView.setOnItemClickListener(this);
-		mListView.setOnCreateContextMenuListener(this);
+//		mListView.setOnCreateContextMenuListener(this);
+		//long click show edit popmenu
+		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		mListView.setMultiChoiceModeListener(new ModeCallBack());
+//		mListView.setOnLongClickListener(this);
 
 		mAdapter2 = new NoteAdapter2(this, null,
 				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
@@ -127,11 +140,6 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 		switch (item.getItemId()) {
 		case R.id.menu_note_loader_add:
 			intent = new Intent(NoteLoader.this, AppendNoteActivity.class);
-			startActivity(intent);
-			break;
-		case R.id.menu_note_loader_delete_multi:
-			intent = new Intent(NoteLoader.this, BackupDeleteActivity.class);
-			intent.putExtra(NoteUtil.MENU_MODE, NoteUtil.MENU_DELETE_MULTI);
 			startActivity(intent);
 			break;
 		case NoteUtil.MENU_BACKUP:
@@ -392,5 +400,228 @@ public class NoteLoader extends Activity implements OnItemClickListener,
 			mAdapter2.swapCursor(null);
 		}
 		super.onDestroy();
+	}
+
+	/**
+	 * Listview Selection Action Mode
+	 */
+	private class ModeCallBack implements MultiChoiceModeListener, OnMenuItemClickListener{
+		/**
+		 * 用户弹出全选和取消全选的菜单的
+		 */
+		private PopupMenu mSelectPopupMenu = null;
+		private boolean mSelectedAll = true;
+		/**
+		 * 显示选中多少个，以及全选和取消全选
+		 */
+	    private Button mSelectBtn = null;
+	    
+	    private int currentPosition = -1;
+	    
+	    private ActionMode actionMode;
+	    
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			// TODO Auto-generated method stub
+			Cursor cursor = mAdapter2.getCursor();
+			switch (item.getItemId()) {
+			case R.id.actionbar_edit:
+				cursor.moveToPosition(currentPosition);
+				long index = cursor.getLong(cursor.getColumnIndex(NoteBookMetaData.NoteBook._ID));
+				Intent intent = new Intent(NoteLoader.this, EditNoteActivity.class);
+				intent.putExtra(NoteUtil.ITEM_ID_INDEX, index);
+				startActivity(intent);
+				mode.finish();
+				break;
+			case R.id.actionbar_delete:
+				final ArrayList<Long> selectedList = new ArrayList<Long>();
+				for (int pos = getListView().getCount() - 1; pos >= 0; pos--) {
+					if (mAdapter2.isSelected(pos)) {
+						cursor.moveToPosition(pos);
+						long id = cursor.getLong(cursor.getColumnIndex(NoteBookMetaData.NoteBook._ID));
+						selectedList.add(id);
+					}
+				}
+				
+				String deleteMessage = "是否删除这" + selectedList.size() + "项";
+
+				new AlertDialog.Builder(mContext)
+						.setTitle(R.string.menu_delete)
+						.setMessage(deleteMessage)
+						.setPositiveButton(android.R.string.ok,
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										for (int i = 0; i < selectedList.size(); i++) {
+											Uri uri = Uri
+													.parse(NoteBookMetaData.NoteBook.CONTENT_URI
+															+ "/" + selectedList.get(i));
+											getContentResolver()
+											.delete(uri, null, null);
+										}
+//										// bug: When search string is not empty, the list can not update. Why?
+										if (mIsSearchMode && !TextUtils.isEmpty(mSearchString)) {
+											getLoaderManager().restartLoader(0, null, NoteLoader.this);
+										}
+									}
+								}).setNegativeButton(android.R.string.cancel, null)
+						.create().show();
+				break;
+
+			default:
+				Toast.makeText(NoteLoader.this, "Clicked " + item.getTitle(),
+                        Toast.LENGTH_SHORT).show();
+				break;
+			}
+			return true;
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			// 最先调用的
+			LayoutInflater inflater = (LayoutInflater) mContext
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			// 自定义ActionBar菜单
+			View customView = inflater.inflate(R.layout.listview_actionbar_edit,
+					null);
+			mode.setCustomView(customView);
+			mSelectBtn = (Button) customView.findViewById(R.id.select_button);
+			mSelectBtn.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (null == mSelectPopupMenu) {
+						// 创建"全选/取消全选"的弹出菜单
+						 mSelectPopupMenu = createSelectPopupMenu(mSelectBtn);
+						 updateSelectPopupMenu();
+						 mSelectPopupMenu.show();
+					} else {
+						// Update
+						updateSelectPopupMenu();
+						mSelectPopupMenu.show();
+					}
+				}
+			});
+			MenuInflater menuInflater = mode.getMenuInflater();
+			menuInflater.inflate(R.menu.actionbar_menu, menu);
+			setSubtitle(mode);
+			return true;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			mAdapter2.unSelectedAll();
+			mAdapter2.setMode(NoteUtil.MODE_NORMAL);
+			
+			if (actionMode != null) {
+				actionMode = null;
+			}
+			
+			if (mSelectPopupMenu != null) {
+				mSelectPopupMenu.dismiss();
+				mSelectPopupMenu = null;
+			}
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			mAdapter2.setMode(NoteUtil.MODE_MENU);
+			actionMode = mode;
+			int selectedCount = mAdapter2.getCheckedItemCount();
+			switch (selectedCount) {
+			case 0:
+				menu.findItem(R.id.actionbar_edit).setEnabled(false);
+				menu.findItem(R.id.actionbar_delete).setEnabled(false);
+				break;
+			case 1:
+				menu.findItem(R.id.actionbar_edit).setEnabled(true);
+				menu.findItem(R.id.actionbar_delete).setEnabled(true);
+				break;
+
+			default:
+				
+				break;
+			}
+			return true;
+		}
+
+		@Override
+		public void onItemCheckedStateChanged(ActionMode mode, int position,
+				long id, boolean checked) {
+			currentPosition = position;
+			mAdapter2.setChecked(position);
+			setSubtitle(mode);
+		}
+		
+		private void setSubtitle(ActionMode mode) {
+			final int checkedCount = mAdapter2.getCheckedItemCount();
+			mSelectBtn.setText("" + checkedCount + " items selected");
+			Menu menu = mode.getMenu();
+			if (checkedCount == 0) {
+				menu.findItem(R.id.actionbar_edit).setEnabled(false);
+				menu.findItem(R.id.actionbar_delete).setEnabled(false);
+			}else if (checkedCount == 1) {
+				menu.findItem(R.id.actionbar_edit).setEnabled(true);
+				menu.findItem(R.id.actionbar_delete).setEnabled(true);
+			}else {
+				menu.findItem(R.id.actionbar_edit).setEnabled(false);
+				menu.findItem(R.id.actionbar_delete).setEnabled(true);
+			}
+		}
+		
+		private PopupMenu createSelectPopupMenu(View anchorView) {
+	        final PopupMenu popupMenu = new PopupMenu(mContext, anchorView);
+	        popupMenu.inflate(R.menu.select_popup_menu);
+	        popupMenu.setOnMenuItemClickListener(this);
+	        return popupMenu;
+	    }
+		
+		private void updateSelectPopupMenu(){
+			if (mSelectPopupMenu == null) {
+	            mSelectPopupMenu = createSelectPopupMenu(mSelectBtn);
+	            return;
+	        }
+			final Menu menu = mSelectPopupMenu.getMenu();
+			int selectedCount = mAdapter2.getCheckedItemCount();
+			if (getListView().getCount() == 0) {
+				menu.findItem(R.id.select).setEnabled(false);
+			}else {
+				if (getListView().getCount() != selectedCount) {
+					menu.findItem(R.id.select).setTitle(R.string.seleteall);
+					mSelectedAll = true;
+				}else {
+					menu.findItem(R.id.select).setTitle(R.string.cancelall);
+					mSelectedAll = false;
+				}
+			}
+		}
+
+		@Override
+		public boolean onMenuItemClick(MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.select:
+				if (mSelectedAll) {
+					mAdapter2.selectAll();
+				}else {
+					mAdapter2.unSelectedAll();
+				}
+				
+				int selectedCount = mAdapter2.getCheckedItemCount();
+	            mSelectBtn.setText("" + selectedCount + " items selected");
+	           
+				updateSelectPopupMenu();
+				
+				if (actionMode != null) {
+					actionMode.invalidate();
+				}
+				
+				break;
+
+			default:
+				break;
+			}
+			return true;
+		}
+		
 	}
 }

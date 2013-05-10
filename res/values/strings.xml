@@ -37,14 +37,6 @@
     <string name="pattern_set_tip">请设置图案密码</string>
     <string name="pattern_title">请输入正确的图案</string>
     
-    <string name="tips_msg_01">"那一年，芦中见证了我们的友谊！"</string>
-    <string name="tips_msg_01_01">"那些年，欢声与笑语陪伴着我们。。。！"</string>
-    <string name="tips_msg_02">"那一年，我们被选择了各奔东西！"</string>
-    <string name="tips_msg_03">"那些年，城市拉开了我们之间的距离，却不曾减少我们之间的友谊！"</string>
-    <string name="tips_msg_05">"一个人找到一群对的人，总能快乐一时；一个人找到一个对的人，却能幸福一世！"</string>
-    <string name="tips_msg_06">"敏瑶，恭喜你找到了一个对的人，我带着大家的祝福，见证你开启人生的新里程！"</string>
-    <string name="tips_msg_07">"这个记事本，送给你，希望她能帮你记录生活中的点滴！"</string>
-
    	<!-- Accessibility description sent when user starts drawing a lock pattern. [CHAR LIMIT=NONE] -->
     <string name="lockscreen_access_pattern_start">Pattern started</string>
     <!-- Accessibility description sent when the pattern times out and is cleared. [CHAR LIMIT=NONE] -->
@@ -77,6 +69,10 @@
     
    <string name="no_record">"亲，你还没有添加任何记事哦！"</string>
    <string name="search_result_empty">"没有符合搜索条件的记录"</string>
+   
+   <!-- custom actionBar popmenu -->
+   <string name="actionbar_delete">删除</string>
+   <!-- custom actionBar popmenu -->
    
    
    <string name="retry">"重试"</string>

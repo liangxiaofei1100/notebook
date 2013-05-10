@@ -7,17 +7,13 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_add"/>
     <item
-        android:id="@+id/menu_note_loader_delete_multi"
-        android:showAsAction="never"
-        android:title="@string/menu_delete_multi"/>
-    <item
         android:id="@+id/menu_note_loader_setting"
         android:showAsAction="never"
         android:title="@string/setting"/>
     <item
         android:id="@+id/menu_note_loader_search"
-        android:icon="@android:drawable/ic_menu_search"
-        android:showAsAction="never|collapseActionView"
+        android:icon="@drawable/action_search"
+        android:showAsAction="ifRoom|collapseActionView"
         android:title="@string/menu_search"
         android:actionViewClass="android.widget.SearchView"
         android:imeOptions="actionSearch"/>

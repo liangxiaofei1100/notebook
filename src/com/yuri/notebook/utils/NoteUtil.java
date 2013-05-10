@@ -127,6 +127,9 @@ public class NoteUtil {
 		public static final int PINK = 0XFFCD96CD;
 		public static final int BLUE = 0XFFD1EEEE;
 	}
+	
+	public static final int MODE_NORMAL = 0;
+	public static final int MODE_MENU = 1;
 
 	// get time
 	public static String getTime() {
