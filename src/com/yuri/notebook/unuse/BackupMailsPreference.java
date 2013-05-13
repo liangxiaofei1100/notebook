@@ -1,5 +1,9 @@
-package com.yuri.notebook;
+package com.yuri.notebook.unuse;
 
+import com.yuri.notebook.R;
+import com.yuri.notebook.R.id;
+import com.yuri.notebook.R.layout;
+import com.yuri.notebook.R.string;
 import com.yuri.notebook.utils.NoteUtil;
 
 import android.app.AlertDialog;

@@ -78,10 +78,17 @@
             ></activity>
         
         <activity
-            android:name=".BackupDeleteActivity"
-            android:label="Backup"
-             android:theme="@android:style/Theme.Holo.Light"
+            android:name="com.yuri.notebook.ZipBackupActivity"
+            android:label="@string/note_backup"
+            android:theme="@android:style/Theme.Holo.Light.Dialog"
              />
+        
+        <activity
+            android:name=".XmlBackupActivity"
+            android:label="@string/note_backup"
+            android:theme="@android:style/Theme.Holo.Light.Dialog"
+            />
+        
         <provider
             android:name=".db.NoteBookProvider"
             android:authorities="com.yuri.notebook.db.notebookprovider" >

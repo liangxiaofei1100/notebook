@@ -1,7 +1,9 @@
-package com.yuri.notebook;
+package com.yuri.notebook.unuse;
 
 import java.util.List;
 
+import com.yuri.notebook.R;
+import com.yuri.notebook.R.id;
 import com.yuri.notebook.utils.Notes;
 
 import android.content.Context;
@@ -14,7 +16,7 @@ import android.widget.TextView;
 
 //ArrayAdapter 一般用于只显示一行或者最多加一个imageview，不太适合用户复杂的布局，
 //如果一定要用复杂的布局，最好使用baseAdapter
-public class BackupDeleteAdapter extends ArrayAdapter<Notes>{
+public class BackupAdapter extends ArrayAdapter<Notes>{
 	private static final String TAG = "BackupAdapter";
 	
 	private class NoteHolder{
@@ -31,7 +33,7 @@ public class BackupDeleteAdapter extends ArrayAdapter<Notes>{
 	
 	private List<Notes> mList;
 	
-	public BackupDeleteAdapter(Context context, int layoutResId, List<Notes> data) {
+	public BackupAdapter(Context context, int layoutResId, List<Notes> data) {
 		super(context, layoutResId, data);
 		// TODO Auto-generated constructor stub
 		mListItemLayoutId = layoutResId;

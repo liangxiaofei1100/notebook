@@ -1,4 +1,4 @@
-package com.yuri.notebook.utils ;
+package com.yuri.notebook.unuse ;
 
 import java.io.File ;
 import java.io.FileNotFoundException ;
@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat ;
 import java.util.Date ;
 import java.util.HashMap ;
 import java.util.Map ;
+
+import com.yuri.notebook.utils.NoteUtil;
 
 import android.content.Context ;
 import android.content.pm.PackageInfo ;

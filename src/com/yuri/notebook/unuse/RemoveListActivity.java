@@ -1,4 +1,4 @@
-package com.yuri.notebook;
+package com.yuri.notebook.unuse;
 
 import android.app.Activity;
 

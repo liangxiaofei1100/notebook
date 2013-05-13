@@ -1,4 +1,4 @@
-package com.yuri.notebook;
+package com.yuri.notebook.unuse;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;

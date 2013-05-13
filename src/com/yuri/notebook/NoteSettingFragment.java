@@ -5,13 +5,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yuri.notebook.db.NoteBookMetaData;
-import com.yuri.notebook.utils.NoteManager;
-import com.yuri.notebook.utils.NoteUtil;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,13 +22,19 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.yuri.notebook.db.NoteBookMetaData;
+import com.yuri.notebook.utils.ImportXml;
+import com.yuri.notebook.utils.NoteManager;
+import com.yuri.notebook.utils.NoteUtil;
+import com.yuri.notebook.utils.Notes;
 
 public class NoteSettingFragment extends PreferenceFragment implements OnPreferenceChangeListener, OnPreferenceClickListener{
 	private static final String TAG = "NoteSettingFragment";
@@ -132,9 +135,12 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 			editor.putInt(NoteUtil.LOGIN_MODE, index);
 			editor.commit();
 		}else if (editTextPreference == preference) {
-			mBackupMail = editTextPreference.getEditText().getText().toString().trim();
-			editTextPreference.setSummary(mBackupMail);
-			editTextPreference.setText(mBackupMail);
+			String backupMail = editTextPreference.getEditText().getText().toString().trim();
+			editTextPreference.setSummary(backupMail);
+			editTextPreference.setText(backupMail);
+			Editor editor = sp.edit();
+			editor.putString(NoteUtil.MAIL, backupMail);
+			editor.commit();
 		}else if (noteRestorePref == preference) {
 			int index = noteRestorePref.findIndexOfValue((String)newValue);
 			final String value = noteRestorePref.getEntryValues()[index] + "";
@@ -146,8 +152,12 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 			dialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					RestoreTask restoreTask = new RestoreTask();
+					//zip way
+					RestoreFromZipTask restoreTask = new RestoreFromZipTask();
 					restoreTask.execute(value);
+					//xml way
+//					RestoreFromXmlTask restoreFromXmlTask = new RestoreFromXmlTask();
+//					restoreFromXmlTask.execute(value);
 				}
 			});
 			dialog.setNegativeButton(android.R.string.cancel, null);
@@ -175,8 +185,12 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 	@Override
 	public boolean onPreferenceClick(Preference preference) {
 		if (backupScreen == preference) {
-			Intent intent = new Intent(getActivity(), BackupDeleteActivity.class);
-			intent.putExtra(NoteUtil.MENU_MODE, NoteUtil.MENU_BACKUP);
+			Intent intent = null;
+			//xml backup
+			//intent = new Intent(getActivity(), XmlBackupActivity.class);
+			//zip backup
+			intent = new Intent(getActivity(), ZipBackupActivity.class);
+			
 			startActivity(intent);
 		}else if (noteRestorePref == preference) {
 			if (restores == null || restore_values == null) {
@@ -190,6 +204,7 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 		return true;
 	}
 	
+	/**获得备份文件列表*/
 	private void getBackupsFromSdCard(String path){
 		fileLists.clear();
 		File file = new File(path);
@@ -202,10 +217,13 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 		if (file.isDirectory()) {
 			tempFiles = file.listFiles();
 			for (int i = 0; i < tempFiles.length; i++) {
+				//获取xml文件备份列表
+//				if (file.listFiles()[i].getAbsolutePath().endsWith("xml")) {
+//					fileLists.add(tempFiles[i]);
+//				}
+				//获取zip文件备份列表
 				if (file.listFiles()[i].getAbsolutePath().endsWith("zip")) {
 					fileLists.add(tempFiles[i]);
-				}else {
-//					System.out.println("==>" + file.listFiles()[i].getPath());
 				}
 			}
 			
@@ -217,6 +235,9 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 			
 			restores = new CharSequence[size];
 			for (int i = 0; i < size; i++) {
+				//xml
+				restores[i] = fileLists.get(i).getName().substring(0, fileLists.get(i).getName().length() - NoteUtil.EXTENSION_XML.length());
+				//zip
 				restores[i] = fileLists.get(i).getName().substring(0, fileLists.get(i).getName().length() - NoteUtil.EXTENSION_ZIP.length());
 			}
 			
@@ -226,11 +247,69 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 	}
 	
 	//恢复备份
-	public class RestoreTask extends AsyncTask<String, String, String>{
+	private List<Notes> noteItems;
+	/**从Xml文件中恢复数据*/
+	public class RestoreFromXmlTask extends AsyncTask<String, String, String>{
+		ProgressDialog progressDialog;
+
+		@Override
+		protected String doInBackground(String... params) {
+			System.out.println("params=" + params[0]);
+			ImportXml importXml = new ImportXml(getActivity(),params[0]);
+			noteItems = importXml.getNotesFromXml();
+			ContentResolver conResolver = getActivity().getContentResolver();
+			for (Notes note: noteItems) {
+				String title = note.getTitle();
+				String content = note.getContent();
+				long date = note.getTime();
+				
+				ContentValues values = new ContentValues();
+				values.put(NoteBookMetaData.NoteBook.CONTENT, content);
+				values.put(NoteBookMetaData.NoteBook.TIME, date);
+				
+				//数据库更新时，如果更新的类型不是int型，而是text的数据，必须用''包起来，如下面这一句
+				int ret = getActivity().getContentResolver().update(NoteBookMetaData.NoteBook.CONTENT_URI, values,
+						"title='" + title + "'", null);
+				
+				if (ret == 0) {
+					values.put(NoteBookMetaData.NoteBook.TITLE, title);
+					conResolver.insert(NoteBookMetaData.NoteBook.CONTENT_URI, values);
+				}
+			}
+			
+			NoteManager.isNeedRefresh = true;
+			NoteManager.isFirst = true;
+			
+			publishProgress("");
+			return null;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			progressDialog = new ProgressDialog(getActivity());
+			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(false);
+			progressDialog.show();
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected void onProgressUpdate(String... values) {
+			if (progressDialog != null) {
+				progressDialog.cancel();
+			}
+			Toast.makeText(getActivity(), "数据恢复成功！", Toast.LENGTH_SHORT).show();
+			super.onProgressUpdate(values);
+		}
+	}
+	
+	/**从zip文件中恢复数据
+	 * */
+	public class RestoreFromZipTask extends AsyncTask<String, String, String>{
 		ProgressDialog progressDialog;
 		@Override
 		protected String doInBackground(String... params) {
-			// TODO Auto-generated method stub
 			File file = new File(params[0]);
 			String filePath;
 			String fileName;
@@ -283,7 +362,6 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
 			progressDialog = new ProgressDialog(getActivity());
 			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			progressDialog.setIndeterminate(true);
@@ -293,14 +371,7 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-		}
-
-		@Override
 		protected void onProgressUpdate(String... values) {
-			// TODO Auto-generated method stub
 			if (progressDialog != null) {
 				progressDialog.cancel();
 			}

@@ -7,7 +7,7 @@ import org.acra.annotation.ReportsCrashes;
 import android.app.Application;
 
 import com.yuri.notebook.R;
-import com.yuri.notebook.utils.CrashHandler;
+import com.yuri.notebook.unuse.CrashHandler;
 
 //@ReportsCrashes(formKey = "",
 //				)

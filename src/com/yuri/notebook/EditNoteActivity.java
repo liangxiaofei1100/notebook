@@ -40,7 +40,6 @@ public class EditNoteActivity extends Activity {
 //		titleText = (TextView)findViewById(R.id.textbiaoti);
 //		titleText.setVisibility(View.GONE);
 		titleEdit = (EditText)findViewById(R.id.editbiaoti);
-		titleEdit.setVisibility(View.GONE);
 //		contentText = (TextView)findViewById(R.id.content_text);
 //		contentText.setVisibility(View.GONE);
 		contentEdit = (EditText)findViewById(R.id.content_edit);
@@ -48,15 +47,13 @@ public class EditNoteActivity extends Activity {
 		
 		Intent intent = this.getIntent();
 		itemId = intent.getLongExtra(NoteUtil.ITEM_ID_INDEX, -1);
-		System.out.println("itemid="+ itemId);
 		mNoteBook = NoteManager.getNotesFromId(itemId,this);
 		
-		setTitle(mNoteBook.getTitle());
+		setTitle(R.string.edit);
+		titleEdit.setText(mNoteBook.getTitle());
+		
 		contentEdit.setText(mNoteBook.getContent());
-//		if (contentEdit.getText().toString().trim().equals("")) {
-			contentEdit.setHint("在此输入内容");
-//		}
-//		NoteUtil.onFocusChange(contentEdit, true);
+		contentEdit.setHint(R.string.add_note_tip);
 		
 //		sp = getSharedPreferences(NoteUtil.SHARED_NAME, MODE_PRIVATE);
 //		

@@ -6,6 +6,7 @@
     <string name="edit_hint">请输入密码</string>
     <string name="login">登陆</string>
     <string name="exit">退出</string>
+    <string name="edit">编辑</string>
     <string name="modify">修改密码</string>
     
     <string name="setting">"设置"</string>
@@ -60,12 +61,14 @@
     <string name="menu_search">搜索</string>
     
     <string name="add_note">"新增记事"</string>
+    <string name="add_note_tip">"在此输入内容..."</string>
     <string name="edit_note">"修改记事"</string>
     
     <string name="delete_msg">"确定删除 “<xliff:g id="delete">%1$s</xliff:g>” 这一条记录？"</string>
     <string name="delete_msg_2">"确定删除本条记录？"</string>
     <string name="delete_msg_multi">"确定删除这<xliff:g id="delete_multi">%1$s</xliff:g>条记录？"</string>
     <string name="multi_delete"></string>
+    <string name="selected_msg">"选择记事(<xliff:g id="selected">%1$s</xliff:g>)"</string>
     
    <string name="no_record">"亲，你还没有添加任何记事哦！"</string>
    <string name="search_result_empty">"没有符合搜索条件的记录"</string>
@@ -111,6 +114,7 @@
    
    <string name="note_backup">"数据备份"</string>
    <string name="backup_tip">"本地保存路径:/sdcard/Note/"</string>
+   <string name="backup_location">"备份路径："</string>
    <string name="note_restore">"数据恢复"</string>
    <string name="note_restore_title">"选择要恢复的备份"</string>
    <string name="restore_tip">"恢复操作将覆盖现有数据，请谨慎操作"</string>

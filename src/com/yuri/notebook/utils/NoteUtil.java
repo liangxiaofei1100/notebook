@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -90,6 +91,7 @@ public class NoteUtil {
 	public static final String DATA_PATH = "/data/data/com.yuri.notebook/backup";
 	public static final String EXTENSION_TXT = ".txt";
 	public static final String EXTENSION_ZIP = ".zip";
+	public static final String EXTENSION_XML = ".xml";
 	public static final String UNZIP_PATH = DEFAULT_PATH + "backup/";
 
 	public static final SimpleDateFormat FILE_FORMAT = new SimpleDateFormat(
@@ -342,15 +344,9 @@ public class NoteUtil {
 	 * @param files
 	 *            需要压缩的文件
 	 */
-	public static void zipForPw(File file, File... files) {
+	public static void zipForPw(File file, ArrayList<File> files) {
 		try {
 			ZipFile zipFile = new ZipFile(file);
-
-			ArrayList<File> filesToAdd = new ArrayList<File>();
-			// 添加你需要压缩的文件
-			for (int i = 0; i < files.length; i++) {
-				filesToAdd.add(files[i]);
-			}
 
 			ZipParameters zipParameters = new ZipParameters();
 			zipParameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
@@ -360,7 +356,7 @@ public class NoteUtil {
 			// 开始写密码
 			zipParameters.setPassword(ZIP_PW);
 
-			zipFile.addFiles(filesToAdd, zipParameters);
+			zipFile.addFiles(files, zipParameters);
 		} catch (ZipException e) {
 			e.printStackTrace();
 		}

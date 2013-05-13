@@ -30,6 +30,8 @@ public class Notes implements Parcelable {
 			return new Notes[size];
 		}
 	};
+	
+	public Notes(){}
 
 	public Notes(long id) {
 		note_id = id;

@@ -1,4 +1,4 @@
-package com.yuri.notebook.db;
+package com.yuri.notebook.unuse;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

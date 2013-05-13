@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.yuri.notebook.AppendNoteActivity;
-import com.yuri.notebook.BackupDeleteActivity;
 import com.yuri.notebook.CheckNoteActivity;
 import com.yuri.notebook.EditNoteActivity;
 import com.yuri.notebook.NoteSettingActivity;
 import com.yuri.notebook.R;
+import com.yuri.notebook.ZipBackupActivity;
 import com.yuri.notebook.db.NoteBookMetaData;
 import com.yuri.notebook.utils.NoteManager;
 import com.yuri.notebook.utils.NoteUtil;
@@ -143,7 +143,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 			startActivity(intent);
 			break;
 		case NoteUtil.MENU_BACKUP:
-			intent = new Intent(NoteLoader.this, BackupDeleteActivity.class);
+			intent = new Intent(NoteLoader.this, ZipBackupActivity.class);
 			intent.putExtra(NoteUtil.MENU_MODE, NoteUtil.MENU_BACKUP);
 			startActivity(intent);
 
@@ -443,11 +443,9 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 					}
 				}
 				
-				String deleteMessage = "是否删除这" + selectedList.size() + "项";
-
 				new AlertDialog.Builder(mContext)
 						.setTitle(R.string.menu_delete)
-						.setMessage(deleteMessage)
+						.setMessage(getString(R.string.delete_msg_multi, selectedList.size()))
 						.setPositiveButton(android.R.string.ok,
 								new DialogInterface.OnClickListener() {
 									@Override
@@ -555,7 +553,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		
 		private void setSubtitle(ActionMode mode) {
 			final int checkedCount = mAdapter2.getCheckedItemCount();
-			mSelectBtn.setText("" + checkedCount + " items selected");
+			mSelectBtn.setText(getString(R.string.selected_msg, checkedCount));
 			Menu menu = mode.getMenu();
 			if (checkedCount == 0) {
 				menu.findItem(R.id.actionbar_edit).setEnabled(false);
@@ -606,8 +604,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 					mAdapter2.unSelectedAll();
 				}
 				
-				int selectedCount = mAdapter2.getCheckedItemCount();
-	            mSelectBtn.setText("" + selectedCount + " items selected");
+				setSubtitle(actionMode);
 	           
 				updateSelectPopupMenu();
 				
