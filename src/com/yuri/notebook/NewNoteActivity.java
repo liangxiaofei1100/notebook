@@ -2,10 +2,12 @@ package com.yuri.notebook;
 
 import java.util.Calendar;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,19 +16,20 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 
-import com.yuri.notebook.db.NoteBookMetaData;
+import com.yuri.notebook.db.NoteMetaData;
 import com.yuri.notebook.utils.NoteManager;
 import com.yuri.notebook.utils.NoteUtil;
 
-public class AppendNoteActivity extends Activity implements OnFocusChangeListener {
+public class NewNoteActivity extends Activity implements OnFocusChangeListener {
 	private static final String TAG = "AppendNoteActivity";
-	private EditText titleEdit,contentEdit;
+	private EditText mTitleEdit,mContentEdit;
 	Calendar calendar;
 //	String time;
-	long time;
 	Intent intent;
 	
 	private SharedPreferences sp = null;
@@ -36,25 +39,42 @@ public class AppendNoteActivity extends Activity implements OnFocusChangeListene
 	private int mColorType;
 	
 	private boolean hasTitleEditFoucsed = false;
+	
+	private long mTime = 0;
+	private String mTitle = "";
+	private String mContent = "";
+	
+	private View mCustomView ;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		setContentView(R.layout.add_note);
-		
-		// 标题栏返回
-		NoteUtil.setShowTitleBackButton(AppendNoteActivity.this);
-		        
-		setTitle(R.string.add_note);
 		
 		sp = getSharedPreferences(NoteUtil.SHARED_NAME, MODE_PRIVATE);
 		
-		titleEdit = (EditText)findViewById(R.id.editbiaoti);
-		titleEdit.setOnFocusChangeListener(this);
+		mCustomView = getLayoutInflater().inflate(R.layout.editnote_custom_title, null);
+		final ActionBar bar = getActionBar();
+		 bar.setCustomView(mCustomView,
+	                new ActionBar.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+		 
+		 //设置标题栏返回
+		int flags = ActionBar.DISPLAY_HOME_AS_UP;
+		int change = bar.getDisplayOptions() ^ flags;
+		bar.setDisplayOptions(change, flags);
 		
-		contentEdit = (EditText) findViewById(R.id.content_edit);
-		contentEdit.setFocusable(true);
-		contentEdit.requestFocus();
-		contentEdit.addTextChangedListener(watcher);
+		//设置自定义标题栏
+		bar.setDisplayOptions(bar.getDisplayOptions() ^ ActionBar.DISPLAY_SHOW_CUSTOM, ActionBar.DISPLAY_SHOW_CUSTOM);
+		
+//		titleEdit = (EditText)findViewById(R.id.editbiaoti);
+		
+		mTitleEdit = (EditText) mCustomView.findViewById(R.id.title_edit);
+		mTitleEdit.setBackgroundColor(Color.TRANSPARENT);
+		mContentEdit = (EditText) findViewById(R.id.content_edit);
+		mContentEdit.addTextChangedListener(watcher);
+		mContentEdit.setBackgroundColor(Color.TRANSPARENT);
+		mContentEdit.requestFocus();
 //		NoteUtil.emulateShiftHeld(contentEdit);
 //		readFontSize();
 //		readBackgroundColor();
@@ -81,36 +101,45 @@ public class AppendNoteActivity extends Activity implements OnFocusChangeListene
 			NoteManager.isNeedRefresh = true;
 			NoteManager.isFirst = true;
 			
-//			time = NoteUtil.getTime();
 			//use new way
-			time = System.currentTimeMillis();
-			String titleStr = titleEdit.getText().toString().trim();
-			String contentStr = contentEdit.getText().toString().trim();
+			mTime = System.currentTimeMillis();
+			mTitle = mTitleEdit.getText().toString().trim();
+			mContent = mContentEdit.getText().toString().trim();
 			
-			if (titleStr == null || titleStr.equals("")) {
-				NoteUtil.showToast(AppendNoteActivity.this, R.string.title_cannot_null);
+			if (mTitle == null || mTitle.equals("")) {
+				NoteUtil.showToast(NewNoteActivity.this, R.string.title_cannot_null);
 			}else {
 				ContentValues values = new ContentValues();
-				values.put(NoteBookMetaData.NoteBook.TITLE,titleStr);
-				values.put(NoteBookMetaData.NoteBook.CONTENT,contentStr);
-				values.put(NoteBookMetaData.NoteBook.TIME, time);
-				getContentResolver().insert(NoteBookMetaData.NoteBook.CONTENT_URI, values);
+				values.put(NoteMetaData.Note.TITLE,mTitle);
+				values.put(NoteMetaData.Note.CONTENT,mContent);
+				values.put(NoteMetaData.Note.TIME, mTime);
+				getContentResolver().insert(NoteMetaData.Note.CONTENT_URI, values);
 				
-				AppendNoteActivity.this.finish();
+				NewNoteActivity.this.finish();
 			}
 			break;
 		case android.R.id.home://
 			//点击左上角应用图标，返回，默认情况下，图标的ID是android.R.id.home
-			NoteManager.backAlert(AppendNoteActivity.this);
+			noteFinish();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 	
+	private void noteFinish(){
+		mTitle = mTitleEdit.getText().toString().trim();
+		mContent = mContentEdit.getText().toString().trim();
+		if (mTitle.equals("") && mContent.equals("")) {
+			this.finish();
+		}else {
+			NoteManager.backAlert(NewNoteActivity.this);
+		}
+	};
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (KeyEvent.KEYCODE_BACK == keyCode) {
-			NoteManager.backAlert(AppendNoteActivity.this);
+			noteFinish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -120,12 +149,12 @@ public class AppendNoteActivity extends Activity implements OnFocusChangeListene
 	    @Override
 	    public void afterTextChanged(Editable s) {
 	    	if (!hasTitleEditFoucsed) {
-	    		String title = contentEdit.getText().toString();
+	    		String title = mContentEdit.getText().toString();
 		    	if (title.indexOf("\n") == -1) {
 				}else {
 					title = title.substring(0, title.indexOf("\n"));
 				}
-		    	titleEdit.setText(title);
+		    	mTitleEdit.setText(title);
 			}
 	    }
 	 
@@ -142,13 +171,11 @@ public class AppendNoteActivity extends Activity implements OnFocusChangeListene
 	
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
-		if (titleEdit == v) {
-			if (titleEdit.getText().toString().equals("")) {
+		if (mTitleEdit == v) {
+			if (mTitleEdit.getText().toString().equals("")) {
 				hasTitleEditFoucsed = false;
-			}else {
-				if (hasFocus) {
-					hasTitleEditFoucsed = true;
-				}
+			} else {
+				hasTitleEditFoucsed = true;
 			}
 			
 		}

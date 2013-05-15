@@ -30,7 +30,7 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.yuri.notebook.db.NoteBookMetaData;
+import com.yuri.notebook.db.NoteMetaData;
 import com.yuri.notebook.utils.ImportXml;
 import com.yuri.notebook.utils.NoteManager;
 import com.yuri.notebook.utils.NoteUtil;
@@ -264,16 +264,16 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 				long date = note.getTime();
 				
 				ContentValues values = new ContentValues();
-				values.put(NoteBookMetaData.NoteBook.CONTENT, content);
-				values.put(NoteBookMetaData.NoteBook.TIME, date);
+				values.put(NoteMetaData.Note.CONTENT, content);
+				values.put(NoteMetaData.Note.TIME, date);
 				
 				//数据库更新时，如果更新的类型不是int型，而是text的数据，必须用''包起来，如下面这一句
-				int ret = getActivity().getContentResolver().update(NoteBookMetaData.NoteBook.CONTENT_URI, values,
+				int ret = getActivity().getContentResolver().update(NoteMetaData.Note.CONTENT_URI, values,
 						"title='" + title + "'", null);
 				
 				if (ret == 0) {
-					values.put(NoteBookMetaData.NoteBook.TITLE, title);
-					conResolver.insert(NoteBookMetaData.NoteBook.CONTENT_URI, values);
+					values.put(NoteMetaData.Note.TITLE, title);
+					conResolver.insert(NoteMetaData.Note.CONTENT_URI, values);
 				}
 			}
 			
@@ -331,15 +331,15 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 					content = NoteUtil.BufferReaderDemo(filePath);
 					
 					ContentValues values = new ContentValues();
-					values.put(NoteBookMetaData.NoteBook.CONTENT, content);
+					values.put(NoteMetaData.Note.CONTENT, content);
 
 					//数据库更新时，如果更新的类型不是int型，而是text的数据，必须用''包起来，如下面这一句
-					int ret = getActivity().getContentResolver().update(NoteBookMetaData.NoteBook.CONTENT_URI, values,
+					int ret = getActivity().getContentResolver().update(NoteMetaData.Note.CONTENT_URI, values,
 							"title='" + title + "'", null);
 					if (ret == 0) {
-						values.put(NoteBookMetaData.NoteBook.TITLE, title);
-						values.put(NoteBookMetaData.NoteBook.TIME, System.currentTimeMillis());
-						getActivity().getContentResolver().insert(NoteBookMetaData.NoteBook.CONTENT_URI, values);
+						values.put(NoteMetaData.Note.TITLE, title);
+						values.put(NoteMetaData.Note.TIME, System.currentTimeMillis());
+						getActivity().getContentResolver().insert(NoteMetaData.Note.CONTENT_URI, values);
 					}
 
 				}

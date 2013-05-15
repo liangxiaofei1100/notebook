@@ -1,6 +1,6 @@
 package com.yuri.notebook;
 
-import com.yuri.notebook.db.NoteBookMetaData;
+import com.yuri.notebook.db.NoteMetaData;
 import com.yuri.notebook.utils.NoteManager;
 import com.yuri.notebook.utils.NoteUtil;
 import com.yuri.notebook.utils.Notes;
@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 public class CheckNoteActivity extends Activity {
@@ -61,32 +62,39 @@ public class CheckNoteActivity extends Activity {
 		setTitle(mNoteBook.getTitle());
 		contentText.setText(mNoteBook.getContent());
 	}
+	
+	private Intent createShareIntent(){
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.putExtra(Intent.EXTRA_TEXT, contentText.getText().toString().trim() + "\n" + "BY XG NOTE!");
+		intent.setType("*/*");
+		return intent;
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuItem edit_item = menu.add(0, NoteUtil.MENU_EDIT, 1, R.string.menu_edit).setIcon(R.drawable.ic_menu_edit_current);
-		MenuItem delete_item = menu.add(0, NoteUtil.MENU_DELETE, 1, R.string.menu_delete).setIcon(R.drawable.ic_menu_delete_selected);
-		MenuItem share_item = menu.add(0, NoteUtil.MENU_SHARE, 1, "分享");
-		edit_item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		delete_item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		getMenuInflater().inflate(R.menu.check_note_menu, menu);
+		MenuItem menuItem = menu.findItem(R.id.menu_share);
+		ShareActionProvider actionProvider = (ShareActionProvider) menuItem.getActionProvider();
+		actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+		actionProvider.setShareIntent(createShareIntent());
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case NoteUtil.MENU_EDIT:
+		case R.id.menu_edit:
 			Intent intent = new Intent(CheckNoteActivity.this, EditNoteActivity.class);
 			intent.putExtra(NoteUtil.ITEM_ID_INDEX, itemId);
 			startActivityForResult(intent, NoteUtil.REQUEST_EDIT);
 			break;
-		case NoteUtil.MENU_DELETE:
+		case R.id.menu_delete:
 			new AlertDialog.Builder(CheckNoteActivity.this).setTitle(R.string.menu_delete)
 					.setMessage(getResources().getString(R.string.delete_msg_2, mNoteBook.getTitle()))
 					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							Uri uri = Uri.parse(NoteBookMetaData.NoteBook.CONTENT_URI + "/" + itemId);
+							Uri uri = Uri.parse(NoteMetaData.Note.CONTENT_URI + "/" + itemId);
 							getContentResolver().delete(uri, null, null);
 							
 							NoteManager.isNeedRefresh = true;
@@ -96,15 +104,20 @@ public class CheckNoteActivity extends Activity {
 						}
 					}).setNegativeButton(android.R.string.cancel, null).create().show();
 			break;
-		case NoteUtil.MENU_SHARE:
-			Uri smsToUri = Uri.parse("smsto:");// 联系人地址
-
-        	Intent mIntent = new Intent(android.content.Intent.ACTION_SENDTO,smsToUri);
-        	//String noteContent=NoteEdit.getBodyContent();
-        	mIntent.putExtra("sms_body", contentText.getText()+"\n" +
-        			"由“XG笔记”发送");// 短信的内容
-
-        	startActivity(mIntent);
+		case R.id.menu_share:
+//			Uri smsToUri = Uri.parse("smsto:");// 联系人地址
+//
+//        	Intent mIntent = new Intent(android.content.Intent.ACTION_SENDTO,smsToUri);
+//        	//String noteContent=NoteEdit.getBodyContent();
+//        	mIntent.putExtra("sms_body", contentText.getText()+"\n" +
+//        			"由“XG笔记”发送");// 短信的内容
+//
+//        	startActivity(mIntent);
+			Intent mIntent  = new Intent();
+			mIntent.setAction(Intent.ACTION_SEND);
+			mIntent.setType("*/*");
+			startActivity(mIntent);
+			
         	break;
 		case android.R.id.home://
 			// 点击左上角应用图标，返回，默认情况下，图标的ID是android.R.id.home

@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 
 import org.xmlpull.v1.XmlSerializer;
 
-import com.yuri.notebook.db.NoteBookMetaData;
+import com.yuri.notebook.db.NoteMetaData;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -54,12 +54,12 @@ public class ExportXml {
 		try {
 			ContentResolver contentResolver = context.getContentResolver();
 			String[] projection = new String[]{
-					NoteBookMetaData.NoteBook.TITLE,
-					NoteBookMetaData.NoteBook.CONTENT,
-					NoteBookMetaData.NoteBook.TIME
+					NoteMetaData.Note.TITLE,
+					NoteMetaData.Note.CONTENT,
+					NoteMetaData.Note.TIME
                     };
 			
-			cursor = contentResolver.query(NoteBookMetaData.NoteBook.CONTENT_URI, 
+			cursor = contentResolver.query(NoteMetaData.Note.CONTENT_URI, 
 					projection, null, null, 
 					"_id ASC");
 			if (cursor.moveToFirst()) {
@@ -67,23 +67,23 @@ public class ExportXml {
                 String content;  
                 String date;  
                 do {
-                	title = cursor.getString(cursor.getColumnIndex(NoteBookMetaData.NoteBook.TITLE));  
+                	title = cursor.getString(cursor.getColumnIndex(NoteMetaData.Note.TITLE));  
                     if (title == null) {  
                     	title = "";  
                     }  
-                    content = cursor.getString(cursor.getColumnIndex(NoteBookMetaData.NoteBook.CONTENT));  
+                    content = cursor.getString(cursor.getColumnIndex(NoteMetaData.Note.CONTENT));  
                     if (content == null) {  
                     	content = "";  
                     }  
-                    date = cursor.getString(cursor.getColumnIndex(NoteBookMetaData.NoteBook.TIME));  
+                    date = cursor.getString(cursor.getColumnIndex(NoteMetaData.Note.TIME));  
                     if (date == null) {  
                         date = "";  
                     }  
                     
                     serializer.startTag(null, "item");  
-                    serializer.attribute(null, NoteBookMetaData.NoteBook.TITLE, title);  
-                    serializer.attribute(null, NoteBookMetaData.NoteBook.CONTENT, content);  
-                    serializer.attribute(null, NoteBookMetaData.NoteBook.TIME, date);  
+                    serializer.attribute(null, NoteMetaData.Note.TITLE, title);  
+                    serializer.attribute(null, NoteMetaData.Note.CONTENT, content);  
+                    serializer.attribute(null, NoteMetaData.Note.TIME, date);  
                     serializer.endTag(null, "item");
 				} while (cursor.moveToNext());
 			}else {

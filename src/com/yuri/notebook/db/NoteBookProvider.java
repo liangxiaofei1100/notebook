@@ -30,42 +30,42 @@ public class NoteBookProvider extends ContentProvider {
 	
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		uriMatcher.addURI(NoteBookMetaData.AUTHORITY, "notebooks", NOTEBOOK_COLLECTION);
-		uriMatcher.addURI(NoteBookMetaData.AUTHORITY, "notebooks/#", NOTEBOOK_SINGLE);
-		uriMatcher.addURI(NoteBookMetaData.AUTHORITY, "notebooks_filter/*", NOTEBOOK_FILTER);
-		uriMatcher.addURI(NoteBookMetaData.AUTHORITY, "mails", MAIL_COLLECTION);
-		uriMatcher.addURI(NoteBookMetaData.AUTHORITY, "mails/#", MAIL_SINGLE);
+		uriMatcher.addURI(NoteMetaData.AUTHORITY, "notebooks", NOTEBOOK_COLLECTION);
+		uriMatcher.addURI(NoteMetaData.AUTHORITY, "notebooks/#", NOTEBOOK_SINGLE);
+		uriMatcher.addURI(NoteMetaData.AUTHORITY, "notebooks_filter/*", NOTEBOOK_FILTER);
+		uriMatcher.addURI(NoteMetaData.AUTHORITY, "mails", MAIL_COLLECTION);
+		uriMatcher.addURI(NoteMetaData.AUTHORITY, "mails/#", MAIL_SINGLE);
 	}
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper{
 
 		public DatabaseHelper(Context context) {
-			super(context, NoteBookMetaData.DATABASE_NAME, null, NoteBookMetaData.DATABASE_VERSION);
+			super(context, NoteMetaData.DATABASE_NAME, null, NoteMetaData.DATABASE_VERSION);
 		}
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			//notes table
-			db.execSQL("create table " + NoteBookMetaData.NoteBook.TABLE_NAME
+			db.execSQL("create table " + NoteMetaData.Note.TABLE_NAME
 					+ " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, "
-					+ NoteBookMetaData.NoteBook.TITLE + " TEXT, "
-					+ NoteBookMetaData.NoteBook.CONTENT + " TEXT, "
-					+ NoteBookMetaData.NoteBook.TIME + " LONG);"
+					+ NoteMetaData.Note.TITLE + " TEXT, "
+					+ NoteMetaData.Note.CONTENT + " TEXT, "
+					+ NoteMetaData.Note.TIME + " LONG);"
 					);
 			
 			//mails table 暂时没有使用
-			db.execSQL("create table " + NoteBookMetaData.NoteBook.TABLE_MAIL
+			db.execSQL("create table " + NoteMetaData.Note.TABLE_MAIL
 					+ " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, "
-					+ NoteBookMetaData.NoteBook.TITLE + " TEXT);"
+					+ NoteMetaData.Note.TITLE + " TEXT);"
 					);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			//如果数据库版本发生变化，则删掉重建
-			db.execSQL("DROP TABLE IF EXISTS " + NoteBookMetaData.NoteBook.TABLE_NAME);
+			db.execSQL("DROP TABLE IF EXISTS " + NoteMetaData.Note.TABLE_NAME);
 			
-			db.execSQL("DROP TABLE IF EXISTS " + NoteBookMetaData.NoteBook.TABLE_MAIL);
+			db.execSQL("DROP TABLE IF EXISTS " + NoteMetaData.Note.TABLE_MAIL);
 			onCreate(db);
 		}
 		
@@ -79,7 +79,7 @@ public class NoteBookProvider extends ContentProvider {
 		switch (uriMatcher.match(uri)) {
 		case NOTEBOOK_COLLECTION:
 			
-			count = mSqLiteDatabase.delete(NoteBookMetaData.NoteBook.TABLE_NAME, selection, selectionArgs);
+			count = mSqLiteDatabase.delete(NoteMetaData.Note.TABLE_NAME, selection, selectionArgs);
 			break;
 		case NOTEBOOK_SINGLE:
 			String segment = uri.getPathSegments().get(1);
@@ -88,11 +88,11 @@ public class NoteBookProvider extends ContentProvider {
 			}else {
 				selection = "_id=" +  segment;
 			}
-			count = mSqLiteDatabase.delete(NoteBookMetaData.NoteBook.TABLE_NAME, selection, selectionArgs);
+			count = mSqLiteDatabase.delete(NoteMetaData.Note.TABLE_NAME, selection, selectionArgs);
 			break;
 			
 		case MAIL_COLLECTION:
-			count = mSqLiteDatabase.delete(NoteBookMetaData.NoteBook.TABLE_MAIL, selection, selectionArgs);
+			count = mSqLiteDatabase.delete(NoteMetaData.Note.TABLE_MAIL, selection, selectionArgs);
 			break;
 		case MAIL_SINGLE:
 			String segment1 = uri.getPathSegments().get(1);
@@ -101,7 +101,7 @@ public class NoteBookProvider extends ContentProvider {
 			}else {
 				selection = "_id=" +  segment1;
 			}
-			count = mSqLiteDatabase.delete(NoteBookMetaData.NoteBook.TABLE_MAIL, selection, selectionArgs);
+			count = mSqLiteDatabase.delete(NoteMetaData.Note.TABLE_MAIL, selection, selectionArgs);
 			break;
 		default:
 			throw new IllegalArgumentException("UnKnow Uri:" + uri);
@@ -118,14 +118,14 @@ public class NoteBookProvider extends ContentProvider {
 	public String getType(Uri uri) {
 		switch (uriMatcher.match(uri)) {
 		case NOTEBOOK_COLLECTION:
-			return NoteBookMetaData.NoteBook.CONTENT_TYPE;
+			return NoteMetaData.Note.CONTENT_TYPE;
 		case NOTEBOOK_SINGLE:
-			return NoteBookMetaData.NoteBook.CONTENT_TYPE_ITEM;
+			return NoteMetaData.Note.CONTENT_TYPE_ITEM;
 			
 		case MAIL_COLLECTION:
-			return NoteBookMetaData.NoteBook.MAIL_CONTENT_TYPE;
+			return NoteMetaData.Note.MAIL_CONTENT_TYPE;
 		case MAIL_SINGLE:
-			return NoteBookMetaData.NoteBook.MAIL_CONTENT_TYPE_ITEM;
+			return NoteMetaData.Note.MAIL_CONTENT_TYPE_ITEM;
 		default:
 			throw new IllegalArgumentException("Unkonw uri:" + uri);
 		}
@@ -138,10 +138,10 @@ public class NoteBookProvider extends ContentProvider {
 		case NOTEBOOK_COLLECTION:
 		case NOTEBOOK_SINGLE:
 			mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
-			long rowId = mSqLiteDatabase.insertWithOnConflict(NoteBookMetaData.NoteBook.TABLE_NAME, "", 
+			long rowId = mSqLiteDatabase.insertWithOnConflict(NoteMetaData.Note.TABLE_NAME, "", 
 					values, SQLiteDatabase.CONFLICT_REPLACE);
 			if (rowId > 0) {
-				Uri rowUri = ContentUris.withAppendedId(NoteBookMetaData.NoteBook.CONTENT_URI, rowId);
+				Uri rowUri = ContentUris.withAppendedId(NoteMetaData.Note.CONTENT_URI, rowId);
 				getContext().getContentResolver().notifyChange(uri, null);
 				return rowUri;
 			}
@@ -163,21 +163,21 @@ public class NoteBookProvider extends ContentProvider {
 		
 		switch (uriMatcher.match(uri)) {
 		case NOTEBOOK_COLLECTION:
-			qb.setTables(NoteBookMetaData.NoteBook.TABLE_NAME);
+			qb.setTables(NoteMetaData.Note.TABLE_NAME);
 			break;
 		case NOTEBOOK_SINGLE:
-			qb.setTables(NoteBookMetaData.NoteBook.TABLE_NAME);
+			qb.setTables(NoteMetaData.Note.TABLE_NAME);
 			qb.appendWhere("_id=");
 			qb.appendWhere(uri.getPathSegments().get(1));
 			break;
 		case NOTEBOOK_FILTER:
-			qb.setTables(NoteBookMetaData.NoteBook.TABLE_NAME);
+			qb.setTables(NoteMetaData.Note.TABLE_NAME);
 
-			qb.appendWhere(NoteBookMetaData.NoteBook.TITLE + " like \'%"
+			qb.appendWhere(NoteMetaData.Note.TITLE + " like \'%"
 					+ uri.getPathSegments().get(1) + "%\'");
 			qb.appendWhere(" or ");
 
-			qb.appendWhere(NoteBookMetaData.NoteBook.CONTENT + " like \'%"
+			qb.appendWhere(NoteMetaData.Note.CONTENT + " like \'%"
 					+ uri.getPathSegments().get(1) + "%\'");
 			break;
 		default:
@@ -206,10 +206,10 @@ public class NoteBookProvider extends ContentProvider {
 			String segment = uri.getPathSegments().get(1);
 			rowId = Long.parseLong(segment);
 			
-			count = mSqLiteDatabase.update(NoteBookMetaData.NoteBook.TABLE_NAME, values, "_id=" + rowId, null);
+			count = mSqLiteDatabase.update(NoteMetaData.Note.TABLE_NAME, values, "_id=" + rowId, null);
 			break;
 		case NOTEBOOK_COLLECTION:
-			count = mSqLiteDatabase.update(NoteBookMetaData.NoteBook.TABLE_NAME, values, selection, null);
+			count = mSqLiteDatabase.update(NoteMetaData.Note.TABLE_NAME, values, selection, null);
 			break;
 		default:
 			throw new UnsupportedOperationException("Cannot update uri:" + uri);

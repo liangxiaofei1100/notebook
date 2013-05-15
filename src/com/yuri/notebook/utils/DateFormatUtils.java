@@ -54,7 +54,7 @@ public class DateFormatUtils {
 		int month = calendar.get(Calendar.MONTH) + 1;
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		int hours = calendar.get(Calendar.HOUR_OF_DAY);//24H
-		LogUtils.d(TAG, "year=" + year + ",month=" + month + ",day=" + day + ",hours=" + hours);
+//		LogUtils.d(TAG, "year=" + year + ",month=" + month + ",day=" + day + ",hours=" + hours);
 		
 		String format_time = "";
 		Date date;

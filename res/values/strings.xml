@@ -61,8 +61,9 @@
     <string name="menu_search">搜索</string>
     
     <string name="add_note">"新增记事"</string>
-    <string name="add_note_tip">"在此输入内容..."</string>
-    <string name="edit_note">"修改记事"</string>
+    <string name="add_note_title_tip">"请输入标题..."</string>
+    <string name="add_note_tip">"在此输入记事..."</string>
+    <string name="edit_note">"修"</string>
     
     <string name="delete_msg">"确定删除 “<xliff:g id="delete">%1$s</xliff:g>” 这一条记录？"</string>
     <string name="delete_msg_2">"确定删除本条记录？"</string>

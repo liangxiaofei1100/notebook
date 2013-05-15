@@ -3,14 +3,14 @@ package com.yuri.notebook.db;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public class NoteBookMetaData{
+public class NoteMetaData{
 	public static final String DATABASE_NAME = "notebook.db";
 	public static final int DATABASE_VERSION = 1;
 
 	public static final String AUTHORITY = "com.yuri.notebook.db.notebookprovider";
 	
 	/**profiles table*/
-	public static final class NoteBook implements BaseColumns{
+	public static final class Note implements BaseColumns{
 		public static final String TABLE_NAME = "notebooks";
 		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/notebooks");
 		public static final Uri CONTENT_FILTER_URI = Uri.parse("content://" + AUTHORITY + "/notebooks_filter");

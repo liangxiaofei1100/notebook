@@ -19,7 +19,7 @@ import android.net.Uri;
 
 import com.yuri.notebook.R;
 import com.yuri.notebook.R.string;
-import com.yuri.notebook.db.NoteBookMetaData;
+import com.yuri.notebook.db.NoteMetaData;
 
 public class NoteManager {
 	
@@ -43,17 +43,17 @@ public class NoteManager {
 	
 	public static Notes getNotesFromId(long id, Context context){
 		Notes noteBook = new Notes(id);
-		Uri uri = Uri.parse(NoteBookMetaData.NoteBook.CONTENT_URI + "/" + id);
+		Uri uri = Uri.parse(NoteMetaData.Note.CONTENT_URI + "/" + id);
 		Cursor cur = null;
 		try {
 			cur = context.getContentResolver().query(uri, NoteUtil.COLUMNS, null, null, null);
 			
 			if (cur.moveToFirst()) {
 				do {
-					noteBook.setTitle(cur.getString(cur.getColumnIndex(NoteBookMetaData.NoteBook.TITLE)));
-					noteBook.setContent(cur.getString(cur.getColumnIndex(NoteBookMetaData.NoteBook.CONTENT)));
+					noteBook.setTitle(cur.getString(cur.getColumnIndex(NoteMetaData.Note.TITLE)));
+					noteBook.setContent(cur.getString(cur.getColumnIndex(NoteMetaData.Note.CONTENT)));
 //					noteBook.setTime(cur.getString(cur.getColumnIndex(NoteBookMetaData.NoteBook.TIME)));
-					noteBook.setTime(cur.getLong(cur.getColumnIndex(NoteBookMetaData.NoteBook.TIME)));
+					noteBook.setTime(cur.getLong(cur.getColumnIndex(NoteMetaData.Note.TIME)));
 				} while (cur.moveToNext());
 			}
 		} catch (Exception e) {

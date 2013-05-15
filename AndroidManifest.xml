@@ -14,9 +14,11 @@
         android:name=".loader.NoteApplication"
         android:icon="@drawable/app_ic_notebook"
         android:allowBackup="true"
-        android:label="@string/app_name" >
+        android:label="@string/app_name" 
+        >
        <activity
             android:name=".start.StartActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +31,7 @@
         </activity>
          <activity 
             android:name=".start.AppIntroduce"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"
             >
         </activity>
 
@@ -50,8 +53,8 @@
             android:theme="@android:style/Theme.Holo.Light" >
         </activity>
         <activity
-            android:name=".AppendNoteActivity"
-            android:label="@string/app_name"
+            android:name=".NewNoteActivity"
+            android:label=""
             android:theme="@android:style/Theme.Holo.Light"
             android:windowSoftInputMode="adjustResize"
              >
@@ -59,13 +62,14 @@
         <activity
             android:name=".CheckNoteActivity"
             android:label="@string/app_name"
+            android:uiOptions="splitActionBarWhenNarrow"
             android:theme="@android:style/Theme.Holo.Light" >
         </activity>
         
         <!--android:windowSoftInputMode="adjustResize"   可以解决不自动弹出输入法的BUg  -->
         <activity
             android:name=".EditNoteActivity"
-            android:label="@string/app_name"
+            android:label=""
             android:theme="@android:style/Theme.Holo.Light"
             android:windowSoftInputMode="adjustResize"
              >
@@ -110,6 +114,7 @@
         <activity 
             android:name=".loader.NoteLoader"
             android:theme="@android:style/Theme.Holo.Light"
+            android:label=""
             android:uiOptions="splitActionBarWhenNarrow"
             ></activity>
     </application>

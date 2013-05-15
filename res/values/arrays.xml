@@ -35,4 +35,9 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+    
+    <string-array name="action_list">
+        <item>All Notes</item>
+        <item>Notes</item>
+    </string-array>
 </resources>

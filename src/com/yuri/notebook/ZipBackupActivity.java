@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.yuri.notebook.R;
-import com.yuri.notebook.db.NoteBookMetaData;
+import com.yuri.notebook.db.NoteMetaData;
 import com.yuri.notebook.utils.NoteUtil;
 
 import android.app.Activity;
@@ -111,23 +111,23 @@ public class ZipBackupActivity extends Activity implements OnClickListener{
 			try {
 				ContentResolver contentResolver = getContentResolver();
 				String[] projection = new String[]{
-						NoteBookMetaData.NoteBook.TITLE,
-						NoteBookMetaData.NoteBook.CONTENT,
-						NoteBookMetaData.NoteBook.TIME
+						NoteMetaData.Note.TITLE,
+						NoteMetaData.Note.CONTENT,
+						NoteMetaData.Note.TIME
 	                    };
 				
-				cursor = contentResolver.query(NoteBookMetaData.NoteBook.CONTENT_URI, 
+				cursor = contentResolver.query(NoteMetaData.Note.CONTENT_URI, 
 						projection, null, null, 
 						"_id ASC");
 				if (cursor.moveToFirst()) {
 					String title;  
 	                String content;  
 	                do {
-	                	title = cursor.getString(cursor.getColumnIndex(NoteBookMetaData.NoteBook.TITLE));  
+	                	title = cursor.getString(cursor.getColumnIndex(NoteMetaData.Note.TITLE));  
 	                    if (title == null) {  
 	                    	title = "";  
 	                    }  
-	                    content = cursor.getString(cursor.getColumnIndex(NoteBookMetaData.NoteBook.CONTENT));  
+	                    content = cursor.getString(cursor.getColumnIndex(NoteMetaData.Note.CONTENT));  
 	                    if (content == null) {  
 	                    	content = "";  
 	                    }  

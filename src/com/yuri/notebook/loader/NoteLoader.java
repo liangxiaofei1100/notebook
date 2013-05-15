@@ -3,17 +3,20 @@ package com.yuri.notebook.loader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yuri.notebook.AppendNoteActivity;
+import com.yuri.notebook.NewNoteActivity;
 import com.yuri.notebook.CheckNoteActivity;
 import com.yuri.notebook.EditNoteActivity;
 import com.yuri.notebook.NoteSettingActivity;
 import com.yuri.notebook.R;
 import com.yuri.notebook.ZipBackupActivity;
-import com.yuri.notebook.db.NoteBookMetaData;
+import com.yuri.notebook.db.NoteMetaData;
 import com.yuri.notebook.utils.NoteManager;
 import com.yuri.notebook.utils.NoteUtil;
 import com.yuri.notebook.utils.Notes;
 
+import android.R.anim;
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -46,12 +49,14 @@ import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.SearchView;
@@ -87,6 +92,18 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.homepage);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		
+		SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.action_list, android.R.layout.simple_spinner_dropdown_item);
+		actionBar.setListNavigationCallbacks(spinnerAdapter, new OnNavigationListener() {
+			
+			@Override
+			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+				return false;
+			}
+		});
 
 		mContext = this;
 //		mListView = (ListView) findViewById(R.id.ListViewAppend);
@@ -139,7 +156,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		Intent intent = null;
 		switch (item.getItemId()) {
 		case R.id.menu_note_loader_add:
-			intent = new Intent(NoteLoader.this, AppendNoteActivity.class);
+			intent = new Intent(NoteLoader.this, NewNoteActivity.class);
 			startActivity(intent);
 			break;
 		case NoteUtil.MENU_BACKUP:
@@ -200,7 +217,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 			String deleteMessage = getResources().getString(
 					R.string.delete_msg,
 					cursor.getString(cursor
-							.getColumnIndex(NoteBookMetaData.NoteBook.TITLE)));
+							.getColumnIndex(NoteMetaData.Note.TITLE)));
 
 			new AlertDialog.Builder(mContext)
 					.setTitle(R.string.menu_delete)
@@ -211,7 +228,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 								public void onClick(DialogInterface dialog,
 										int which) {
 									Uri uri = Uri
-											.parse(NoteBookMetaData.NoteBook.CONTENT_URI
+											.parse(NoteMetaData.Note.CONTENT_URI
 													+ "/" + menuInfo.id);
 									getContentResolver()
 											.delete(uri, null, null);
@@ -234,7 +251,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 			editText.setSingleLine();
 			editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 			editText.setText(cursor.getString(cursor
-					.getColumnIndex(NoteBookMetaData.NoteBook.TITLE)));
+					.getColumnIndex(NoteMetaData.Note.TITLE)));
 			new AlertDialog.Builder(mContext)
 					.setTitle("编辑标题")
 					.setIcon(R.drawable.ic_menu_edit_current)
@@ -247,10 +264,10 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 									String title = editText.getText()
 											.toString().trim();
 									ContentValues values = new ContentValues();
-									values.put(NoteBookMetaData.NoteBook.TITLE,
+									values.put(NoteMetaData.Note.TITLE,
 											title);
 									Uri uri = Uri
-											.parse(NoteBookMetaData.NoteBook.CONTENT_URI
+											.parse(NoteMetaData.Note.CONTENT_URI
 													+ "/" + menuInfo.id);
 									getContentResolver().update(uri, values,
 											null, null);
@@ -298,7 +315,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 	public void onClick(View v) {
 		if (v.getId() == R.id.add_tips_btn) {
 			Intent intent = new Intent();
-			intent = new Intent(NoteLoader.this, AppendNoteActivity.class);
+			intent = new Intent(NoteLoader.this, NewNoteActivity.class);
 			startActivity(intent);
 		}
 	}
@@ -321,14 +338,14 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		Uri uri = null;
 		if (mSearchString == null) {
-			uri = NoteBookMetaData.NoteBook.CONTENT_URI;
+			uri = NoteMetaData.Note.CONTENT_URI;
 		} else {
 			uri = Uri.withAppendedPath(
-					NoteBookMetaData.NoteBook.CONTENT_FILTER_URI,
+					NoteMetaData.Note.CONTENT_FILTER_URI,
 					Uri.encode(mSearchString));
 		}
 		return new CursorLoader(this, uri, NoteUtil.COLUMNS, null, null,
-				NoteBookMetaData.NoteBook.SORT_ORDER_DEFAULT);
+				NoteMetaData.Note.SORT_ORDER_DEFAULT);
 	}
 
 	@Override
@@ -394,11 +411,11 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 
 	@Override
 	protected void onDestroy() {
-		Cursor cursor = mAdapter2.getCursor();
-		if (cursor != null) {
-			cursor.close();
-			mAdapter2.swapCursor(null);
-		}
+//		Cursor cursor = mAdapter2.getCursor();
+//		if (cursor != null) {
+//			cursor.close();
+//			mAdapter2.swapCursor(null);
+//		}
 		super.onDestroy();
 	}
 
@@ -427,7 +444,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 			switch (item.getItemId()) {
 			case R.id.actionbar_edit:
 				cursor.moveToPosition(currentPosition);
-				long index = cursor.getLong(cursor.getColumnIndex(NoteBookMetaData.NoteBook._ID));
+				long index = cursor.getLong(cursor.getColumnIndex(NoteMetaData.Note._ID));
 				Intent intent = new Intent(NoteLoader.this, EditNoteActivity.class);
 				intent.putExtra(NoteUtil.ITEM_ID_INDEX, index);
 				startActivity(intent);
@@ -438,7 +455,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 				for (int pos = getListView().getCount() - 1; pos >= 0; pos--) {
 					if (mAdapter2.isSelected(pos)) {
 						cursor.moveToPosition(pos);
-						long id = cursor.getLong(cursor.getColumnIndex(NoteBookMetaData.NoteBook._ID));
+						long id = cursor.getLong(cursor.getColumnIndex(NoteMetaData.Note._ID));
 						selectedList.add(id);
 					}
 				}
@@ -453,7 +470,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 											int which) {
 										for (int i = 0; i < selectedList.size(); i++) {
 											Uri uri = Uri
-													.parse(NoteBookMetaData.NoteBook.CONTENT_URI
+													.parse(NoteMetaData.Note.CONTENT_URI
 															+ "/" + selectedList.get(i));
 											getContentResolver()
 											.delete(uri, null, null);
