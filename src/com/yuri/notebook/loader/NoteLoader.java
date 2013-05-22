@@ -8,19 +8,17 @@ import com.yuri.notebook.CheckNoteActivity;
 import com.yuri.notebook.EditNoteActivity;
 import com.yuri.notebook.NoteSettingActivity;
 import com.yuri.notebook.R;
-import com.yuri.notebook.ZipBackupActivity;
 import com.yuri.notebook.db.NoteMetaData;
+import com.yuri.notebook.utils.LogUtils;
 import com.yuri.notebook.utils.NoteManager;
 import com.yuri.notebook.utils.NoteUtil;
 import com.yuri.notebook.utils.Notes;
 
-import android.R.anim;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -30,29 +28,23 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -86,6 +78,8 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 	private SearchView mSearchView;
 	private String mSearchString;
 	private boolean mIsSearchMode = false;
+	
+	private static final int ADD_NEW_NOTE_REQUEST = 0x01;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +124,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 	@Override
 	protected void onResume() {
 		if (NoteManager.isNeedRefresh) {
+			System.out.println("-=-=-=-=-==-");
 			NoteManager.isNeedRefresh = false;
 			getLoaderManager().restartLoader(0, null, this);
 		}
@@ -144,10 +139,6 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 				.getActionView();
 		mSearchView.setOnQueryTextListener(this);
 		mSearchView.addOnAttachStateChangeListener(this);
-
-		if (NoteUtil.DEBUG) {
-			menu.add(0, NoteUtil.MENU_RECOVER, 4, "Recover");
-		}
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -156,22 +147,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		Intent intent = null;
 		switch (item.getItemId()) {
 		case R.id.menu_note_loader_add:
-			intent = new Intent(NoteLoader.this, NewNoteActivity.class);
-			startActivity(intent);
-			break;
-		case NoteUtil.MENU_BACKUP:
-			intent = new Intent(NoteLoader.this, ZipBackupActivity.class);
-			intent.putExtra(NoteUtil.MENU_MODE, NoteUtil.MENU_BACKUP);
-			startActivity(intent);
-
-			break;
-		case NoteUtil.MENU_RECOVER:// 恢复
-			long times = System.currentTimeMillis() - 360000;
-			CharSequence dateText = DateUtils.getRelativeTimeSpanString(times,
-					System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS,
-					DateUtils.FORMAT_ABBREV_RELATIVE);
-
-			NoteUtil.showToast(mContext, dateText + "");
+			addNewNote();
 			break;
 		case R.id.menu_note_loader_setting:
 			intent = new Intent();
@@ -180,6 +156,11 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private void addNewNote(){
+		Intent intent = new Intent(NoteLoader.this, NewNoteActivity.class);
+		startActivity(intent);
 	}
 
 	@Override
@@ -196,93 +177,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		openNote(id);
 	}
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		getMenuInflater().inflate(R.menu.note_loader_context_menu, menu);
-		menu.setHeaderTitle(R.string.menu_title);
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		final AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item
-				.getMenuInfo();
-		Cursor cursor = mAdapter2.getCursor();
-		switch (item.getItemId()) {
-		case R.id.menu_note_loader_open:
-			openNote(menuInfo.id);
-			break;
-		case R.id.menu_note_loader_delete://
-			cursor.moveToPosition(menuInfo.position);
-			String deleteMessage = getResources().getString(
-					R.string.delete_msg,
-					cursor.getString(cursor
-							.getColumnIndex(NoteMetaData.Note.TITLE)));
-
-			new AlertDialog.Builder(mContext)
-					.setTitle(R.string.menu_delete)
-					.setMessage(deleteMessage)
-					.setPositiveButton(android.R.string.ok,
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									Uri uri = Uri
-											.parse(NoteMetaData.Note.CONTENT_URI
-													+ "/" + menuInfo.id);
-									getContentResolver()
-											.delete(uri, null, null);
-									// bug: When search string is not empty, the list can not update. Why?
-									if (mIsSearchMode && !TextUtils.isEmpty(mSearchString)) {
-										getLoaderManager().restartLoader(0, null, NoteLoader.this);
-									}
-								}
-							}).setNegativeButton(android.R.string.cancel, null)
-					.create().show();
-			break;
-		case R.id.menu_note_loader_edit://
-			Intent intent = new Intent(NoteLoader.this, EditNoteActivity.class);
-			intent.putExtra(NoteUtil.ITEM_ID_INDEX, menuInfo.id);
-			startActivity(intent);
-			break;
-		case R.id.menu_note_loader_edit_title:
-			final EditText editText = new EditText(mContext);
-			cursor.moveToPosition(menuInfo.position);
-			editText.setSingleLine();
-			editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-			editText.setText(cursor.getString(cursor
-					.getColumnIndex(NoteMetaData.Note.TITLE)));
-			new AlertDialog.Builder(mContext)
-					.setTitle("编辑标题")
-					.setIcon(R.drawable.ic_menu_edit_current)
-					.setView(editText)
-					.setPositiveButton(android.R.string.ok,
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									String title = editText.getText()
-											.toString().trim();
-									ContentValues values = new ContentValues();
-									values.put(NoteMetaData.Note.TITLE,
-											title);
-									Uri uri = Uri
-											.parse(NoteMetaData.Note.CONTENT_URI
-													+ "/" + menuInfo.id);
-									getContentResolver().update(uri, values,
-											null, null);
-									
-									// bug: When search string is not empty, the list can not update. Why?
-									if (mIsSearchMode && !TextUtils.isEmpty(mSearchString)) {
-										getLoaderManager().restartLoader(0, null, NoteLoader.this);
-									}
-								}
-							}).setNegativeButton(android.R.string.cancel, null)
-					.create().show();
-			break;
-		}
-		return super.onContextItemSelected(item);
-	}
+	//use action mode instead of context menu
 
 	/**
 	 * Open note with _id in database.
@@ -314,9 +209,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.add_tips_btn) {
-			Intent intent = new Intent();
-			intent = new Intent(NoteLoader.this, NewNoteActivity.class);
-			startActivity(intent);
+			addNewNote();
 		}
 	}
 
@@ -407,6 +300,11 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		}
 
 		updateTipsView(mAdapter2.getCount());
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
@@ -525,6 +423,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 
 		@Override
 		public void onDestroyActionMode(ActionMode mode) {
+			LogUtils.i(TAG, "onDestroyActionMode");
 			mAdapter2.unSelectedAll();
 			mAdapter2.setMode(NoteUtil.MODE_NORMAL);
 			

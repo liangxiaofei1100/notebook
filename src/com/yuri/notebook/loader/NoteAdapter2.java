@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import com.yuri.notebook.R;
 import com.yuri.notebook.utils.DateFormatUtils;
+import com.yuri.notebook.utils.LogUtils;
 import com.yuri.notebook.utils.NoteUtil;
 import com.yuri.notebook.utils.Notes;
 
@@ -22,6 +23,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 public class NoteAdapter2 extends CursorAdapter {
+	private static final String TAG = "NoteAdapter2";
 
 	private final LayoutInflater mInflater;
 	private DateFormatUtils mDateFormatUtils;
@@ -58,7 +60,7 @@ public class NoteAdapter2 extends CursorAdapter {
 	
 	public void setChecked(int position){
 		mCheckedArray[position] = !mCheckedArray[position];
-		System.out.println("mCheckedArray[" + position + "]=" + mCheckedArray[position]);
+		LogUtils.d(TAG, "mCheckedArray[" + position + "]=" + mCheckedArray[position]);
 		notifyDataSetChanged();
 	}
 	
@@ -69,7 +71,7 @@ public class NoteAdapter2 extends CursorAdapter {
 				selectedCount ++;
 			}
 		}
-		System.out.println("getCheckedItemCount = " + mCheckedCount);
+		LogUtils.d(TAG, "getCheckedItemCount = " + selectedCount);
 		return selectedCount;
 	}
 	
@@ -108,7 +110,28 @@ public class NoteAdapter2 extends CursorAdapter {
 		mDateFormatUtils = new DateFormatUtils(context,
 				System.currentTimeMillis());
 	}
-
+	
+	@Override
+	protected void onContentChanged() {
+		// TODO Auto-generated method stub
+		super.onContentChanged();
+		
+	}
+	
+	@Override
+	public Cursor swapCursor(Cursor newCursor) {
+		// TODO Auto-generated method stub
+		//当cursor改变后，重新new mCheckArray
+		Cursor oldCursor = super.swapCursor(newCursor);
+		mCount = newCursor.getCount();
+		LogUtils.d(TAG, "new COunt = " + mCount);
+		mCheckedArray = new boolean[mCount];
+		for (int i = 0; i < mCount; i++) {
+			mCheckedArray[i] = false;
+		}
+		return oldCursor;
+	}
+	
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		Notes noteBook = Notes.createNotebookFromCursor(cursor);
@@ -156,11 +179,18 @@ public class NoteAdapter2 extends CursorAdapter {
 
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		mCount = cursor.getCount();
-		mCheckedArray = new boolean[mCount];
-		for (int i = 0; i < mCount; i++) {
-			mCheckedArray[i] = false;
-		}
+		/**TODO 碰到难题了
+		 * 这里的mCount只有在第一次进入的时候才会初始化，当新添家一个的时候，这个count不会改变
+		 * 因为不会再调用newView，而是直接调用bindView，但是这个CheckedArray初始化不能在bindView吧
+		 * 难！难！！难啊!!!
+		 * 
+		 * 已解决，覆写swapCusor。在那里对mCheckArray数组进行变更
+		 * */
+//		mCount = cursor.getCount();
+//		mCheckedArray = new boolean[mCount];
+//		for (int i = 0; i < mCount; i++) {
+//			mCheckedArray[i] = false;
+//		}
 		return mInflater.inflate(R.layout.homepage_list_item, parent, false);
 	}
 	
