@@ -71,6 +71,7 @@ public class NewNoteActivity extends Activity implements OnFocusChangeListener {
 		
 		mTitleEdit = (EditText) mCustomView.findViewById(R.id.title_edit);
 		mTitleEdit.setBackgroundColor(Color.TRANSPARENT);
+		mTitleEdit.setOnFocusChangeListener(this);
 		mContentEdit = (EditText) findViewById(R.id.content_edit);
 		mContentEdit.addTextChangedListener(watcher);
 		mContentEdit.setBackgroundColor(Color.TRANSPARENT);
@@ -168,6 +169,7 @@ public class NewNoteActivity extends Activity implements OnFocusChangeListener {
 	    }
 	     
 	};
+	
 	
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {

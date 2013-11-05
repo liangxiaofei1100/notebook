@@ -38,6 +38,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView.OnItemClickListener;
@@ -336,7 +337,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 	    private ActionMode actionMode;
 	    
 		@Override
-		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+		public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
 			// TODO Auto-generated method stub
 			Cursor cursor = mAdapter2.getCursor();
 			switch (item.getItemId()) {
@@ -366,6 +367,8 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
+										//add this code,fix a bug when delete the last item
+										mode.finish();
 										for (int i = 0; i < selectedList.size(); i++) {
 											Uri uri = Uri
 													.parse(NoteMetaData.Note.CONTENT_URI
@@ -392,6 +395,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 
 		@Override
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			Log.d(TAG, "onCreateActionMode");
 			// 最先调用的
 			LayoutInflater inflater = (LayoutInflater) mContext
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -463,6 +467,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		public void onItemCheckedStateChanged(ActionMode mode, int position,
 				long id, boolean checked) {
 			currentPosition = position;
+			Log.d(TAG, "position=" + position);
 			mAdapter2.setChecked(position);
 			setSubtitle(mode);
 		}

@@ -94,8 +94,15 @@ public class ZipBackupActivity extends Activity implements OnClickListener{
 	
 	//备份完毕后，删除文件
 	public void deleteFiles(ArrayList<File> files){
+		if (files.size() <= 0) {
+			return;
+		}
+		
 		for(File file: files){
-			file.delete();
+			boolean ret = file.delete();
+			if (ret) {
+				Log.e(TAG, "deleteFiles.delete file fail:" + file.getAbsolutePath());
+			}
 		}
 	}
 	
@@ -133,6 +140,9 @@ public class ZipBackupActivity extends Activity implements OnClickListener{
 	                    }  
 	                    
 	                    File file = NoteUtil.fileWriteDemo(title, content);
+	                    if (null == file) {
+							break;
+						}
 						fileLists.add(file);
 	                    
 					} while (cursor.moveToNext());

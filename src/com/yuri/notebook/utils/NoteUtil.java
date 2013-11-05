@@ -206,6 +206,8 @@ public class NoteUtil {
 				Log.e(TAG, NoteUtil.DEFAULT_PATH + " make failed");
 			}
 		}
+		//如果title中有/字符是不能作为文件名的
+		title = title.replace("/", "");
 
 		String filePath = NoteUtil.DEFAULT_PATH + "/" + title
 				+ NoteUtil.EXTENSION_TXT;
@@ -214,7 +216,9 @@ public class NoteUtil {
 			try {
 				tempFile.createNewFile();
 			} catch (IOException e) {
+				Log.e(TAG,"fileWriteDemo:createNewFile faile:" + tempFile.getAbsolutePath());
 				e.printStackTrace();
+				return null;
 			}
 		}
 

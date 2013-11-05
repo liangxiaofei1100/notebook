@@ -163,21 +163,23 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 			dialog.setNegativeButton(android.R.string.cancel, null);
 			dialog.create().show();
 		}else if (mFontSetPref == preference) {
-			int index = mFontSetPref.findIndexOfValue((String)newValue);
-			mFontSetPref.setValueIndex(index);
-			
-			//保存当前选中模式，方便其他Activity使用
-			Editor editor = sp.edit();
-			editor.putInt(NoteUtil.FONT_SET, index);
-			editor.commit();
+			Toast.makeText(getActivity(), "尚未实现，敬请期待！", Toast.LENGTH_SHORT).show();
+//			int index = mFontSetPref.findIndexOfValue((String)newValue);
+//			mFontSetPref.setValueIndex(index);
+//			
+//			//保存当前选中模式，方便其他Activity使用
+//			Editor editor = sp.edit();
+//			editor.putInt(NoteUtil.FONT_SET, index);
+//			editor.commit();
 		}else if (mColorSetPref == preference) {
-			int index = mColorSetPref.findIndexOfValue((String)newValue);
-			mColorSetPref.setValueIndex(index);
-			
-			//保存当前选中模式，方便其他Activity使用
-			Editor editor = sp.edit();
-			editor.putInt(NoteUtil.COLOR_SET, index);
-			editor.commit();
+			Toast.makeText(getActivity(), "尚未实现，敬请期待！", Toast.LENGTH_SHORT).show();
+//			int index = mColorSetPref.findIndexOfValue((String)newValue);
+//			mColorSetPref.setValueIndex(index);
+//			
+//			//保存当前选中模式，方便其他Activity使用
+//			Editor editor = sp.edit();
+//			editor.putInt(NoteUtil.COLOR_SET, index);
+//			editor.commit();
 		}
 		return false;
 	}
@@ -254,7 +256,6 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 
 		@Override
 		protected String doInBackground(String... params) {
-			System.out.println("params=" + params[0]);
 			ImportXml importXml = new ImportXml(getActivity(),params[0]);
 			noteItems = importXml.getNotesFromXml();
 			ContentResolver conResolver = getActivity().getContentResolver();
