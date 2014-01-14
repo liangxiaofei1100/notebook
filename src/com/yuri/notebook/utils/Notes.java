@@ -1,6 +1,7 @@
 package com.yuri.notebook.utils;
 
 import com.yuri.notebook.db.NoteMetaData;
+import com.yuri.notebook.db.NoteMetaData.Note;
 
 import android.database.Cursor;
 import android.os.Parcel;
@@ -11,7 +12,7 @@ public class Notes implements Parcelable {
 	private long note_id;
 	private String note_title;
 	private String note_content;
-	// private String note_time;
+	private String note_group;
 	// use long time
 	private long note_time;
 
@@ -68,6 +69,14 @@ public class Notes implements Parcelable {
 	public void setContent(String content) {
 		note_content = content;
 	}
+	
+	public String getGroup(){
+		return note_group;
+	}
+	
+	public void setGroup(String group){
+		note_group = group;
+	}
 
 	public long getTime() {
 		return note_time;
@@ -119,13 +128,15 @@ public class Notes implements Parcelable {
 				.getColumnIndex(NoteMetaData.Note.TITLE));
 		String content = cursor.getString(cursor
 				.getColumnIndex(NoteMetaData.Note.CONTENT));
+		String group = cursor.getString(cursor.getColumnIndex(Note.GROUP));
 		long time = cursor.getLong(cursor
 				.getColumnIndex(NoteMetaData.Note.TIME));
 
-		Notes noteBook = new Notes(id);
-		noteBook.setTitle(title);
-		noteBook.setContent(content);
-		noteBook.setTime(time);
-		return noteBook;
+		Notes note = new Notes(id);
+		note.setTitle(title);
+		note.setContent(content);
+		note.setGroup(group);
+		note.setTime(time);
+		return note;
 	}
 }

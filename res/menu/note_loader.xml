@@ -10,6 +10,24 @@
         android:id="@+id/menu_note_loader_setting"
         android:showAsAction="never"
         android:title="@string/setting"/>
+    
+    <item 
+        android:id="@+id/menu_note_sort_by_default"
+        android:showAsAction="never"
+        android:title="@string/sort_by_default"
+        />
+    
+    <item 
+        android:id="@+id/menu_note_sort_by_date"
+        android:showAsAction="never"
+        android:title="@string/sort_by_date"
+        />
+    
+    <item 
+        android:id="@+id/menu_note_sort_by_type"
+        android:showAsAction="never"
+        android:title="@string/sort_by_type"
+        />
     <item
         android:id="@+id/menu_note_loader_search"
         android:icon="@drawable/action_search"

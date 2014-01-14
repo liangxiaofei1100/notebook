@@ -1,6 +1,7 @@
 package com.yuri.notebook;
 
 import com.yuri.notebook.db.NoteMetaData;
+import com.yuri.notebook.utils.DateFormatUtils;
 import com.yuri.notebook.utils.NoteManager;
 import com.yuri.notebook.utils.NoteUtil;
 import com.yuri.notebook.utils.Notes;
@@ -19,8 +20,10 @@ import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 public class CheckNoteActivity extends Activity {
-	private static final String TAG = "CheckNote";
-	private TextView contentText;
+	private static final String TAG = "CheckNoteActivity";
+	private TextView mContentTv;
+	private TextView mGroupTv;
+	private TextView mDateTv;
 
 	private long itemId;
 
@@ -29,7 +32,6 @@ public class CheckNoteActivity extends Activity {
 	private Notes mNoteBook;
 	
 	private long mTime = 0;
-	private Intent mData = null;
 	
 	private SharedPreferences sp = null;
 
@@ -40,32 +42,54 @@ public class CheckNoteActivity extends Activity {
 
 		// 标题栏返回
 		NoteUtil.setShowTitleBackButton(CheckNoteActivity.this);
-
-		contentText = (TextView) findViewById(R.id.note_content);
+		setTitle(R.string.check_title);
+		
+		mContentTv = (TextView) findViewById(R.id.note_content);
+		mGroupTv = (TextView) findViewById(R.id.tv_group);
+		mDateTv = (TextView) findViewById(R.id.tv_time);
+		
 		Intent intent = this.getIntent();
 		itemId = intent.getLongExtra(NoteUtil.ITEM_ID_INDEX, -1);
 
 		mNoteBook = NoteManager.getNotesFromId(itemId, this);
+		mContentTv.setText(mNoteBook.getContent());
 		
+		String group = mNoteBook.getGroup();
+		String groupWork = getResources().getString(R.string.type_work);
+		String groupPersonal = getResources().getString(R.string.type_personal);
+		String groupFamily = getResources().getString(R.string.type_family);
+		String groupStudy = getResources().getString(R.string.type_study);
+		if (group.equals(groupWork)) {
+			mGroupTv.setTextColor(getResources().getColor(R.color.work));
+		} else if (group.equals(groupPersonal)) {
+			mGroupTv.setTextColor(getResources().getColor(R.color.personal));
+		} else if (group.equals(groupFamily)) {
+			mGroupTv.setTextColor(getResources().getColor(R.color.family));
+		} else if (group.equals(groupStudy)) {
+			mGroupTv.setTextColor(getResources().getColor(R.color.study));
+		} else {
+			mGroupTv.setTextColor(getResources().getColor(R.color.none));
+		}
+		mGroupTv.setText(group);
+		
+		DateFormatUtils dateFormatUtils = new DateFormatUtils(getApplicationContext(), System.currentTimeMillis());
+		mDateTv.setText(dateFormatUtils.getDateFormatString(mNoteBook.getTime()));
 //		sp = getSharedPreferences(NoteUtil.SHARED_NAME, MODE_PRIVATE);
 //		int font_size = sp.getInt(NoteUtil.FONT_SET, 1);
 //		NoteUtil.setFontSize(contentText, font_size);
-//		
 //		int color = sp.getInt(NoteUtil.COLOR_SET, 3);
 //		NoteUtil.setBackgroundColor(contentText, color);
+		setResult(RESULT_CANCELED);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		setTitle(mNoteBook.getTitle());
-		contentText.setText(mNoteBook.getContent());
 	}
 	
 	private Intent createShareIntent(){
 		Intent intent = new Intent(Intent.ACTION_SEND);
-		intent.putExtra(Intent.EXTRA_TEXT, contentText.getText().toString().trim() + "\n" + "BY XG NOTE!");
+		intent.putExtra(Intent.EXTRA_TEXT, mContentTv.getText().toString().trim() + "\n" + "BY XG NOTE!");
 		intent.setType("*/*");
 		return intent;
 	}
@@ -86,7 +110,8 @@ public class CheckNoteActivity extends Activity {
 		case R.id.menu_edit:
 			Intent intent = new Intent(CheckNoteActivity.this, EditNoteActivity.class);
 			intent.putExtra(NoteUtil.ITEM_ID_INDEX, itemId);
-			startActivityForResult(intent, NoteUtil.REQUEST_EDIT);
+			startActivity(intent);
+			this.finish();
 			break;
 		case R.id.menu_delete:
 			new AlertDialog.Builder(CheckNoteActivity.this).setTitle(R.string.menu_delete)
@@ -97,9 +122,7 @@ public class CheckNoteActivity extends Activity {
 							Uri uri = Uri.parse(NoteMetaData.Note.CONTENT_URI + "/" + itemId);
 							getContentResolver().delete(uri, null, null);
 							
-							NoteManager.isNeedRefresh = true;
-							NoteManager.isFirst = true;
-							
+							setResult(RESULT_OK);
 							CheckNoteActivity.this.finish();
 						}
 					}).setNegativeButton(android.R.string.cancel, null).create().show();
@@ -119,9 +142,7 @@ public class CheckNoteActivity extends Activity {
 			startActivity(mIntent);
 			
         	break;
-		case android.R.id.home://
-			// 点击左上角应用图标，返回，默认情况下，图标的ID是android.R.id.home
-			setResult(RESULT_OK, mData);
+		case android.R.id.home:
 			this.finish();
 			break;
 		default:
@@ -133,23 +154,9 @@ public class CheckNoteActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (KeyEvent.KEYCODE_BACK == keyCode) {
-			setResult(RESULT_OK, mData);
 			this.finish();
 		}
 		return super.onKeyDown(keyCode, event);
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-
-		if (resultCode == RESULT_OK) {
-			// query one record
-			mNoteBook = NoteManager.getNotesFromId(itemId, this);
-			mData = data;
-		} else if (resultCode == RESULT_CANCELED) {
-
-		}
 	}
 
 }

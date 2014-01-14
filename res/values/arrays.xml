@@ -40,4 +40,12 @@
         <item>All Notes</item>
         <item>Notes</item>
     </string-array>
+    
+    <string-array name="group_list">
+        <item>@string/type_default</item>
+        <item>@string/type_work</item>
+        <item>@string/type_personal</item>
+        <item>@string/type_family</item>
+        <item>@string/type_study</item>
+    </string-array>
 </resources>

@@ -12,8 +12,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
-public class NoteBookProvider extends ContentProvider {
-	private static final String TAG = "NoteBookProvider";
+public class NoteProvider extends ContentProvider {
+	private static final String TAG = "NoteProvider";
 	
 	private SQLiteDatabase mSqLiteDatabase;
 	private DatabaseHelper mDatabaseHelper;
@@ -50,6 +50,7 @@ public class NoteBookProvider extends ContentProvider {
 					+ " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ NoteMetaData.Note.TITLE + " TEXT, "
 					+ NoteMetaData.Note.CONTENT + " TEXT, "
+					+ NoteMetaData.Note.GROUP + " TEXT, "
 					+ NoteMetaData.Note.TIME + " LONG);"
 					);
 			

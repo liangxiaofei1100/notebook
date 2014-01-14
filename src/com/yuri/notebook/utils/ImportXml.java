@@ -42,7 +42,7 @@ public class ImportXml {
                     if ("item".equals(parser.getName())) {  
                         notes = new Notes();
                         
-                        notes.setTitle(parser.getAttributeValue(0));
+                        notes.setGroup(parser.getAttributeValue(0));
                         notes.setContent(parser.getAttributeValue(1));
                         notes.setTime(Long.parseLong(parser.getAttributeValue(2)));
                         

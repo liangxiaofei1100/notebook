@@ -10,6 +10,8 @@ import com.yuri.notebook.utils.NoteUtil;
 import com.yuri.notebook.utils.Notes;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.text.SpannableString;
@@ -22,8 +24,8 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-public class NoteAdapter2 extends CursorAdapter {
-	private static final String TAG = "NoteAdapter2";
+public class NoteAdapter extends CursorAdapter {
+	private static final String TAG = "NoteAdapter";
 
 	private final LayoutInflater mInflater;
 	private DateFormatUtils mDateFormatUtils;
@@ -44,6 +46,16 @@ public class NoteAdapter2 extends CursorAdapter {
 	private int mCheckedCount = 0;
 
 	private static final int SHOW_LENGTH = 20;
+	
+	private ColorStateList mColorNone;
+	private ColorStateList mColorWork;
+	private ColorStateList mColorPersonal;
+	private ColorStateList mColorFamily;
+	private ColorStateList mColorStudy;
+	private String mGroupWork;
+	private String mGroupPersonal;
+	private String mGroupFamily;
+	private String mGroupStudy;
 	
 	//for menu
 	public void setMode(int mode){
@@ -104,11 +116,25 @@ public class NoteAdapter2 extends CursorAdapter {
 		}
 	}
 
-	public NoteAdapter2(Context context, Cursor c, int flags) {
+	public NoteAdapter(Context context, Cursor c, int flags) {
 		super(context, c, flags);
 		mInflater = LayoutInflater.from(context);
 		mDateFormatUtils = new DateFormatUtils(context,
 				System.currentTimeMillis());
+		setResourceData(context.getResources());
+	}
+	
+	private void setResourceData(Resources resources){
+		mColorNone = resources.getColorStateList(R.color.none);
+		mColorWork = resources.getColorStateList(R.color.work);
+		mColorPersonal = resources.getColorStateList(R.color.personal);
+		mColorFamily = resources.getColorStateList(R.color.family);
+		mColorStudy = resources.getColorStateList(R.color.study);
+		
+		mGroupWork = resources.getString(R.string.type_work);
+		mGroupPersonal = resources.getString(R.string.type_personal);
+		mGroupFamily = resources.getString(R.string.type_family);
+		mGroupStudy = resources.getString(R.string.type_study);
 	}
 	
 	@Override
@@ -140,17 +166,35 @@ public class NoteAdapter2 extends CursorAdapter {
 		TextView titleTextView = (TextView) view.findViewById(R.id.ItemTitle);
 		TextView contentTextView = (TextView) view.findViewById(R.id.ItemContent);
 		TextView timeTextView = (TextView) view.findViewById(R.id.ItemTime);
-		snTextView.setText(String.valueOf(cursor.getPosition() + 1));
+		
+		if (noteBook.getGroup().equals(mGroupWork)) {
+			titleTextView.setTextColor(mColorWork);
+			snTextView.setBackgroundResource(R.color.work);
+		} else if (noteBook.getGroup().equals(mGroupPersonal)) {
+			titleTextView.setTextColor(mColorPersonal);
+			snTextView.setBackgroundResource(R.color.personal);
+		} else if (noteBook.getGroup().equals(mGroupFamily)) {
+			titleTextView.setTextColor(mColorFamily);
+			snTextView.setBackgroundResource(R.color.family);
+		} else if (noteBook.getGroup().equals(mGroupStudy)) {
+			titleTextView.setTextColor(mColorStudy);
+			snTextView.setBackgroundResource(R.color.study);
+		} else {
+			titleTextView.setTextColor(mColorNone);
+			snTextView.setBackgroundResource(R.color.none);
+		}
+		titleTextView.setText(noteBook.getGroup());
+		
 		String title = noteBook.getTitle();
 		String content = noteBook.getContent();
 		if (!TextUtils.isEmpty(mSearchString)) {
 			//title search
-			hightLightMatcherText(titleTextView, title);
+//			hightLightMatcherText(titleTextView, title);
 			
 			//content search
 			hightLightMatcherTextCut(contentTextView, content);
 		} else {
-			titleTextView.setText(title);
+//			titleTextView.setText(title);
 			
 			int enter = content.indexOf(NoteUtil.ENTER);
 			if (enter != -1) {//有回车

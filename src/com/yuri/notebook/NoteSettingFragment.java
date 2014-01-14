@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
@@ -116,11 +117,16 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 		}
 		
 		mFontSetPref = (ListPreference) findPreference("note_font_set");
-		mFontSetPref.setOnPreferenceChangeListener(this);
+		if (mFontSetPref != null) {
+			mFontSetPref.setOnPreferenceChangeListener(this);
+		}
 		
 		mColorSetPref = (ListPreference) findPreference("note_background_color_set");
-		mColorSetPref.setOnPreferenceChangeListener(this);
+		if (mColorSetPref != null) {
+			mColorSetPref.setOnPreferenceChangeListener(this);
+		}
 		
+		getActivity().setResult(Activity.RESULT_CANCELED);
 	}
 	@Override
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -153,11 +159,11 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					//zip way
-					RestoreFromZipTask restoreTask = new RestoreFromZipTask();
-					restoreTask.execute(value);
+//					RestoreFromZipTask restoreTask = new RestoreFromZipTask();
+//					restoreTask.execute(value);
 					//xml way
-//					RestoreFromXmlTask restoreFromXmlTask = new RestoreFromXmlTask();
-//					restoreFromXmlTask.execute(value);
+					RestoreFromXmlTask restoreFromXmlTask = new RestoreFromXmlTask();
+					restoreFromXmlTask.execute(value);
 				}
 			});
 			dialog.setNegativeButton(android.R.string.cancel, null);
@@ -189,9 +195,9 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 		if (backupScreen == preference) {
 			Intent intent = null;
 			//xml backup
-			//intent = new Intent(getActivity(), XmlBackupActivity.class);
+			intent = new Intent(getActivity(), XmlBackupActivity.class);
 			//zip backup
-			intent = new Intent(getActivity(), ZipBackupActivity.class);
+//			intent = new Intent(getActivity(), ZipBackupActivity.class);
 			
 			startActivity(intent);
 		}else if (noteRestorePref == preference) {
@@ -220,13 +226,13 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 			tempFiles = file.listFiles();
 			for (int i = 0; i < tempFiles.length; i++) {
 				//获取xml文件备份列表
-//				if (file.listFiles()[i].getAbsolutePath().endsWith("xml")) {
-//					fileLists.add(tempFiles[i]);
-//				}
-				//获取zip文件备份列表
-				if (file.listFiles()[i].getAbsolutePath().endsWith("zip")) {
+				if (file.listFiles()[i].getAbsolutePath().endsWith("xml")) {
 					fileLists.add(tempFiles[i]);
 				}
+				//获取zip文件备份列表
+//				if (file.listFiles()[i].getAbsolutePath().endsWith("zip")) {
+//					fileLists.add(tempFiles[i]);
+//				}
 			}
 			
 			int size = fileLists.size();
@@ -260,7 +266,7 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 			noteItems = importXml.getNotesFromXml();
 			ContentResolver conResolver = getActivity().getContentResolver();
 			for (Notes note: noteItems) {
-				String title = note.getTitle();
+				String group = note.getGroup();
 				String content = note.getContent();
 				long date = note.getTime();
 				
@@ -269,19 +275,11 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 				values.put(NoteMetaData.Note.TIME, date);
 				
 				//数据库更新时，如果更新的类型不是int型，而是text的数据，必须用''包起来，如下面这一句
-				int ret = getActivity().getContentResolver().update(NoteMetaData.Note.CONTENT_URI, values,
-						"title='" + title + "'", null);
-				
-				if (ret == 0) {
-					values.put(NoteMetaData.Note.TITLE, title);
-					conResolver.insert(NoteMetaData.Note.CONTENT_URI, values);
-				}
+//				int ret = getActivity().getContentResolver().update(NoteMetaData.Note.CONTENT_URI, values,
+//						"title='" + title + "'", null);
+				values.put(NoteMetaData.Note.GROUP, group);
+				conResolver.insert(NoteMetaData.Note.CONTENT_URI, values);
 			}
-			
-			NoteManager.isNeedRefresh = true;
-			NoteManager.isFirst = true;
-			
-			publishProgress("");
 			return null;
 		}
 		
@@ -296,12 +294,14 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 		}
 		
 		@Override
-		protected void onProgressUpdate(String... values) {
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
 			if (progressDialog != null) {
 				progressDialog.cancel();
 			}
 			Toast.makeText(getActivity(), "数据恢复成功！", Toast.LENGTH_SHORT).show();
-			super.onProgressUpdate(values);
+			getActivity().setResult(Activity.RESULT_OK);
 		}
 	}
 	
@@ -316,6 +316,7 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 			String fileName;
 			String content = null;
 			String title = null;
+			String group = null;
 			try {
 				//普通解压
 //				String path = NoteManager.unZipFiles(file, NoteUtil.DEFAULT_PATH);
@@ -330,7 +331,7 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 					fileName = files[i].getName();
 					title = fileName.substring(0, fileName.length() - NoteUtil.EXTENSION_TXT.length());
 					content = NoteUtil.BufferReaderDemo(filePath);
-					
+					group = getResources().getStringArray(R.array.group_list)[0];
 					ContentValues values = new ContentValues();
 					values.put(NoteMetaData.Note.CONTENT, content);
 
@@ -339,15 +340,12 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 							"title='" + title + "'", null);
 					if (ret == 0) {
 						values.put(NoteMetaData.Note.TITLE, title);
+						values.put(NoteMetaData.Note.GROUP, group);
 						values.put(NoteMetaData.Note.TIME, System.currentTimeMillis());
 						getActivity().getContentResolver().insert(NoteMetaData.Note.CONTENT_URI, values);
 					}
 
 				}
-				
-				NoteManager.isNeedRefresh = true;
-				NoteManager.isFirst = true;
-				
 				//删除掉解压出来的文件夹
 				NoteManager.recursionDeleteFile(tempFile);
 			} catch (IOException e) {
@@ -370,16 +368,17 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 			progressDialog.show();
 			super.onPreExecute();
 		}
-
+		
 		@Override
-		protected void onProgressUpdate(String... values) {
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
 			if (progressDialog != null) {
 				progressDialog.cancel();
 			}
 			Toast.makeText(getActivity(), "数据恢复成功！", Toast.LENGTH_SHORT).show();
-			super.onProgressUpdate(values);
+			getActivity().setResult(Activity.RESULT_OK);
 		}
-		
 	}
 	
 }

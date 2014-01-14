@@ -9,18 +9,18 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 
 /**自定义带下划线的Edittext*/
-public class LineEditText2 extends EditText {
+public class LineEditText extends EditText {
     private Paint mPaint;
     private Rect mRect;
     private float mult = 1.5f;
     private float add = 2.0f;
 
-    public LineEditText2(Context paramContext, AttributeSet paramAttributeSet) {
+    public LineEditText(Context paramContext, AttributeSet paramAttributeSet) {
         super(paramContext, paramAttributeSet);
         init();
     }
     
-    public LineEditText2(Context context){
+    public LineEditText(Context context){
     	super(context);
     	
     	init();

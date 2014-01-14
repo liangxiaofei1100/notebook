@@ -94,7 +94,7 @@
             />
         
         <provider
-            android:name=".db.NoteBookProvider"
+            android:name=".db.NoteProvider"
             android:authorities="com.yuri.notebook.db.notebookprovider" >
         </provider>
 

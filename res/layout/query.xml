@@ -3,51 +3,47 @@
     android:id="@+id/scrollView"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:scrollbars="none"
-    >
-<!-- 	<TableLayout  -->
-<!--     	android:layout_width="fill_parent" -->
-<!--     	android:layout_height="fill_parent" -->
-<!--     	android:orientation="vertical"> -->
-<!--     	<TableRow> -->
-<!--  			<TextView  -->
-<!--  				android:id="@+id/CX_biaoti" -->
-<!--  				android:layout_width="fill_parent" -->
-<!--  				android:layout_height="wrap_content" -->
-<!--  				android:text="标题" -->
-<!--  				android:textSize="30dip" -->
-<!--  				android:textColor="#ff44f3ff" -->
-<!--  			/> -->
-<!--  		</TableRow> -->
-<!--  		<View -->
-<!--         	android:layout_height="3dip" -->
-<!--         	android:background="#ffffffff" /> -->
-<!-- 		<TableRow> -->
-<!--     		<TextView  -->
-<!--     			android:id="@+id/CX_neirong" -->
-<!--     			android:layout_width="fill_parent" -->
-<!--     			android:layout_height="wrap_content" -->
-<!--     			android:textSize="20dip" -->
-<!--     			android:ems="15" -->
-<!--    			/> -->
-<!--     	</TableRow> -->
-<!-- 	</TableLayout> -->
-<!-- <com.yuri.notebook.LineTextView -->
-<!-- 	         android:id="@+id/CX_neirong" -->
-<!-- 	         android:layout_width="fill_parent" -->
-<!-- 	         android:layout_height="wrap_content" -->
-<!-- 	         android:textSize="20sp" -->
-<!-- 	         android:gravity="top" -->
-<!-- 	         android:inputType="textMultiLine" -->
-<!-- 	         android:background="#D1EEEE"   -->
-<!-- 			 android:textColor="#000000" /> -->
+    android:scrollbars="none" >
 
-<TextView 
-    			android:id="@+id/note_content"
-    			android:layout_width="fill_parent"
-    			android:layout_height="wrap_content"
-    			android:textSize="20sp"
-    			android:ems="15"
-    			android:textIsSelectable="true"
-   			/>
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+        <TextView 
+            android:id="@+id/tv_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:text="text"
+            />
+        
+         <TextView 
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:text="text"
+            android:textColor="#a9a9a9"
+            />
+         
+         <TextView
+            android:id="@+id/note_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_group"
+            android:ems="15"
+            android:textIsSelectable="true"
+            android:textSize="20sp" 
+            android:text="text"
+            />
+
+    </RelativeLayout>
+
 </ScrollView>

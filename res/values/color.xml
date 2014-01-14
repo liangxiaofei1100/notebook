@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="none">#777777</color>
+    <color name="work">#2ab2e6</color>
+    <color name="personal">#f98f1f</color>
+    <color name="family">#87c238</color>
+    <color name="study">#a366ab</color>
+</resources>

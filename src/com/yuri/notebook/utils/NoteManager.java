@@ -20,13 +20,13 @@ import android.net.Uri;
 import com.yuri.notebook.R;
 import com.yuri.notebook.R.string;
 import com.yuri.notebook.db.NoteMetaData;
+import com.yuri.notebook.db.NoteMetaData.Note;
 
 public class NoteManager {
 	
 	private Context mContext;
 	private static NoteManager mNoteBookManager;
 	
-	public static boolean isNeedRefresh = false;
 	public static boolean isFirst = true;
 
 	public static NoteManager getInstance(Context context){
@@ -50,10 +50,10 @@ public class NoteManager {
 			
 			if (cur.moveToFirst()) {
 				do {
-					noteBook.setTitle(cur.getString(cur.getColumnIndex(NoteMetaData.Note.TITLE)));
-					noteBook.setContent(cur.getString(cur.getColumnIndex(NoteMetaData.Note.CONTENT)));
-//					noteBook.setTime(cur.getString(cur.getColumnIndex(NoteBookMetaData.NoteBook.TIME)));
-					noteBook.setTime(cur.getLong(cur.getColumnIndex(NoteMetaData.Note.TIME)));
+					noteBook.setTitle(cur.getString(cur.getColumnIndex(Note.TITLE)));
+					noteBook.setContent(cur.getString(cur.getColumnIndex(Note.CONTENT)));
+					noteBook.setGroup(cur.getString(cur.getColumnIndex(Note.GROUP)));
+					noteBook.setTime(cur.getLong(cur.getColumnIndex(Note.TIME)));
 				} while (cur.moveToNext());
 			}
 		} catch (Exception e) {

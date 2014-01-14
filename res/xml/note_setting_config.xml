@@ -34,26 +34,25 @@
         android:dialogTitle="@string/note_restore_title"
         android:key="note_restore_list"
         android:title="@string/note_restore"
-        android:summary="@string/restore_tip"
         />
     
-    <ListPreference 
-        android:dialogTitle="@string/font_set"
-        android:key="note_font_set"
-        android:title="@string/font_set"
-        android:entries="@array/font_entries"
-        android:entryValues="@array/font_entryvalues"
-        android:defaultValue="1"
-        />
+<!--     <ListPreference  -->
+<!--         android:dialogTitle="@string/font_set" -->
+<!--         android:key="note_font_set" -->
+<!--         android:title="@string/font_set" -->
+<!--         android:entries="@array/font_entries" -->
+<!--         android:entryValues="@array/font_entryvalues" -->
+<!--         android:defaultValue="1" -->
+<!--         /> -->
     
-    <ListPreference 
-        android:dialogTitle="@string/background_color_set"
-        android:key="note_background_color_set"
-        android:title="@string/background_color_set"
-        android:entries="@array/color_entries"
-        android:entryValues="@array/color_entryvalues"
-        android:defaultValue="3"
-        />
+<!--     <ListPreference  -->
+<!--         android:dialogTitle="@string/background_color_set" -->
+<!--         android:key="note_background_color_set" -->
+<!--         android:title="@string/background_color_set" -->
+<!--         android:entries="@array/color_entries" -->
+<!--         android:entryValues="@array/color_entryvalues" -->
+<!--         android:defaultValue="3" -->
+<!--         /> -->
     
     <PreferenceScreen
         android:summary=""

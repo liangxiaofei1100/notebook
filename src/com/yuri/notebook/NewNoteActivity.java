@@ -99,8 +99,6 @@ public class NewNoteActivity extends Activity implements OnFocusChangeListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case NoteUtil.MENU_SAVE:
-			NoteManager.isNeedRefresh = true;
-			NoteManager.isFirst = true;
 			
 			//use new way
 			mTime = System.currentTimeMillis();

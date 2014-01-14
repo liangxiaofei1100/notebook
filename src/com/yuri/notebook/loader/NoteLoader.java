@@ -3,19 +3,17 @@ package com.yuri.notebook.loader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yuri.notebook.NewNoteActivity;
 import com.yuri.notebook.CheckNoteActivity;
 import com.yuri.notebook.EditNoteActivity;
 import com.yuri.notebook.NoteSettingActivity;
 import com.yuri.notebook.R;
 import com.yuri.notebook.db.NoteMetaData;
+import com.yuri.notebook.db.NoteMetaData.Note;
 import com.yuri.notebook.utils.LogUtils;
-import com.yuri.notebook.utils.NoteManager;
 import com.yuri.notebook.utils.NoteUtil;
 import com.yuri.notebook.utils.Notes;
 
 import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -24,12 +22,18 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,18 +42,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
-import android.view.Window;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.SpinnerAdapter;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.SearchView;
@@ -66,7 +69,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 	private ImageView mAddTipsBtn;
 	private TextView mSearchResultEmptyTextView;
 
-	private NoteAdapter2 mAdapter2;
+	private NoteAdapter mAdapter;
 
 	// 临时性保存数据
 	public static List<Notes> mList = new ArrayList<Notes>();
@@ -80,55 +83,103 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 	private String mSearchString;
 	private boolean mIsSearchMode = false;
 	
-	private static final int ADD_NEW_NOTE_REQUEST = 0x01;
+	private TextView mCountView;
+	
+	private String mSort = Note.SORT_ORDER_DEFAULT;
+	
+	private SharedPreferences sp = null;
+	
+	private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private DrawerAdapter mDrawerAdapter;
+    
+    private ActionBarDrawerToggle mDrawerToggle;
+    private List<String> mGroupList = new ArrayList<String>();
+    private String GROUP_ALL;
+	private String mGroup;
+	
+	private ProgressBar mLoadingBar;
+	
+	private ModeCallBack mCallBack;
+	
+	private static final int DRAWER_OPEN = 0;
+	private static final int DRAWER_CLOSE = 2;
+	private int mDrawerPreStatus = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.homepage);
 		
-		ActionBar actionBar = getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		GROUP_ALL = getString(R.string.type_all);
+		mGroup = GROUP_ALL;
+		getActionBar().setTitle(mGroup);
 		
-		SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.action_list, android.R.layout.simple_spinner_dropdown_item);
-		actionBar.setListNavigationCallbacks(spinnerAdapter, new OnNavigationListener() {
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		
+		//侧滑菜单主要布局
+		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+		mDrawerList.setOnItemClickListener(this);
+	
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, 
+				R.string.about, R.string.about_author){
+			@Override
+			public void onDrawerClosed(View drawerView) {
+				super.onDrawerClosed(drawerView);
+				mDrawerPreStatus = DRAWER_OPEN;
+				invalidateOptionsMenu();
+			}
 			
 			@Override
-			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-				return false;
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				mDrawerPreStatus = DRAWER_CLOSE;
+				invalidateOptionsMenu();
 			}
-		});
+		};
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		initGroup();
+		mDrawerAdapter.setSelectPosition(0);
+		
+		ActionBar actionBar = getActionBar();
+		ViewGroup viewGroup = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.homepage_actionbar, null);
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM, ActionBar.DISPLAY_SHOW_CUSTOM);
+		actionBar.setCustomView(viewGroup, new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, 
+				ActionBar.LayoutParams.WRAP_CONTENT, Gravity.CENTER_VERTICAL | Gravity.RIGHT));
+		
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+		
+		mCountView = (TextView) viewGroup.findViewById(R.id.note_count);
 
 		mContext = this;
-//		mListView = (ListView) findViewById(R.id.ListViewAppend);
 		mListView = getListView();
 		mListView.setOnItemClickListener(this);
-//		mListView.setOnCreateContextMenuListener(this);
 		//long click show edit popmenu
 		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		mListView.setMultiChoiceModeListener(new ModeCallBack());
-//		mListView.setOnLongClickListener(this);
+		mCallBack = new ModeCallBack();
+		mListView.setMultiChoiceModeListener(mCallBack);
 
-		mAdapter2 = new NoteAdapter2(this, null,
+		mAdapter = new NoteAdapter(this, null,
 				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-		mListView.setAdapter(mAdapter2);
+		mListView.setAdapter(mAdapter);
 
 		mTipsView = (TextView) findViewById(R.id.tips);
 		mAddTipsBtn = (ImageView) findViewById(R.id.add_tips_btn);
 		mAddTipsBtn.setOnClickListener(this);
+		
+		mLoadingBar = (ProgressBar) findViewById(R.id.bar_loading);
+		
 		mSearchResultEmptyTextView = (TextView) findViewById(R.id.tv_homepage_search_result_empty);
+		
+		sp = getSharedPreferences(NoteUtil.SHARED_NAME, MODE_PRIVATE);
+		mSort = sp.getString(NoteUtil.LIST_SORT, Note.SORT_ORDER_DEFAULT);
 
 		getLoaderManager().initLoader(0, null, this);
 	}
 
 	@Override
 	protected void onResume() {
-		if (NoteManager.isNeedRefresh) {
-			System.out.println("-=-=-=-=-==-");
-			NoteManager.isNeedRefresh = false;
-			getLoaderManager().restartLoader(0, null, this);
-		}
 		super.onResume();
 	}
 
@@ -142,9 +193,26 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		mSearchView.addOnAttachStateChangeListener(this);
 		return super.onCreateOptionsMenu(menu);
 	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		// If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        menu.findItem(R.id.menu_note_loader_add).setVisible(!drawerOpen);
+        menu.findItem(R.id.menu_note_loader_search).setVisible(!drawerOpen);
+        menu.findItem(R.id.menu_note_sort_by_default).setVisible(!drawerOpen);
+        menu.findItem(R.id.menu_note_sort_by_date).setVisible(!drawerOpen);
+        menu.findItem(R.id.menu_note_sort_by_type).setVisible(!drawerOpen);
+		return super.onPrepareOptionsMenu(menu);
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+		
 		Intent intent = null;
 		switch (item.getItemId()) {
 		case R.id.menu_note_loader_add:
@@ -155,12 +223,50 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 			intent.setClass(NoteLoader.this, NoteSettingActivity.class);
 			startActivity(intent);
 			break;
+		case R.id.menu_note_sort_by_default:
+			mSort = Note.SORT_ORDER_DEFAULT;
+			restartLoader("menu_note_sort_by_default");
+			
+			Editor editor = sp.edit();
+			editor.putString(NoteUtil.LIST_SORT, mSort);
+			editor.commit();
+			break;
+		case R.id.menu_note_sort_by_date:
+			mSort = Note.SORT_ORDER_TIME;
+			restartLoader("menu_note_sort_by_date");
+			
+			Editor editor2 = sp.edit();
+			editor2.putString(NoteUtil.LIST_SORT, mSort);
+			editor2.commit();
+			break;
+		case R.id.menu_note_sort_by_type:
+			mSort = Note.SORT_ORDER_GROUP;
+			restartLoader("menu_note_sort_by_type");
+			
+			Editor editor3 = sp.edit();
+			editor3.putString(NoteUtil.LIST_SORT, mSort);
+			editor3.commit();
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onPostCreate(savedInstanceState);
+		mDrawerToggle.syncState();
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		// TODO Auto-generated method stub
+		super.onConfigurationChanged(newConfig);
+		mDrawerToggle.onConfigurationChanged(newConfig);
+	}
+	
 	private void addNewNote(){
-		Intent intent = new Intent(NoteLoader.this, NewNoteActivity.class);
+		Intent intent = new Intent(NoteLoader.this, EditNoteActivity.class);
 		startActivity(intent);
 	}
 
@@ -175,7 +281,24 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 			long id) {
 		if (NoteUtil.DEBUG)
 			Log.d(TAG, "onItem.posititon=" + position);
-		openNote(id);
+		switch (parent.getId()) {
+		case R.id.left_drawer:
+			if (mAdapter.isMode(NoteUtil.MODE_MENU)) {
+				mCallBack.actionMode.finish();
+			}
+			mDrawerAdapter.setSelectPosition(position);
+			mDrawerAdapter.notifyDataSetChanged();
+			
+			mGroup = mGroupList.get(position);
+			restartLoader("left_drawer");
+			getActionBar().setTitle(mGroup);
+			
+			mDrawerLayout.closeDrawer(mDrawerList);
+			break;
+		default:
+			openNote(id);
+			break;
+		}
 	}
 
 	//use action mode instead of context menu
@@ -189,6 +312,19 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		Intent intent = new Intent(this, CheckNoteActivity.class);
 		intent.putExtra(NoteUtil.ITEM_ID_INDEX, id);
 		startActivity(intent);
+	}
+	
+	private void initGroup(){
+		mGroupList.clear();
+		mGroupList.add(GROUP_ALL);
+		
+		String[] groups = getResources().getStringArray(R.array.group_list);
+		for(String group : groups){
+			mGroupList.add(group);
+		}
+		
+		mDrawerAdapter = new DrawerAdapter(getApplicationContext(), mGroupList);
+		mDrawerList.setAdapter(mDrawerAdapter);
 	}
 
 	@Override
@@ -216,9 +352,13 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 
 	@Override
 	public boolean onQueryTextChange(String newText) {
+		LogUtils.d(TAG, "onQueryTextChange:" + newText);
+		if (DRAWER_OPEN == mDrawerPreStatus || mDrawerLayout.isDrawerOpen(mDrawerList)) {
+			return false;
+		}
 		mSearchString = !TextUtils.isEmpty(newText) ? newText : null;
-		mAdapter2.setSearchString(newText);
-		getLoaderManager().restartLoader(0, null, this);
+		mAdapter.setSearchString(newText);
+		restartLoader("onQueryTextChange");
 		return true;
 	}
 
@@ -230,27 +370,38 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		LogUtils.d(TAG, "onCreateLoader");
+		mLoadingBar.setVisibility(View.VISIBLE);
+		
 		Uri uri = null;
+		String selection = null;
+		String[] selectionArgs = null;
 		if (mSearchString == null) {
 			uri = NoteMetaData.Note.CONTENT_URI;
+			if (!GROUP_ALL.equals(mGroup)) {
+				selection = Note.GROUP + "=?";
+				selectionArgs = new String[]{mGroup};
+			}
 		} else {
 			uri = Uri.withAppendedPath(
 					NoteMetaData.Note.CONTENT_FILTER_URI,
 					Uri.encode(mSearchString));
 		}
-		return new CursorLoader(this, uri, NoteUtil.COLUMNS, null, null,
-				NoteMetaData.Note.SORT_ORDER_DEFAULT);
+		return new CursorLoader(this, uri, NoteUtil.COLUMNS, selection, selectionArgs, mSort);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
 		Log.d(TAG, "onLoadFinished. count = " + cursor.getCount());
 		// TODO for compatibility, init mList.
+		mLoadingBar.setVisibility(View.GONE);
+		
 		loadNotesToList(cursor, mList);
 
-		mAdapter2.swapCursor(cursor);
+		mAdapter.swapCursor(cursor);
 
-		updateTipsView(mAdapter2.getCount());
+		updateTipsView(mAdapter.getCount());
+		mCountView.setText(cursor.getCount() + "");
 	}
 
 	private void loadNotesToList(Cursor cursor, List<Notes> list) {
@@ -281,14 +432,14 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
-		mAdapter2.swapCursor(null);
+		mAdapter.swapCursor(null);
 
 	}
 
 	@Override
 	public void onViewAttachedToWindow(View v) {
 		mIsSearchMode = true;
-		updateTipsView(mAdapter2.getCount());
+		updateTipsView(mAdapter.getCount());
 	}
 
 	@Override
@@ -296,16 +447,24 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		mIsSearchMode = false;
 		if (!TextUtils.isEmpty(mSearchString)) {
 			mSearchString = null;
-			mAdapter2.setSearchString(null);
-			getLoaderManager().restartLoader(0, null, this);
+			mAdapter.setSearchString(null);
+			restartLoader("onViewDetachedFromWindow");
 		}
 
-		updateTipsView(mAdapter2.getCount());
+		updateTipsView(mAdapter.getCount());
+	}
+	
+	private void restartLoader(String test){
+		LogUtils.d(TAG, "restartLoader:" + test);
+		getLoaderManager().restartLoader(0, null, this);
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			restartLoader("onActivityResult");
+		}
 	}
 
 	@Override
@@ -339,7 +498,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		@Override
 		public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
 			// TODO Auto-generated method stub
-			Cursor cursor = mAdapter2.getCursor();
+			Cursor cursor = mAdapter.getCursor();
 			switch (item.getItemId()) {
 			case R.id.actionbar_edit:
 				cursor.moveToPosition(currentPosition);
@@ -352,7 +511,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 			case R.id.actionbar_delete:
 				final ArrayList<Long> selectedList = new ArrayList<Long>();
 				for (int pos = getListView().getCount() - 1; pos >= 0; pos--) {
-					if (mAdapter2.isSelected(pos)) {
+					if (mAdapter.isSelected(pos)) {
 						cursor.moveToPosition(pos);
 						long id = cursor.getLong(cursor.getColumnIndex(NoteMetaData.Note._ID));
 						selectedList.add(id);
@@ -378,7 +537,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 										}
 //										// bug: When search string is not empty, the list can not update. Why?
 										if (mIsSearchMode && !TextUtils.isEmpty(mSearchString)) {
-											getLoaderManager().restartLoader(0, null, NoteLoader.this);
+											restartLoader("menu_delete");
 										}
 									}
 								}).setNegativeButton(android.R.string.cancel, null)
@@ -428,8 +587,8 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		@Override
 		public void onDestroyActionMode(ActionMode mode) {
 			LogUtils.i(TAG, "onDestroyActionMode");
-			mAdapter2.unSelectedAll();
-			mAdapter2.setMode(NoteUtil.MODE_NORMAL);
+			mAdapter.unSelectedAll();
+			mAdapter.setMode(NoteUtil.MODE_NORMAL);
 			
 			if (actionMode != null) {
 				actionMode = null;
@@ -443,9 +602,9 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 
 		@Override
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			mAdapter2.setMode(NoteUtil.MODE_MENU);
+			mAdapter.setMode(NoteUtil.MODE_MENU);
 			actionMode = mode;
-			int selectedCount = mAdapter2.getCheckedItemCount();
+			int selectedCount = mAdapter.getCheckedItemCount();
 			switch (selectedCount) {
 			case 0:
 				menu.findItem(R.id.actionbar_edit).setEnabled(false);
@@ -466,14 +625,17 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 		@Override
 		public void onItemCheckedStateChanged(ActionMode mode, int position,
 				long id, boolean checked) {
+			if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+				return;
+			}
 			currentPosition = position;
 			Log.d(TAG, "position=" + position);
-			mAdapter2.setChecked(position);
+			mAdapter.setChecked(position);
 			setSubtitle(mode);
 		}
 		
 		private void setSubtitle(ActionMode mode) {
-			final int checkedCount = mAdapter2.getCheckedItemCount();
+			final int checkedCount = mAdapter.getCheckedItemCount();
 			mSelectBtn.setText(getString(R.string.selected_msg, checkedCount));
 			Menu menu = mode.getMenu();
 			if (checkedCount == 0) {
@@ -501,7 +663,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 	            return;
 	        }
 			final Menu menu = mSelectPopupMenu.getMenu();
-			int selectedCount = mAdapter2.getCheckedItemCount();
+			int selectedCount = mAdapter.getCheckedItemCount();
 			if (getListView().getCount() == 0) {
 				menu.findItem(R.id.select).setEnabled(false);
 			}else {
@@ -520,9 +682,9 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 			switch (item.getItemId()) {
 			case R.id.select:
 				if (mSelectedAll) {
-					mAdapter2.selectAll();
+					mAdapter.selectAll();
 				}else {
-					mAdapter2.unSelectedAll();
+					mAdapter.unSelectedAll();
 				}
 				
 				setSubtitle(actionMode);

@@ -1,14 +1,20 @@
 package com.yuri.notebook;
 
+import java.io.File;
+
 import com.yuri.notebook.utils.NoteUtil;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 public class AboutActivity extends Activity {
@@ -33,6 +39,27 @@ public class AboutActivity extends Activity {
 				return true;
 			}
 		});
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		getMenuInflater().inflate(R.menu.about, menu);
+		MenuItem item = menu.findItem(R.id.action_share);
+		
+		ShareActionProvider actionProvider = (ShareActionProvider) item.getActionProvider();
+		actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+		actionProvider.setShareIntent(createShareIntent());
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	private Intent createShareIntent(){
+		String sourceDir = getApplicationInfo().sourceDir;
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("*/*");
+		intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(sourceDir)));
+		intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_tip));
+		return intent;
 	}
 	
 	@Override

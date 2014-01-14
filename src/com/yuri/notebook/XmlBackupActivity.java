@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.yuri.notebook.utils.ExportXml;
 import com.yuri.notebook.utils.NoteUtil;
@@ -66,7 +67,6 @@ public class XmlBackupActivity extends Activity implements OnClickListener {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			publishProgress("");
 			return null;
 		}
 
@@ -84,14 +84,11 @@ public class XmlBackupActivity extends Activity implements OnClickListener {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-			progressDialog.cancel();	
+			if (progressDialog != null) {
+				progressDialog.cancel();
+			}
+			Toast.makeText(XmlBackupActivity.this, "备份完成！", Toast.LENGTH_SHORT).show();
 			XmlBackupActivity.this.finish();
-			super.onProgressUpdate(values);
 		}
-		
 	}
 }

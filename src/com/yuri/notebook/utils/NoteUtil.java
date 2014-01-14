@@ -66,7 +66,8 @@ public class NoteUtil {
 	// cloumns
 	public static final String[] COLUMNS = new String[] {
 			NoteMetaData.Note._ID, NoteMetaData.Note.TITLE,
-			NoteMetaData.Note.CONTENT, NoteMetaData.Note.TIME };
+			NoteMetaData.Note.CONTENT, NoteMetaData.Note.GROUP, 
+			NoteMetaData.Note.TIME };
 
 	// Service Action
 	public static final String ACTION_INSERT = "com.yuri.notebook.action_insert";
@@ -115,6 +116,8 @@ public class NoteUtil {
 	public static final String FONT_SET = "font_set";
 	// 背景设置。 Type：int
 	public static final String COLOR_SET = "color_set";
+	//sort 
+	public static final String LIST_SORT = "list_sort";
 
 	public static final int REQUEST_CODE_EDIT = 0x00121;
 

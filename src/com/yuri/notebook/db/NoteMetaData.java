@@ -5,7 +5,7 @@ import android.provider.BaseColumns;
 
 public class NoteMetaData{
 	public static final String DATABASE_NAME = "notebook.db";
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 2;
 
 	public static final String AUTHORITY = "com.yuri.notebook.db.notebookprovider";
 	
@@ -29,11 +29,15 @@ public class NoteMetaData{
 		public static final String CONTENT = "content";
 		/**note create time. Type:Long*/
 		public static final String TIME = "time";
+		/**note group. Type:String*/
+		public static final String GROUP = "note_group";
 		
 		/**order by _id DESC*/
 		public static final String SORT_ORDER_DEFAULT = _ID + " DESC"; 
 		/**order by time DESC*/
 		public static final String SORT_ORDER_TIME = TIME + " DESC"; 
+		/**order by group DESC*/
+		public static final String SORT_ORDER_GROUP = GROUP + " ASC";
 		
 		//mail table
 		/**mail.Type:String*/

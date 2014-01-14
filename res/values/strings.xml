@@ -8,6 +8,8 @@
     <string name="exit">退出</string>
     <string name="edit">编辑</string>
     <string name="modify">修改密码</string>
+    <string name="share">分享</string>
+    <string name="share_tip">您的记事管家，很好,很强大!</string>
     
     <string name="setting">"设置"</string>
     
@@ -64,6 +66,21 @@
     <string name="add_note_title_tip">"请输入标题..."</string>
     <string name="add_note_tip">"在此输入记事..."</string>
     <string name="edit_note">"修"</string>
+    <string name="empty_note">记事内容为空</string>
+    <string name="empty_note_1">记事内容为空,无记事创建</string>
+    <string name="note_saved">记事已保存</string>
+    <string name="check_title">本条记事</string>
+    
+    <string name="sort_by_default">默认排序</string>
+    <string name="sort_by_date">按修改时间排序</string>
+    <string name="sort_by_type">按类别排序</string>
+    
+    <string name="type_all">全部分类</string>
+    <string name="type_default">未分类</string>
+    <string name="type_work">工作记事</string>
+    <string name="type_personal">个人记事</string>
+    <string name="type_family">家庭记事</string>
+    <string name="type_study">学习记事</string>
     
     <string name="delete_msg">"确定删除 “<xliff:g id="delete">%1$s</xliff:g>” 这一条记录？"</string>
     <string name="delete_msg_2">"确定删除本条记录？"</string>
@@ -73,6 +90,7 @@
     
    <string name="no_record">"亲，你还没有添加任何记事哦！"</string>
    <string name="search_result_empty">"没有符合搜索条件的记录"</string>
+   <string name="loading">正在加载...</string>
    
    <!-- custom actionBar popmenu -->
    <string name="actionbar_delete">删除</string>
@@ -142,7 +160,10 @@
 	<string name="about_introduce">"    XG记事本，只是一个简单的记事本，请勿要求她做太多的事情，请善待她。
 	    \n    她没有华丽的外表，但她有你需要的功能
 	    \n    当你需要她时，请记住，她就在你的手机里
-	    \n    感谢您的使用！"</string>
+	    \n    感谢您的使用！
+	   	\n    如果你喜欢，何不分享给小伙伴使用一下呢
+	    \n    点击右上角分享
+	    "</string>
 	<string name="about_author">"©2013 Yuri_Xia"</string>
 	<string name="about_connection">"联系我"</string>
 	<string name="about_statement">"    如您在使用过程中有任何疑问或软件错误，您可以通过以下方式联系我，期待与您交流。"</string>

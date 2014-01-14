@@ -54,7 +54,7 @@ public class ExportXml {
 		try {
 			ContentResolver contentResolver = context.getContentResolver();
 			String[] projection = new String[]{
-					NoteMetaData.Note.TITLE,
+					NoteMetaData.Note.GROUP,
 					NoteMetaData.Note.CONTENT,
 					NoteMetaData.Note.TIME
                     };
@@ -63,13 +63,13 @@ public class ExportXml {
 					projection, null, null, 
 					"_id ASC");
 			if (cursor.moveToFirst()) {
-				String title;  
+				String group;  
                 String content;  
                 String date;  
                 do {
-                	title = cursor.getString(cursor.getColumnIndex(NoteMetaData.Note.TITLE));  
-                    if (title == null) {  
-                    	title = "";  
+                	group = cursor.getString(cursor.getColumnIndex(NoteMetaData.Note.GROUP));  
+                    if (group == null) {  
+                    	group = "";  
                     }  
                     content = cursor.getString(cursor.getColumnIndex(NoteMetaData.Note.CONTENT));  
                     if (content == null) {  
@@ -81,7 +81,7 @@ public class ExportXml {
                     }  
                     
                     serializer.startTag(null, "item");  
-                    serializer.attribute(null, NoteMetaData.Note.TITLE, title);  
+                    serializer.attribute(null, NoteMetaData.Note.GROUP, group);  
                     serializer.attribute(null, NoteMetaData.Note.CONTENT, content);  
                     serializer.attribute(null, NoteMetaData.Note.TIME, date);  
                     serializer.endTag(null, "item");
