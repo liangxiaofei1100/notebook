@@ -30,7 +30,6 @@ public class ExportXml {
 	}
 	
 	public void xmlStart() {
-		System.out.println("mpath=" + mPath);
 		File file = new File(mPath);
 		try {
 			if (!file.exists()) {

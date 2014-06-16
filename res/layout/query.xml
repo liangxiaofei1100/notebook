@@ -42,6 +42,7 @@
             android:textIsSelectable="true"
             android:textSize="20sp" 
             android:text="text"
+            android:autoLink="all"
             />
 
     </RelativeLayout>

@@ -32,7 +32,6 @@ public class DrawerAdapter extends BaseAdapter {
 	}
 	
 	public void setSelectPosition(int position){
-		System.out.println("position=" + position);
 		mSelectPosition = position;
 	}
 
@@ -61,7 +60,6 @@ public class DrawerAdapter extends BaseAdapter {
 		TextView textView = (TextView) view.findViewById(R.id.tv_drawer_item);
 		textView.setText(mData.get(position));
 		
-		System.out.println("position2=" + mSelectPosition);
 		if (mSelectPosition == position) {
 			textView.setTextColor(mBlue);
 		}else {

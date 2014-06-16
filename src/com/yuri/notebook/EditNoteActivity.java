@@ -114,7 +114,7 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 	}
 	
 	private void doSaveAction(){
-		String content = mContentEdit.getText().toString();
+		String content = mContentEdit.getText().toString().trim();
 		if (itemId == -1) {
 			if (content.equals("")) {
 				Toast.makeText(this, R.string.empty_note_1, Toast.LENGTH_SHORT).show();

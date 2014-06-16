@@ -59,9 +59,9 @@ public class ImportXml {
             }  
         } catch (Exception e) {  
             Looper.prepare();  
+            e.printStackTrace();  
             Toast.makeText(context,"恢复出错", Toast.LENGTH_SHORT).show();  
             Looper.loop();  
-            e.printStackTrace();  
         } 
         return noteItems;  
     }

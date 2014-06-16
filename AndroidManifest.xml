@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yuri.notebook"
     android:versionCode="2"
-    android:versionName="1.3" >
+    android:versionName="2.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -114,6 +114,7 @@
         <activity 
             android:name=".loader.NoteLoader"
             android:theme="@android:style/Theme.Holo.Light"
+            android:configChanges="orientation|screenSize"
             android:label=""
             android:uiOptions="splitActionBarWhenNarrow"
             ></activity>

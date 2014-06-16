@@ -1,0 +1,444 @@
+android.support.v4.app.BackStackState
+android.support.v4.app.BackStackState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.Fragment$SavedState
+android.support.v4.app.Fragment$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentManagerState
+android.support.v4.app.FragmentManagerState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentState
+android.support.v4.app.FragmentState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentTabHost: void setOnTabChangedListener(android.widget.TabHost$OnTabChangeListener)
+android.support.v4.app.FragmentTabHost$SavedState
+android.support.v4.app.FragmentTabHost$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.content.ModernAsyncTask$Status: android.support.v4.content.ModernAsyncTask$Status[] values()
+android.support.v4.content.ModernAsyncTask$Status: android.support.v4.content.ModernAsyncTask$Status valueOf(java.lang.String)
+android.support.v4.view.PagerTabStrip: void setTabIndicatorColor(int)
+android.support.v4.view.PagerTabStrip: void setTabIndicatorColorResource(int)
+android.support.v4.view.PagerTabStrip: int getTabIndicatorColor()
+android.support.v4.view.PagerTabStrip: void setTextSpacing(int)
+android.support.v4.view.PagerTabStrip: void setBackgroundDrawable(android.graphics.drawable.Drawable)
+android.support.v4.view.PagerTabStrip: void setBackgroundColor(int)
+android.support.v4.view.PagerTabStrip: void setBackgroundResource(int)
+android.support.v4.view.PagerTabStrip: void setDrawFullUnderline(boolean)
+android.support.v4.view.PagerTabStrip: boolean getDrawFullUnderline()
+android.support.v4.view.PagerTabStrip: int getMinHeight()
+android.support.v4.view.PagerTitleStrip: void setSingleLineAllCaps(android.widget.TextView)
+android.support.v4.view.PagerTitleStrip: void setTextSpacing(int)
+android.support.v4.view.PagerTitleStrip: int getTextSpacing()
+android.support.v4.view.PagerTitleStrip: void setNonPrimaryAlpha(float)
+android.support.v4.view.PagerTitleStrip: void setTextColor(int)
+android.support.v4.view.PagerTitleStrip: void setGravity(int)
+android.support.v4.view.PagerTitleStrip: int getMinHeight()
+android.support.v4.view.ViewPager: void setScrollState(int)
+android.support.v4.view.ViewPager: void setAdapter(android.support.v4.view.PagerAdapter)
+android.support.v4.view.ViewPager: android.support.v4.view.PagerAdapter getAdapter()
+android.support.v4.view.ViewPager: void setOnAdapterChangeListener(android.support.v4.view.ViewPager$OnAdapterChangeListener)
+android.support.v4.view.ViewPager: int getClientWidth()
+android.support.v4.view.ViewPager: void setCurrentItem(int)
+android.support.v4.view.ViewPager: int getCurrentItem()
+android.support.v4.view.ViewPager: void setOnPageChangeListener(android.support.v4.view.ViewPager$OnPageChangeListener)
+android.support.v4.view.ViewPager: void setChildrenDrawingOrderEnabledCompat(boolean)
+android.support.v4.view.ViewPager: int getOffscreenPageLimit()
+android.support.v4.view.ViewPager: void setOffscreenPageLimit(int)
+android.support.v4.view.ViewPager: void setPageMargin(int)
+android.support.v4.view.ViewPager: int getPageMargin()
+android.support.v4.view.ViewPager: void setPageMarginDrawable(android.graphics.drawable.Drawable)
+android.support.v4.view.ViewPager: void setPageMarginDrawable(int)
+android.support.v4.view.ViewPager: void setScrollingCacheEnabled(boolean)
+android.support.v4.view.ViewPager$SavedState
+android.support.v4.view.ViewPager$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.widget.DrawerLayout
+android.support.v4.widget.DrawerLayout: DrawerLayout(android.content.Context)
+android.support.v4.widget.DrawerLayout: DrawerLayout(android.content.Context,android.util.AttributeSet)
+android.support.v4.widget.DrawerLayout: DrawerLayout(android.content.Context,android.util.AttributeSet,int)
+android.support.v4.widget.DrawerLayout: void setScrimColor(int)
+android.support.v4.widget.DrawerLayout: void setDrawerListener(android.support.v4.widget.DrawerLayout$DrawerListener)
+android.support.v4.widget.DrawerLayout: void setDrawerLockMode(int)
+android.support.v4.widget.DrawerLayout$SavedState
+android.support.v4.widget.DrawerLayout$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.widget.SlidingPaneLayout: void setParallaxDistance(int)
+android.support.v4.widget.SlidingPaneLayout: int getParallaxDistance()
+android.support.v4.widget.SlidingPaneLayout: void setSliderFadeColor(int)
+android.support.v4.widget.SlidingPaneLayout: int getSliderFadeColor()
+android.support.v4.widget.SlidingPaneLayout: void setCoveredFadeColor(int)
+android.support.v4.widget.SlidingPaneLayout: int getCoveredFadeColor()
+android.support.v4.widget.SlidingPaneLayout: void setPanelSlideListener(android.support.v4.widget.SlidingPaneLayout$PanelSlideListener)
+android.support.v4.widget.SlidingPaneLayout: void setShadowDrawable(android.graphics.drawable.Drawable)
+android.support.v4.widget.SlidingPaneLayout: void setShadowResource(int)
+android.support.v4.widget.SlidingPaneLayout$SavedState
+android.support.v4.widget.SlidingPaneLayout$SavedState: android.os.Parcelable$Creator CREATOR
+com.yuri.notebook.AboutActivity
+com.yuri.notebook.AboutActivity: AboutActivity()
+com.yuri.notebook.CheckNoteActivity
+com.yuri.notebook.CheckNoteActivity: CheckNoteActivity()
+com.yuri.notebook.EditNoteActivity
+com.yuri.notebook.EditNoteActivity: EditNoteActivity()
+com.yuri.notebook.LineEditText
+com.yuri.notebook.LineEditText: LineEditText(android.content.Context,android.util.AttributeSet)
+com.yuri.notebook.LineEditText: LineEditText(android.content.Context)
+com.yuri.notebook.NewNoteActivity
+com.yuri.notebook.NewNoteActivity: NewNoteActivity()
+com.yuri.notebook.NoteSettingActivity
+com.yuri.notebook.NoteSettingActivity: NoteSettingActivity()
+com.yuri.notebook.R$anim: int translate_left
+com.yuri.notebook.R$anim: int translate_right
+com.yuri.notebook.R$anim: int zoom_out_enter
+com.yuri.notebook.R$anim: int zoom_out_exit
+com.yuri.notebook.R$array: int action_list
+com.yuri.notebook.R$array: int color_entries
+com.yuri.notebook.R$array: int color_entryvalues
+com.yuri.notebook.R$array: int entries_list_preference
+com.yuri.notebook.R$array: int entryvalues_list_preference
+com.yuri.notebook.R$array: int font_entries
+com.yuri.notebook.R$array: int font_entryvalues
+com.yuri.notebook.R$array: int group_list
+com.yuri.notebook.R$attr: int aspect
+com.yuri.notebook.R$color: int family
+com.yuri.notebook.R$color: int none
+com.yuri.notebook.R$color: int personal
+com.yuri.notebook.R$color: int study
+com.yuri.notebook.R$color: int work
+com.yuri.notebook.R$drawable: int action_search
+com.yuri.notebook.R$drawable: int actionbar_backup
+com.yuri.notebook.R$drawable: int actionbar_delete
+com.yuri.notebook.R$drawable: int actionbar_edit
+com.yuri.notebook.R$drawable: int actionbar_more
+com.yuri.notebook.R$drawable: int add_button
+com.yuri.notebook.R$drawable: int app_ic_notebook
+com.yuri.notebook.R$drawable: int app_notes
+com.yuri.notebook.R$drawable: int btn_code_lock_default_holo
+com.yuri.notebook.R$drawable: int btn_code_lock_touched_holo
+com.yuri.notebook.R$drawable: int button_bg
+com.yuri.notebook.R$drawable: int content_bg
+com.yuri.notebook.R$drawable: int dropdown_ic_arrow_normal_holo_dark
+com.yuri.notebook.R$drawable: int ic_action_cancel
+com.yuri.notebook.R$drawable: int ic_action_search
+com.yuri.notebook.R$drawable: int ic_clear_select
+com.yuri.notebook.R$drawable: int ic_clear_select_disable
+com.yuri.notebook.R$drawable: int ic_drawer
+com.yuri.notebook.R$drawable: int ic_menu_backup
+com.yuri.notebook.R$drawable: int ic_menu_compose
+com.yuri.notebook.R$drawable: int ic_menu_delete_disable
+com.yuri.notebook.R$drawable: int ic_menu_delete_selected
+com.yuri.notebook.R$drawable: int ic_menu_edit_current
+com.yuri.notebook.R$drawable: int ic_menu_edit_disable
+com.yuri.notebook.R$drawable: int ic_menu_more
+com.yuri.notebook.R$drawable: int ic_menu_more_disable
+com.yuri.notebook.R$drawable: int ic_notification_delete
+com.yuri.notebook.R$drawable: int ic_select_all
+com.yuri.notebook.R$drawable: int ic_select_all_disable
+com.yuri.notebook.R$drawable: int ic_title_bar_done
+com.yuri.notebook.R$drawable: int indicator_code_lock_drag_direction_green_up_holo
+com.yuri.notebook.R$drawable: int indicator_code_lock_drag_direction_red_up
+com.yuri.notebook.R$drawable: int indicator_code_lock_drag_direction_red_up_holo
+com.yuri.notebook.R$drawable: int indicator_code_lock_point_area_default
+com.yuri.notebook.R$drawable: int indicator_code_lock_point_area_default_holo
+com.yuri.notebook.R$drawable: int indicator_code_lock_point_area_green
+com.yuri.notebook.R$drawable: int indicator_code_lock_point_area_green_holo
+com.yuri.notebook.R$drawable: int indicator_code_lock_point_area_red
+com.yuri.notebook.R$drawable: int indicator_code_lock_point_area_red_holo
+com.yuri.notebook.R$drawable: int note_null_add_bg
+com.yuri.notebook.R$drawable: int note_null_add_sel
+com.yuri.notebook.R$drawable: int page_indicator_bg
+com.yuri.notebook.R$drawable: int page_indicator_focused
+com.yuri.notebook.R$drawable: int page_indicator_unfocused
+com.yuri.notebook.R$drawable: int title_bg
+com.yuri.notebook.R$drawable: int whatsnew_bg
+com.yuri.notebook.R$drawable: int whatsnew_btn_nor
+com.yuri.notebook.R$drawable: int whatsnew_btn_pressed
+com.yuri.notebook.R$id: int ItemContent
+com.yuri.notebook.R$id: int ItemTime
+com.yuri.notebook.R$id: int ItemTitle
+com.yuri.notebook.R$id: int ListViewAppend
+com.yuri.notebook.R$id: int RelativeLayout01
+com.yuri.notebook.R$id: int ScrollLayout
+com.yuri.notebook.R$id: int about_connection
+com.yuri.notebook.R$id: int about_version
+com.yuri.notebook.R$id: int action_share
+com.yuri.notebook.R$id: int actionbar_delete
+com.yuri.notebook.R$id: int actionbar_edit
+com.yuri.notebook.R$id: int add_tips_btn
+com.yuri.notebook.R$id: int author
+com.yuri.notebook.R$id: int backup_button
+com.yuri.notebook.R$id: int backup_name
+com.yuri.notebook.R$id: int bar_loading
+com.yuri.notebook.R$id: int buttonLinearLayout
+com.yuri.notebook.R$id: int button_layout
+com.yuri.notebook.R$id: int cancel_menu_item
+com.yuri.notebook.R$id: int confirmpw_edit
+com.yuri.notebook.R$id: int content_edit
+com.yuri.notebook.R$id: int do_button
+com.yuri.notebook.R$id: int drawer_layout
+com.yuri.notebook.R$id: int exitButton
+com.yuri.notebook.R$id: int fouredit
+com.yuri.notebook.R$id: int fourtext
+com.yuri.notebook.R$id: int hidetext
+com.yuri.notebook.R$id: int icon_cancel
+com.yuri.notebook.R$id: int icon_save
+com.yuri.notebook.R$id: int id_text
+com.yuri.notebook.R$id: int introduce
+com.yuri.notebook.R$id: int left_button
+com.yuri.notebook.R$id: int left_drawer
+com.yuri.notebook.R$id: int linearLayout
+com.yuri.notebook.R$id: int ll_custom_title
+com.yuri.notebook.R$id: int ll_spinner
+com.yuri.notebook.R$id: int llayout
+com.yuri.notebook.R$id: int loginButton
+com.yuri.notebook.R$id: int lpv_lock
+com.yuri.notebook.R$id: int mail_add
+com.yuri.notebook.R$id: int mail_text
+com.yuri.notebook.R$id: int mainRLayout
+com.yuri.notebook.R$id: int menu_delete
+com.yuri.notebook.R$id: int menu_edit
+com.yuri.notebook.R$id: int menu_note_loader_add
+com.yuri.notebook.R$id: int menu_note_loader_delete
+com.yuri.notebook.R$id: int menu_note_loader_edit
+com.yuri.notebook.R$id: int menu_note_loader_edit_title
+com.yuri.notebook.R$id: int menu_note_loader_open
+com.yuri.notebook.R$id: int menu_note_loader_search
+com.yuri.notebook.R$id: int menu_note_loader_setting
+com.yuri.notebook.R$id: int menu_note_sort_by_date
+com.yuri.notebook.R$id: int menu_note_sort_by_default
+com.yuri.notebook.R$id: int menu_note_sort_by_type
+com.yuri.notebook.R$id: int menu_share
+com.yuri.notebook.R$id: int name_pref
+com.yuri.notebook.R$id: int newpw_edit
+com.yuri.notebook.R$id: int note_content
+com.yuri.notebook.R$id: int note_count
+com.yuri.notebook.R$id: int password_edit
+com.yuri.notebook.R$id: int reset_pw
+com.yuri.notebook.R$id: int right_button
+com.yuri.notebook.R$id: int save_menu_item
+com.yuri.notebook.R$id: int scrollView
+com.yuri.notebook.R$id: int select
+com.yuri.notebook.R$id: int select_button
+com.yuri.notebook.R$id: int select_checkbox
+com.yuri.notebook.R$id: int set_pw
+com.yuri.notebook.R$id: int spinner
+com.yuri.notebook.R$id: int startBtn
+com.yuri.notebook.R$id: int summary
+com.yuri.notebook.R$id: int threeedit
+com.yuri.notebook.R$id: int threetext
+com.yuri.notebook.R$id: int tips
+com.yuri.notebook.R$id: int title
+com.yuri.notebook.R$id: int title_edit
+com.yuri.notebook.R$id: int tv_drawer_item
+com.yuri.notebook.R$id: int tv_group
+com.yuri.notebook.R$id: int tv_homepage_search_result_empty
+com.yuri.notebook.R$id: int tv_time
+com.yuri.notebook.R$id: int twoedit
+com.yuri.notebook.R$id: int twotext
+com.yuri.notebook.R$id: int verify_pw
+com.yuri.notebook.R$layout: int about
+com.yuri.notebook.R$layout: int add_note
+com.yuri.notebook.R$layout: int backup
+com.yuri.notebook.R$layout: int editnote_custom_title
+com.yuri.notebook.R$layout: int editor_custom_actionbar
+com.yuri.notebook.R$layout: int first_start_layout
+com.yuri.notebook.R$layout: int homepage
+com.yuri.notebook.R$layout: int homepage_actionbar
+com.yuri.notebook.R$layout: int homepage_list_item
+com.yuri.notebook.R$layout: int listview_actionbar_edit
+com.yuri.notebook.R$layout: int loader_drawer_item
+com.yuri.notebook.R$layout: int login_password
+com.yuri.notebook.R$layout: int mail_setting
+com.yuri.notebook.R$layout: int modify_main
+com.yuri.notebook.R$layout: int multi_list_item
+com.yuri.notebook.R$layout: int multi_select
+com.yuri.notebook.R$layout: int note_backup
+com.yuri.notebook.R$layout: int pattern_main
+com.yuri.notebook.R$layout: int preference_mail
+com.yuri.notebook.R$layout: int query
+com.yuri.notebook.R$layout: int set_main
+com.yuri.notebook.R$menu: int about
+com.yuri.notebook.R$menu: int actionbar_menu
+com.yuri.notebook.R$menu: int check_note_menu
+com.yuri.notebook.R$menu: int note_loader
+com.yuri.notebook.R$menu: int note_loader_context_menu
+com.yuri.notebook.R$menu: int popup
+com.yuri.notebook.R$menu: int select_popup_menu
+com.yuri.notebook.R$string: int about
+com.yuri.notebook.R$string: int about_author
+com.yuri.notebook.R$string: int about_connection
+com.yuri.notebook.R$string: int about_email
+com.yuri.notebook.R$string: int about_introduce
+com.yuri.notebook.R$string: int about_introduce_title
+com.yuri.notebook.R$string: int about_statement
+com.yuri.notebook.R$string: int about_version
+com.yuri.notebook.R$string: int about_version_code
+com.yuri.notebook.R$string: int actionbar_delete
+com.yuri.notebook.R$string: int add_note
+com.yuri.notebook.R$string: int add_note_tip
+com.yuri.notebook.R$string: int add_note_title_tip
+com.yuri.notebook.R$string: int app_name
+com.yuri.notebook.R$string: int back_msg
+com.yuri.notebook.R$string: int background_color_set
+com.yuri.notebook.R$string: int backup_location
+com.yuri.notebook.R$string: int backup_tip
+com.yuri.notebook.R$string: int blue
+com.yuri.notebook.R$string: int cancelall
+com.yuri.notebook.R$string: int check_title
+com.yuri.notebook.R$string: int confirm
+com.yuri.notebook.R$string: int confirm_password
+com.yuri.notebook.R$string: int confirm_password_tip
+com.yuri.notebook.R$string: int content
+com.yuri.notebook.R$string: int crash_toast
+com.yuri.notebook.R$string: int delete_msg
+com.yuri.notebook.R$string: int delete_msg_2
+com.yuri.notebook.R$string: int delete_msg_multi
+com.yuri.notebook.R$string: int edit
+com.yuri.notebook.R$string: int edit_hint
+com.yuri.notebook.R$string: int edit_note
+com.yuri.notebook.R$string: int empty_note
+com.yuri.notebook.R$string: int empty_note_1
+com.yuri.notebook.R$string: int error_password
+com.yuri.notebook.R$string: int exit
+com.yuri.notebook.R$string: int font_set
+com.yuri.notebook.R$string: int gray
+com.yuri.notebook.R$string: int hours_sfd
+com.yuri.notebook.R$string: int large_font
+com.yuri.notebook.R$string: int little_font
+com.yuri.notebook.R$string: int loading
+com.yuri.notebook.R$string: int lock_draw_tip
+com.yuri.notebook.R$string: int lock_draw_tip2
+com.yuri.notebook.R$string: int lock_msg_init
+com.yuri.notebook.R$string: int lock_msg_new
+com.yuri.notebook.R$string: int lock_msg_retry
+com.yuri.notebook.R$string: int lock_msg_tip
+com.yuri.notebook.R$string: int lockscreen_access_pattern_cell_added
+com.yuri.notebook.R$string: int lockscreen_access_pattern_cleared
+com.yuri.notebook.R$string: int lockscreen_access_pattern_detected
+com.yuri.notebook.R$string: int lockscreen_access_pattern_start
+com.yuri.notebook.R$string: int login
+com.yuri.notebook.R$string: int login_mode
+com.yuri.notebook.R$string: int login_model_pattern
+com.yuri.notebook.R$string: int login_model_pw
+com.yuri.notebook.R$string: int mail_backup
+com.yuri.notebook.R$string: int mail_modify
+com.yuri.notebook.R$string: int mail_not_setting
+com.yuri.notebook.R$string: int mail_setting
+com.yuri.notebook.R$string: int menu_add
+com.yuri.notebook.R$string: int menu_backup
+com.yuri.notebook.R$string: int menu_cancel
+com.yuri.notebook.R$string: int menu_delete
+com.yuri.notebook.R$string: int menu_delete_multi
+com.yuri.notebook.R$string: int menu_edit
+com.yuri.notebook.R$string: int menu_edit_title
+com.yuri.notebook.R$string: int menu_open
+com.yuri.notebook.R$string: int menu_save
+com.yuri.notebook.R$string: int menu_search
+com.yuri.notebook.R$string: int menu_title
+com.yuri.notebook.R$string: int middle_font
+com.yuri.notebook.R$string: int mode_select
+com.yuri.notebook.R$string: int modify
+com.yuri.notebook.R$string: int month_sfd
+com.yuri.notebook.R$string: int multi_delete
+com.yuri.notebook.R$string: int new_password
+com.yuri.notebook.R$string: int new_password_tip
+com.yuri.notebook.R$string: int next
+com.yuri.notebook.R$string: int no_record
+com.yuri.notebook.R$string: int note_backup
+com.yuri.notebook.R$string: int note_restore
+com.yuri.notebook.R$string: int note_restore_title
+com.yuri.notebook.R$string: int note_saved
+com.yuri.notebook.R$string: int pa_check_pw
+com.yuri.notebook.R$string: int pa_reset_pw
+com.yuri.notebook.R$string: int pa_set_pw
+com.yuri.notebook.R$string: int pale_yellow
+com.yuri.notebook.R$string: int pattern_set_error
+com.yuri.notebook.R$string: int pattern_set_success
+com.yuri.notebook.R$string: int pattern_set_tip
+com.yuri.notebook.R$string: int pattern_title
+com.yuri.notebook.R$string: int pink
+com.yuri.notebook.R$string: int pw_modify_ok
+com.yuri.notebook.R$string: int pw_modify_tip
+com.yuri.notebook.R$string: int pw_msg_01
+com.yuri.notebook.R$string: int pw_msg_02
+com.yuri.notebook.R$string: int pw_msg_03
+com.yuri.notebook.R$string: int pw_msg_04
+com.yuri.notebook.R$string: int pw_msg_08
+com.yuri.notebook.R$string: int pw_old_error
+com.yuri.notebook.R$string: int reset
+com.yuri.notebook.R$string: int reset_confirm
+com.yuri.notebook.R$string: int reset_ok
+com.yuri.notebook.R$string: int restore_tip
+com.yuri.notebook.R$string: int retry
+com.yuri.notebook.R$string: int search_result_empty
+com.yuri.notebook.R$string: int selected_msg
+com.yuri.notebook.R$string: int seleteall
+com.yuri.notebook.R$string: int set_password
+com.yuri.notebook.R$string: int setting
+com.yuri.notebook.R$string: int share
+com.yuri.notebook.R$string: int share_tip
+com.yuri.notebook.R$string: int sort_by_date
+com.yuri.notebook.R$string: int sort_by_default
+com.yuri.notebook.R$string: int sort_by_type
+com.yuri.notebook.R$string: int tip_msg
+com.yuri.notebook.R$string: int title
+com.yuri.notebook.R$string: int title_cannot_null
+com.yuri.notebook.R$string: int type_all
+com.yuri.notebook.R$string: int type_default
+com.yuri.notebook.R$string: int type_family
+com.yuri.notebook.R$string: int type_personal
+com.yuri.notebook.R$string: int type_study
+com.yuri.notebook.R$string: int type_work
+com.yuri.notebook.R$string: int year_sfd
+com.yuri.notebook.R$string: int yestoday
+com.yuri.notebook.R$style: int AppTheme
+com.yuri.notebook.R$style: int Button
+com.yuri.notebook.R$style: int ButtonContainer
+com.yuri.notebook.R$style: int SecurityPreferenceButton
+com.yuri.notebook.R$style: int SecurityPreferenceButtonContainer
+com.yuri.notebook.R$styleable: int[] LockPatternView
+com.yuri.notebook.R$styleable: int LockPatternView_aspect
+com.yuri.notebook.R$xml: int note_setting_config
+com.yuri.notebook.XmlBackupActivity
+com.yuri.notebook.XmlBackupActivity: XmlBackupActivity()
+com.yuri.notebook.XmlBackupActivity: void onClick(android.view.View)
+com.yuri.notebook.ZipBackupActivity
+com.yuri.notebook.ZipBackupActivity: ZipBackupActivity()
+com.yuri.notebook.ZipBackupActivity: void onClick(android.view.View)
+com.yuri.notebook.db.NoteProvider
+com.yuri.notebook.db.NoteProvider: NoteProvider()
+com.yuri.notebook.loader.NoteApplication
+com.yuri.notebook.loader.NoteApplication: NoteApplication()
+com.yuri.notebook.loader.NoteLoader
+com.yuri.notebook.loader.NoteLoader: NoteLoader()
+com.yuri.notebook.loader.NoteLoader: void onClick(android.view.View)
+com.yuri.notebook.loader.NoteLoader: void onViewAttachedToWindow(android.view.View)
+com.yuri.notebook.loader.NoteLoader: void onViewDetachedFromWindow(android.view.View)
+com.yuri.notebook.login.LockPatternActivity
+com.yuri.notebook.login.LockPatternActivity: LockPatternActivity()
+com.yuri.notebook.login.LockPatternActivity: void onClick(android.view.View)
+com.yuri.notebook.login.LockPatternView
+com.yuri.notebook.login.LockPatternView: LockPatternView(android.content.Context)
+com.yuri.notebook.login.LockPatternView: LockPatternView(android.content.Context,android.util.AttributeSet)
+com.yuri.notebook.login.LockPatternView: void setInStealthMode(boolean)
+com.yuri.notebook.login.LockPatternView: void setTactileFeedbackEnabled(boolean)
+com.yuri.notebook.login.LockPatternView: void setOnPatternListener(com.yuri.notebook.login.LockPatternView$OnPatternListener)
+com.yuri.notebook.login.LockPatternView: void setDisplayMode(com.yuri.notebook.login.LockPatternView$DisplayMode)
+com.yuri.notebook.login.LockPatternView: int getSuggestedMinimumWidth()
+com.yuri.notebook.login.LockPatternView: int getSuggestedMinimumHeight()
+com.yuri.notebook.login.LockPatternView$DisplayMode: com.yuri.notebook.login.LockPatternView$DisplayMode[] values()
+com.yuri.notebook.login.LockPatternView$DisplayMode: com.yuri.notebook.login.LockPatternView$DisplayMode valueOf(java.lang.String)
+com.yuri.notebook.login.LockPatternView$SavedState
+com.yuri.notebook.login.LoginActivity
+com.yuri.notebook.login.LoginActivity: LoginActivity()
+com.yuri.notebook.login.LoginPasswdActivity
+com.yuri.notebook.login.LoginPasswdActivity: LoginPasswdActivity()
+com.yuri.notebook.login.LoginPasswdActivity: void onClick(android.view.View)
+com.yuri.notebook.start.AppIntroduce
+com.yuri.notebook.start.AppIntroduce: AppIntroduce()
+com.yuri.notebook.start.ScrollLayout
+com.yuri.notebook.start.ScrollLayout: ScrollLayout(android.content.Context)
+com.yuri.notebook.start.ScrollLayout: ScrollLayout(android.content.Context,android.util.AttributeSet)
+com.yuri.notebook.start.ScrollLayout: ScrollLayout(android.content.Context,android.util.AttributeSet,int)
+com.yuri.notebook.start.StartActivity
+com.yuri.notebook.start.StartActivity: StartActivity()
+com.yuri.notebook.utils.Notes
+com.yuri.notebook.utils.Notes: android.os.Parcelable$Creator CREATOR
+org.acra.ReportField: org.acra.ReportField[] values()
+org.acra.ReportField: org.acra.ReportField valueOf(java.lang.String)
+org.acra.ReportingInteractionMode: org.acra.ReportingInteractionMode[] values()
+org.acra.ReportingInteractionMode: org.acra.ReportingInteractionMode valueOf(java.lang.String)
+org.acra.collector.MediaCodecListCollector$CodecType: org.acra.collector.MediaCodecListCollector$CodecType[] values()
+org.acra.collector.MediaCodecListCollector$CodecType: org.acra.collector.MediaCodecListCollector$CodecType valueOf(java.lang.String)

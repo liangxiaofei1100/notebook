@@ -353,7 +353,7 @@ public class NoteLoader extends ListActivity implements OnItemClickListener,
 	@Override
 	public boolean onQueryTextChange(String newText) {
 		LogUtils.d(TAG, "onQueryTextChange:" + newText);
-		if (DRAWER_OPEN == mDrawerPreStatus || mDrawerLayout.isDrawerOpen(mDrawerList)) {
+		if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
 			return false;
 		}
 		mSearchString = !TextUtils.isEmpty(newText) ? newText : null;
