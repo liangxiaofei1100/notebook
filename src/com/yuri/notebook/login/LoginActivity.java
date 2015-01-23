@@ -1,6 +1,6 @@
 package com.yuri.notebook.login;
 
-import com.yuri.notebook.loader.NoteLoader;
+import com.yuri.notebook.activitys.NoteMainActivity;
 import com.yuri.notebook.utils.NoteUtil;
 
 import android.app.Activity;
@@ -30,7 +30,7 @@ public class LoginActivity extends Activity {
 			startActivity(intent);
 		}else {
 			Intent intent = new Intent();
-			intent.setClass(LoginActivity.this, NoteLoader.class);
+			intent.setClass(LoginActivity.this, NoteMainActivity.class);
 			startActivity(intent);
 		}
 		this.finish();

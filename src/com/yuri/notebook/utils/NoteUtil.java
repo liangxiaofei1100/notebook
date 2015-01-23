@@ -35,7 +35,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yuri.notebook.db.NoteMetaData;
+import com.yuri.notebook.db.MetaData;
+import com.yuri.notebook.db.MetaData.NoteColumns;
 
 public class NoteUtil {
 	public static final String TAG = "NoteUtil";
@@ -65,9 +66,9 @@ public class NoteUtil {
 
 	// cloumns
 	public static final String[] COLUMNS = new String[] {
-			NoteMetaData.Note._ID, NoteMetaData.Note.TITLE,
-			NoteMetaData.Note.CONTENT, NoteMetaData.Note.GROUP, 
-			NoteMetaData.Note.TIME };
+			MetaData.NoteColumns._ID, NoteColumns.OBJECT_ID,
+			MetaData.NoteColumns.CONTENT, MetaData.NoteColumns.GROUP, 
+			MetaData.NoteColumns.TIME };
 
 	// Service Action
 	public static final String ACTION_INSERT = "com.yuri.notebook.action_insert";

@@ -13,46 +13,14 @@
         android:dialogTitle="@string/mode_select"
         android:entries="@array/entries_list_preference"
         android:entryValues="@array/entryvalues_list_preference"
-        android:key="list_preference"
+        android:key="login_preference"
         android:title="@string/login_mode" />
     
-    <EditTextPreference 
-        android:key="edit_mail_preference"
-        android:title="@string/mail_backup"
-        android:summary="@string/mail_not_setting"
-        android:dialogTitle="@string/mail_setting"
-        />
-    
     <PreferenceScreen
-        android:key="backup_screen"
-        android:title="@string/note_backup"
-        android:summary="@string/backup_tip"
+        android:key="sync_screen"
+        android:title="@string/note_sync"
          >
     </PreferenceScreen>
-        
-    <ListPreference 
-        android:dialogTitle="@string/note_restore_title"
-        android:key="note_restore_list"
-        android:title="@string/note_restore"
-        />
-    
-<!--     <ListPreference  -->
-<!--         android:dialogTitle="@string/font_set" -->
-<!--         android:key="note_font_set" -->
-<!--         android:title="@string/font_set" -->
-<!--         android:entries="@array/font_entries" -->
-<!--         android:entryValues="@array/font_entryvalues" -->
-<!--         android:defaultValue="1" -->
-<!--         /> -->
-    
-<!--     <ListPreference  -->
-<!--         android:dialogTitle="@string/background_color_set" -->
-<!--         android:key="note_background_color_set" -->
-<!--         android:title="@string/background_color_set" -->
-<!--         android:entries="@array/color_entries" -->
-<!--         android:entryValues="@array/color_entryvalues" -->
-<!--         android:defaultValue="3" -->
-<!--         /> -->
     
     <PreferenceScreen
         android:summary=""
@@ -60,7 +28,7 @@
         android:title="@string/about" >
         <intent
             android:action="com.yuri.notebook.about"
-            android:targetClass="com.yuri.notebook.AboutActivity"
+            android:targetClass="com.yuri.notebook.activitys.AboutActivity"
             android:targetPackage="com.yuri.notebook" />
     </PreferenceScreen>
 

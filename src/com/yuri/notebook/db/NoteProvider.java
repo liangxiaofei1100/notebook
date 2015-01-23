@@ -20,53 +20,39 @@ public class NoteProvider extends ContentProvider {
 	
 	public static final int NOTEBOOK_COLLECTION = 1;
 	public static final int NOTEBOOK_SINGLE = 2;
-	
-	public static final int MAIL_COLLECTION = 3;
-	public static final int MAIL_SINGLE = 4;
-	
 	public static final int NOTEBOOK_FILTER = 5;
 	
 	public static final UriMatcher uriMatcher;
 	
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		uriMatcher.addURI(NoteMetaData.AUTHORITY, "notebooks", NOTEBOOK_COLLECTION);
-		uriMatcher.addURI(NoteMetaData.AUTHORITY, "notebooks/#", NOTEBOOK_SINGLE);
-		uriMatcher.addURI(NoteMetaData.AUTHORITY, "notebooks_filter/*", NOTEBOOK_FILTER);
-		uriMatcher.addURI(NoteMetaData.AUTHORITY, "mails", MAIL_COLLECTION);
-		uriMatcher.addURI(NoteMetaData.AUTHORITY, "mails/#", MAIL_SINGLE);
+		uriMatcher.addURI(MetaData.AUTHORITY, "notebook", NOTEBOOK_COLLECTION);
+		uriMatcher.addURI(MetaData.AUTHORITY, "notebook/#", NOTEBOOK_SINGLE);
+		uriMatcher.addURI(MetaData.AUTHORITY, "notebook_filter/*", NOTEBOOK_FILTER);
 	}
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper{
 
 		public DatabaseHelper(Context context) {
-			super(context, NoteMetaData.DATABASE_NAME, null, NoteMetaData.DATABASE_VERSION);
+			super(context, MetaData.DATABASE_NAME, null, MetaData.DATABASE_VERSION);
 		}
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			//notes table
-			db.execSQL("create table " + NoteMetaData.Note.TABLE_NAME
+			db.execSQL("create table " + MetaData.NoteColumns.TABLE_NAME
 					+ " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, "
-					+ NoteMetaData.Note.TITLE + " TEXT, "
-					+ NoteMetaData.Note.CONTENT + " TEXT, "
-					+ NoteMetaData.Note.GROUP + " TEXT, "
-					+ NoteMetaData.Note.TIME + " LONG);"
-					);
-			
-			//mails table 暂时没有使用
-			db.execSQL("create table " + NoteMetaData.Note.TABLE_MAIL
-					+ " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, "
-					+ NoteMetaData.Note.TITLE + " TEXT);"
+					+ MetaData.NoteColumns.OBJECT_ID + " TEXT, "
+					+ MetaData.NoteColumns.CONTENT + " TEXT, "
+					+ MetaData.NoteColumns.GROUP + " TEXT, "
+					+ MetaData.NoteColumns.TIME + " LONG);"
 					);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			//如果数据库版本发生变化，则删掉重建
-			db.execSQL("DROP TABLE IF EXISTS " + NoteMetaData.Note.TABLE_NAME);
-			
-			db.execSQL("DROP TABLE IF EXISTS " + NoteMetaData.Note.TABLE_MAIL);
+			db.execSQL("DROP TABLE IF EXISTS " + MetaData.NoteColumns.TABLE_NAME);
 			onCreate(db);
 		}
 		
@@ -80,7 +66,7 @@ public class NoteProvider extends ContentProvider {
 		switch (uriMatcher.match(uri)) {
 		case NOTEBOOK_COLLECTION:
 			
-			count = mSqLiteDatabase.delete(NoteMetaData.Note.TABLE_NAME, selection, selectionArgs);
+			count = mSqLiteDatabase.delete(MetaData.NoteColumns.TABLE_NAME, selection, selectionArgs);
 			break;
 		case NOTEBOOK_SINGLE:
 			String segment = uri.getPathSegments().get(1);
@@ -89,20 +75,7 @@ public class NoteProvider extends ContentProvider {
 			}else {
 				selection = "_id=" +  segment;
 			}
-			count = mSqLiteDatabase.delete(NoteMetaData.Note.TABLE_NAME, selection, selectionArgs);
-			break;
-			
-		case MAIL_COLLECTION:
-			count = mSqLiteDatabase.delete(NoteMetaData.Note.TABLE_MAIL, selection, selectionArgs);
-			break;
-		case MAIL_SINGLE:
-			String segment1 = uri.getPathSegments().get(1);
-			if (selection != null && segment1.length() > 0) {
-				selection = "_id=" + segment1 + " AND (" + selection + ")";
-			}else {
-				selection = "_id=" +  segment1;
-			}
-			count = mSqLiteDatabase.delete(NoteMetaData.Note.TABLE_MAIL, selection, selectionArgs);
+			count = mSqLiteDatabase.delete(MetaData.NoteColumns.TABLE_NAME, selection, selectionArgs);
 			break;
 		default:
 			throw new IllegalArgumentException("UnKnow Uri:" + uri);
@@ -119,14 +92,9 @@ public class NoteProvider extends ContentProvider {
 	public String getType(Uri uri) {
 		switch (uriMatcher.match(uri)) {
 		case NOTEBOOK_COLLECTION:
-			return NoteMetaData.Note.CONTENT_TYPE;
+			return MetaData.NoteColumns.CONTENT_TYPE;
 		case NOTEBOOK_SINGLE:
-			return NoteMetaData.Note.CONTENT_TYPE_ITEM;
-			
-		case MAIL_COLLECTION:
-			return NoteMetaData.Note.MAIL_CONTENT_TYPE;
-		case MAIL_SINGLE:
-			return NoteMetaData.Note.MAIL_CONTENT_TYPE_ITEM;
+			return MetaData.NoteColumns.CONTENT_TYPE_ITEM;
 		default:
 			throw new IllegalArgumentException("Unkonw uri:" + uri);
 		}
@@ -139,10 +107,10 @@ public class NoteProvider extends ContentProvider {
 		case NOTEBOOK_COLLECTION:
 		case NOTEBOOK_SINGLE:
 			mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
-			long rowId = mSqLiteDatabase.insertWithOnConflict(NoteMetaData.Note.TABLE_NAME, "", 
+			long rowId = mSqLiteDatabase.insertWithOnConflict(MetaData.NoteColumns.TABLE_NAME, "", 
 					values, SQLiteDatabase.CONFLICT_REPLACE);
 			if (rowId > 0) {
-				Uri rowUri = ContentUris.withAppendedId(NoteMetaData.Note.CONTENT_URI, rowId);
+				Uri rowUri = ContentUris.withAppendedId(MetaData.NoteColumns.CONTENT_URI, rowId);
 				getContext().getContentResolver().notifyChange(uri, null);
 				return rowUri;
 			}
@@ -164,21 +132,19 @@ public class NoteProvider extends ContentProvider {
 		
 		switch (uriMatcher.match(uri)) {
 		case NOTEBOOK_COLLECTION:
-			qb.setTables(NoteMetaData.Note.TABLE_NAME);
+			qb.setTables(MetaData.NoteColumns.TABLE_NAME);
 			break;
 		case NOTEBOOK_SINGLE:
-			qb.setTables(NoteMetaData.Note.TABLE_NAME);
+			qb.setTables(MetaData.NoteColumns.TABLE_NAME);
 			qb.appendWhere("_id=");
 			qb.appendWhere(uri.getPathSegments().get(1));
 			break;
 		case NOTEBOOK_FILTER:
-			qb.setTables(NoteMetaData.Note.TABLE_NAME);
-
-			qb.appendWhere(NoteMetaData.Note.TITLE + " like \'%"
-					+ uri.getPathSegments().get(1) + "%\'");
-			qb.appendWhere(" or ");
-
-			qb.appendWhere(NoteMetaData.Note.CONTENT + " like \'%"
+			qb.setTables(MetaData.NoteColumns.TABLE_NAME);
+//			qb.appendWhere(MetaData.NoteColumns.TITLE + " like \'%"
+//					+ uri.getPathSegments().get(1) + "%\'");
+//			qb.appendWhere(" or ");
+			qb.appendWhere(MetaData.NoteColumns.CONTENT + " like \'%"
 					+ uri.getPathSegments().get(1) + "%\'");
 			break;
 		default:
@@ -207,17 +173,16 @@ public class NoteProvider extends ContentProvider {
 			String segment = uri.getPathSegments().get(1);
 			rowId = Long.parseLong(segment);
 			
-			count = mSqLiteDatabase.update(NoteMetaData.Note.TABLE_NAME, values, "_id=" + rowId, null);
+			count = mSqLiteDatabase.update(MetaData.NoteColumns.TABLE_NAME, values, "_id=" + rowId, null);
 			break;
 		case NOTEBOOK_COLLECTION:
-			count = mSqLiteDatabase.update(NoteMetaData.Note.TABLE_NAME, values, selection, null);
+			count = mSqLiteDatabase.update(MetaData.NoteColumns.TABLE_NAME, values, selection, null);
 			break;
 		default:
 			throw new UnsupportedOperationException("Cannot update uri:" + uri);
 		}
 		
 		getContext().getContentResolver().notifyChange(uri, null);
-		
 		return count;
 	}
 

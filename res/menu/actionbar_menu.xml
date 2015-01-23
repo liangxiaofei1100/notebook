@@ -7,6 +7,6 @@
     <item android:id="@+id/actionbar_delete" android:title="@string/menu_delete"
         android:icon="@drawable/actionbar_delete" android:showAsAction="always" />
 
-<!--     <item android:id="@+id/actionbar_backup" android:title="@string/menu_backup" -->
-<!--         android:icon="@drawable/actionbar_backup" android:showAsAction="always" /> -->
+    <item android:id="@+id/actionbar_backup" android:title="@string/menu_backup"
+        android:icon="@drawable/actionbar_backup" android:showAsAction="always" />
 </menu>

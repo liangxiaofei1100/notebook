@@ -138,6 +138,7 @@
    <string name="note_restore_title">"选择要恢复的备份"</string>
    <string name="restore_tip">"恢复操作将覆盖现有数据，请谨慎操作"</string>
    <string name="crash_toast">"错误信息已发送，谢谢你的协助！"</string>
+   <string name="note_sync">同步</string>
    
    <string name="font_set">"字体大小设置"</string>
    <string name="large_font">"较大字体"</string>

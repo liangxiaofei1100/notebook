@@ -1,7 +1,7 @@
 package com.yuri.notebook.login;
 
 import com.yuri.notebook.R;
-import com.yuri.notebook.loader.NoteLoader;
+import com.yuri.notebook.activitys.NoteMainActivity;
 import com.yuri.notebook.utils.NoteUtil;
 
 import android.app.Activity;
@@ -181,7 +181,7 @@ public class LoginPasswdActivity extends Activity implements OnClickListener, On
 			String pw = passwdEdit.getText().toString().trim();
 			if (password.equals(pw)) {
 				Intent intent = new Intent();
-				intent.setClass(this, NoteLoader.class);
+				intent.setClass(this, NoteMainActivity.class);
 				startActivity(intent);
 				LoginPasswdActivity.this.finish();
 			}else {

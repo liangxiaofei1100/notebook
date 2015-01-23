@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yuri.notebook.R;
-import com.yuri.notebook.loader.NoteLoader;
+import com.yuri.notebook.activitys.NoteMainActivity;
 import com.yuri.notebook.login.LockPatternView.Cell;
 import com.yuri.notebook.login.LockPatternView.DisplayMode;
 import com.yuri.notebook.login.LockPatternView.OnPatternListener;
@@ -171,7 +171,7 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
 			} else {
 				Intent intent = new Intent();
 //				intent.setClass(LockPatternActivity.this, HomePageActivity.class);
-				intent.setClass(LockPatternActivity.this, NoteLoader.class);
+				intent.setClass(LockPatternActivity.this, NoteMainActivity.class);
 				startActivity(intent);
 				finish();
 			}

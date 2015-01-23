@@ -7,34 +7,42 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="14" />
-	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:targetPackage="com.example.test0823" >
+    </instrumentation>
+
     <application
-        android:name=".loader.NoteApplication"
-        android:icon="@drawable/app_ic_notebook"
+        android:name="com.baidu.frontia.FrontiaApplication"
         android:allowBackup="true"
-        android:label="@string/app_name" 
-        >
-       <activity
+        android:icon="@drawable/app_ic_notebook"
+        android:label="@string/app_name" >
+        <uses-library android:name="android.test.runner" />
+
+        <activity
             android:name=".start.StartActivity"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
-            android:name=".login.LoginActivity"
-            >
+        <activity android:name=".login.LoginActivity" >
         </activity>
-         <activity 
+        <activity
             android:name=".start.AppIntroduce"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"
-            >
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
         </activity>
-
         <activity
             android:name=".login.LockPatternActivity"
             android:label="@string/app_name"
@@ -44,8 +52,7 @@
             android:name=".login.LoginPasswdActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Holo.Light"
-            android:windowSoftInputMode="adjustResize"
-             >
+            android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
             android:name=".HomePageActivity"
@@ -53,71 +60,59 @@
             android:theme="@android:style/Theme.Holo.Light" >
         </activity>
         <activity
-            android:name=".NewNoteActivity"
+            android:name="com.yuri.notebook.activitys.NewNoteActivity"
             android:label=""
             android:theme="@android:style/Theme.Holo.Light"
-            android:windowSoftInputMode="adjustResize"
-             >
+            android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
-            android:name=".CheckNoteActivity"
+            android:name="com.yuri.notebook.activitys.CheckNoteActivity"
             android:label="@string/app_name"
-            android:uiOptions="splitActionBarWhenNarrow"
-            android:theme="@android:style/Theme.Holo.Light" >
-        </activity>
-        
-        <!--android:windowSoftInputMode="adjustResize"   可以解决不自动弹出输入法的BUg  -->
-        <activity
-            android:name=".EditNoteActivity"
-            android:label=""
             android:theme="@android:style/Theme.Holo.Light"
-            android:windowSoftInputMode="adjustResize"
-             >
+            android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
 
-        <activity 
-            android:name=".NoteSettingActivity"
-            android:label="@string/setting"
-            android:theme="@android:style/Theme.Holo.Light"
-            ></activity>
-        
+        <!-- android:windowSoftInputMode="adjustResize"   可以解决不自动弹出输入法的BUg -->
         <activity
-            android:name="com.yuri.notebook.ZipBackupActivity"
+            android:name="com.yuri.notebook.activitys.EditNoteActivity"
+            android:label=""
+            android:theme="@android:style/Theme.Holo.Light"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name="com.yuri.notebook.activitys.NoteSettingActivity"
+            android:label="@string/setting"
+            android:theme="@android:style/Theme.Holo.Light" >
+        </activity>
+        <activity
+            android:name="com.yuri.notebook.unuse.ZipBackupActivity"
             android:label="@string/note_backup"
-            android:theme="@android:style/Theme.Holo.Light.Dialog"
-             />
-        
+            android:theme="@android:style/Theme.Holo.Light.Dialog" />
         <activity
             android:name=".XmlBackupActivity"
             android:label="@string/note_backup"
-            android:theme="@android:style/Theme.Holo.Light.Dialog"
-            />
-        
-        <provider
-            android:name=".db.NoteProvider"
-            android:authorities="com.yuri.notebook.db.notebookprovider" >
-        </provider>
+            android:theme="@android:style/Theme.Holo.Light.Dialog" />
 
-        <service android:name=".NoteBookService" >
-        </service>
-        
-        <activity 
-            android:name=".AboutActivity"
+        <provider
+            android:name="com.yuri.notebook.db.NoteProvider"
+            android:authorities="com.yuri.notebook.db.notebookprovider" />
+
+        <activity
+            android:name="com.yuri.notebook.activitys.AboutActivity"
             android:label="@string/about"
-            android:theme="@android:style/Theme.Holo.Light"
-            >
+            android:theme="@android:style/Theme.Holo.Light" >
             <intent-filter>
-                <action android:name="com.yuri.notebook.about"></action>
+                <action android:name="com.yuri.notebook.about" >
+                </action>
             </intent-filter>
         </activity>
-        
-        <activity 
-            android:name=".loader.NoteLoader"
-            android:theme="@android:style/Theme.Holo.Light"
+        <activity
+            android:name="com.yuri.notebook.activitys.NoteMainActivity"
             android:configChanges="orientation|screenSize"
             android:label=""
-            android:uiOptions="splitActionBarWhenNarrow"
-            ></activity>
+            android:theme="@android:style/Theme.Holo.Light"
+            android:uiOptions="splitActionBarWhenNarrow" >
+        </activity>
     </application>
 
 </manifest>
