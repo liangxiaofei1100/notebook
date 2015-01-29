@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 
 import com.baidu.frontia.Frontia;
 import com.baidu.frontia.FrontiaData;
@@ -38,7 +39,8 @@ public class FrontiaManager {
 		JSONObject data = new JSONObject();
 		try {
 			data.put(Note.FRONTIA_KEY, Note.FRONTIA_VALUE);
-			data.put(Note.ID, note.getId());
+			LogUtils.d(TAG, "insertData.objectId:" + note.getObjectId());
+			data.put(Note.OBJECTID, note.getObjectId());
 			data.put(Note.CONTENT, note.getContent());
 			data.put(Note.GROUP, note.getGroup());
 			data.put(Note.TIME, note.getTime());
@@ -105,17 +107,16 @@ public class FrontiaManager {
 					jsonObject = data.get(i).toJSON();
 					note = new Note();
 					try {
-						note.setId(jsonObject.getLong(Note.ID));
 						note.setContent(jsonObject.getString(Note.CONTENT));
 						note.setGroup(jsonObject.getString(Note.GROUP));
 						long time = jsonObject.getLong(Note.TIME);
 						note.setTime(time);
 						String objectId = jsonObject.getString(Note.OBJECTID);
 						if (TextUtils.isEmpty(objectId)) {
-							objectId = Long.toHexString(time + new Random().nextInt(10000));
+							objectId = Note.getObjectId(time);
 						}
 						note.setObjectId(objectId);
-						LogUtils.i(TAG, "find.content>>" + note.getContent());
+						LogUtils.i(TAG, "find.content>>" + note.getContent() + ",objectId:" + objectId);
 					} catch (JSONException e) {
 						e.printStackTrace();
 						LogUtils.e(TAG, "queryData.error:" + e.toString());
@@ -152,9 +153,19 @@ public class FrontiaManager {
 	}
 	
 	public void delete(Handler handler, List<String> objectIds){
+		LogUtils.d(TAG, "delete.objectIds.size=" + objectIds.size());
 		FrontiaQuery frontiaQuery = new FrontiaQuery();
 		frontiaQuery.equals(Note.FRONTIA_KEY, Note.FRONTIA_VALUE);
-		frontiaQuery.in(Note.OBJECTID, objectIds.toArray(new String[objectIds.size()]));
+
+		FrontiaQuery preQuery = null;
+		for (int i = 0; i < objectIds.size(); i++) {
+			frontiaQuery.equals(Note.OBJECTID, objectIds.get(i));
+			if (preQuery != null) {
+				preQuery = preQuery.or(frontiaQuery);
+			} else {
+				preQuery = frontiaQuery;
+			}
+		}
 		delete(frontiaQuery, handler);
 	}
 	
@@ -202,6 +213,9 @@ public class FrontiaManager {
 				message.sendToTarget();
 			}
 		});
+		
+		
 	}
+	
 	
 }

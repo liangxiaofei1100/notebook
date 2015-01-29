@@ -30,6 +30,24 @@
         />
     
     <item
+        android:id="@+id/menu_test"
+        android:showAsAction="never"
+        android:title="test"
+        />
+    
+    <item
+        android:id="@+id/menu_test1"
+        android:showAsAction="never"
+        android:title="test1"
+        />
+    
+      <item
+        android:id="@+id/menu_test2"
+        android:showAsAction="never"
+        android:title="query"
+        />
+    
+    <item
         android:id="@+id/menu_note_loader_search"
         android:icon="@drawable/action_search"
         android:showAsAction="ifRoom|collapseActionView"

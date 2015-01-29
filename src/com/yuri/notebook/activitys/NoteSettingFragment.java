@@ -11,6 +11,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.yuri.notebook.R;
 import com.yuri.notebook.bean.Note;
 import com.yuri.notebook.db.MetaData;
+import com.yuri.notebook.db.MetaData.NoteColumns;
 import com.yuri.notebook.net.FrontiaManager;
 import com.yuri.notebook.utils.LogUtils;
 import com.yuri.notebook.utils.NoteUtil;
@@ -130,6 +132,12 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 				String group = note.getGroup();
 				String content = note.getContent();
 				long date = note.getTime();
+				
+				String selection = NoteColumns.OBJECT_ID + "='" + objectId + "'";
+				Cursor cursor = conResolver.query(NoteColumns.CONTENT_URI, null, selection, null, null);
+				if (cursor != null && cursor.getCount() > 0) {
+					continue;
+				}
 				
 				ContentValues values = new ContentValues();
 				values.put(MetaData.NoteColumns.OBJECT_ID, objectId);

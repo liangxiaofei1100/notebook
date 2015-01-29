@@ -1,5 +1,9 @@
 package com.yuri.notebook.activitys;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +11,8 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -16,11 +22,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -49,14 +57,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.frontia.Frontia;
-import com.baidu.frontia.FrontiaData;
-import com.baidu.frontia.FrontiaQuery;
+import com.yuri.notebook.DbHelper;
 import com.yuri.notebook.R;
 import com.yuri.notebook.adapter.DrawerAdapter;
 import com.yuri.notebook.adapter.NoteAdapter;
 import com.yuri.notebook.bean.Note;
 import com.yuri.notebook.db.MetaData;
 import com.yuri.notebook.db.MetaData.NoteColumns;
+import com.yuri.notebook.db.MetaData.NoteColumns2;
 import com.yuri.notebook.net.FrontiaManager;
 import com.yuri.notebook.utils.Constants;
 import com.yuri.notebook.utils.LogUtils;
@@ -257,6 +265,74 @@ public class NoteMainActivity extends ListActivity implements
 			Editor editor3 = sp.edit();
 			editor3.putString(NoteUtil.LIST_SORT, mSort);
 			editor3.commit();
+			break;
+		case R.id.menu_test:
+			
+			// 只要第一次创建一下database目录就可以了
+			File databaseDir = new File("/data/data/com.yuri.notebook/files/database");
+			if (!databaseDir.exists()) {
+				databaseDir.mkdirs();
+			}
+			
+			String srcFileName = "notebook.db";
+			File desFile = new File("/data/data/com.yuri.notebook/files/database/notebook.db");
+
+			if (desFile.exists() && desFile.isFile()) {
+				Log.d(TAG, desFile.getName() + " is exist");
+			} else if (!desFile.exists()) {
+				
+				FileOutputStream fos = null;
+				try {
+					desFile.createNewFile();
+					byte[] buffer = new byte[4096];
+					InputStream inputStream = getAssets().open(srcFileName);
+					fos = new FileOutputStream(desFile);
+					int count;
+					count = inputStream.read(buffer);
+					while (count > 0) {
+						fos.write(buffer);
+						count = inputStream.read(buffer);
+					}
+
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+					Log.e(TAG, "doCopyDB.fail exception : " + e.toString());
+				}
+			}
+			break;
+		case R.id.menu_test1:
+			ContentResolver contentResolver = getContentResolver();
+			SQLiteDatabase sqLiteDatabase = new DbHelper().getReadDb();
+			Cursor cursor = sqLiteDatabase.query(NoteColumns2.TABLE_NAME, NoteUtil.COLUMNS, null, null, null, null, NoteColumns2.SORT_ORDER_DEFAULT);
+//			Cursor cursor = contentResolver.query(NoteColumns2.CONTENT_URI, NoteUtil.COLUMNS, null, null, NoteColumns.SORT_ORDER_DEFAULT);
+			if (cursor != null && cursor.moveToFirst()) {
+				String objectId = "";
+				String content = "";
+				String group = "";
+				long time = 0;
+				
+				ContentValues values = null;
+				do {
+					objectId = cursor.getString(cursor.getColumnIndex(NoteColumns.OBJECT_ID));
+					content = cursor.getString(cursor.getColumnIndex(NoteColumns.CONTENT));
+					group = cursor.getString(cursor.getColumnIndex(NoteColumns.GROUP));
+					time = cursor.getLong(cursor.getColumnIndex(NoteColumns.TIME));
+					
+					values = new ContentValues();
+					values.put(NoteColumns.OBJECT_ID, objectId);
+					values.put(NoteColumns.CONTENT, content);
+					values.put(NoteColumns.GROUP, group);
+					values.put(NoteColumns.TIME, time);
+					
+					contentResolver.insert(NoteColumns.CONTENT_URI, values);
+				} while (cursor.moveToNext());
+			}
+			break;
+		case R.id.menu_test2:
+			LogUtils.d(TAG, "Menu_Query");
+			FrontiaManager frontiaManager = new FrontiaManager();
+			frontiaManager.queryAll(null);
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -562,14 +638,16 @@ public class NoteMainActivity extends ListActivity implements
 						.create().show();
 				break;
 			case R.id.actionbar_backup:
-				FrontiaManager frontiaManager = new FrontiaManager();
-				
-				cursor.moveToFirst();
 				Note note = null;
-				do {
-					note = Note.getNoteFromCursor(cursor);
-					frontiaManager.insertData(note, null);
-				} while (cursor.moveToNext());
+				FrontiaManager frontiaManager = new FrontiaManager();
+				for (int pos = getListView().getCount() - 1; pos >= 0; pos--) {
+					if (mAdapter.isSelected(pos)) {
+						cursor.moveToPosition(pos);
+						
+						note = Note.getNoteFromCursor(cursor);
+						frontiaManager.insertData(note, null);
+					}
+				}
 				break;
 
 			default:

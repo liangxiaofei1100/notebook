@@ -27,8 +27,8 @@ public class Note implements Parcelable {
 	public static final String CONTENT = "content";
 	public static final String GROUP = "group";
 	public static final String TIME = "time";
-	public static final String FRONTIA_KEY = "note";
-	public static final String FRONTIA_VALUE = "com.yuri.notebook.value";
+	public static final String FRONTIA_KEY = "xg_note";
+	public static final String FRONTIA_VALUE = "com.yuri.notebook.value.xg";
 
 	public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {
 
@@ -151,6 +151,7 @@ public class Note implements Parcelable {
 
 		Note note = new Note();
 		note.init();
+		note.setObjectId(getObjectId(time));
 		note.setId(id);
 		note.setContent(content);
 		note.setGroup(group);
@@ -161,6 +162,8 @@ public class Note implements Parcelable {
 	public static Note getNoteFromCursor(Cursor cursor) {
 		int id = cursor.getInt(cursor
 				.getColumnIndex(MetaData.NoteColumns._ID));
+		String objectId = cursor.getString(cursor
+				.getColumnIndex(MetaData.NoteColumns.OBJECT_ID));
 		String content = cursor.getString(cursor
 				.getColumnIndex(MetaData.NoteColumns.CONTENT));
 		String group = cursor.getString(cursor.getColumnIndex(NoteColumns.GROUP));
@@ -169,6 +172,7 @@ public class Note implements Parcelable {
 
 		Note note = new Note();
 		note.setId(id);
+		note.setObjectId(objectId);
 		note.setContent(content);
 		note.setGroup(group);
 		note.setTime(time);

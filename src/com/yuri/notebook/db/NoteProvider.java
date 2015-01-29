@@ -26,9 +26,9 @@ public class NoteProvider extends ContentProvider {
 	
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		uriMatcher.addURI(MetaData.AUTHORITY, "notebook", NOTEBOOK_COLLECTION);
-		uriMatcher.addURI(MetaData.AUTHORITY, "notebook/#", NOTEBOOK_SINGLE);
-		uriMatcher.addURI(MetaData.AUTHORITY, "notebook_filter/*", NOTEBOOK_FILTER);
+		uriMatcher.addURI(MetaData.AUTHORITY, "note", NOTEBOOK_COLLECTION);
+		uriMatcher.addURI(MetaData.AUTHORITY, "note/#", NOTEBOOK_SINGLE);
+		uriMatcher.addURI(MetaData.AUTHORITY, "note_filter/*", NOTEBOOK_FILTER);
 	}
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper{

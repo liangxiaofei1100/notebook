@@ -48,6 +48,7 @@ import com.yuri.notebook.utils.LogUtils;
 import com.yuri.notebook.utils.NoteUtil;
 
 public class EditNoteActivity extends Activity implements OnItemSelectedListener {
+	private static final String TAG = EditNoteActivity.class.getSimpleName();
 	private EditText mContentEdit;
 
 	private long mTime;
@@ -169,7 +170,11 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 				return;
 			} 
 			
+			String objectId = Note.getObjectId(System.currentTimeMillis());
+			mNoteBook.setObjectId(objectId);
+			
 			ContentValues values = new ContentValues();
+			values.put(NoteColumns.OBJECT_ID, objectId);
 			values.put(NoteColumns.CONTENT, content);
 			values.put(NoteColumns.GROUP, mGroup);
 			values.put(NoteColumns.TIME, System.currentTimeMillis());
@@ -179,8 +184,6 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 			mNoteBook.setContent(content);
 			mNoteBook.setTime(System.currentTimeMillis());
 			mNoteBook.setGroup(mGroup);
-			String objectId = Note.getObjectId(mNoteBook.getTime());
-			mNoteBook.setObjectId(objectId);
 			mFrontiaManager.insertData(mNoteBook, mHandler);
 			
 			setResult(RESULT_OK);
@@ -211,12 +214,16 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 		Uri uri = Uri.parse(MetaData.NoteColumns.CONTENT_URI + "/" + itemId);
 		getContentResolver().update(uri, values, null, null);
 		
+		LogUtils.d(TAG, "updateNote.objectId:" + mNoteBook.getObjectId());
 		FrontiaQuery frontiaQuery = new FrontiaQuery();
 		frontiaQuery.equals(Note.FRONTIA_KEY, Note.FRONTIA_VALUE);
+		frontiaQuery.equals(Note.OBJECTID, mNoteBook.getObjectId());
 		
 		FrontiaData frontiaData = new FrontiaData();
+		frontiaData.put(Note.OBJECTID, mNoteBook.getObjectId());
 		frontiaData.put(Note.CONTENT, content);
 		frontiaData.put(Note.GROUP, group);
+		frontiaData.put(Note.TIME, mTime);
 		mFrontiaManager.update(frontiaQuery, frontiaData, mHandler);
 	}
 	
