@@ -6,11 +6,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,21 +29,14 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
-import com.baidu.frontia.FrontiaData;
-import com.baidu.frontia.FrontiaQuery;
 import com.yuri.notebook.NoteManager;
 import com.yuri.notebook.R;
-import com.yuri.notebook.R.array;
-import com.yuri.notebook.R.color;
-import com.yuri.notebook.R.drawable;
-import com.yuri.notebook.R.id;
-import com.yuri.notebook.R.layout;
-import com.yuri.notebook.R.string;
 import com.yuri.notebook.bean.Note;
 import com.yuri.notebook.db.MetaData;
 import com.yuri.notebook.db.MetaData.NoteColumns;
-import com.yuri.notebook.net.FrontiaManager;
 import com.yuri.notebook.utils.LogUtils;
 import com.yuri.notebook.utils.NoteUtil;
 
@@ -65,8 +58,6 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 	private Spinner mSpinner;
 	
 	private String[] mGroups = null;
-	
-	FrontiaManager mFrontiaManager = null;
 	
 	public static final int MSG_UPLOAD_OVER = 0x01;
 	public static final int MSG_UPDATE_OVER = 0x02;
@@ -143,7 +134,6 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 		if (itemId == -1) {
 			mContentEdit.setText("");
 			mNoteBook = new Note();
-			mNoteBook.init();
 		} else {
 			mNoteBook = NoteManager.getNotesFromId(itemId,this);
 			mContentEdit.setText(mNoteBook.getContent());
@@ -157,8 +147,6 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 			}
 			mSpinner.setSelection(position);
 		}
-		
-		mFrontiaManager = new FrontiaManager();
 	}
 	
 	private void doSaveAction(){
@@ -170,21 +158,42 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 				return;
 			} 
 			
-			String objectId = Note.getObjectId(System.currentTimeMillis());
-			mNoteBook.setObjectId(objectId);
-			
-			ContentValues values = new ContentValues();
-			values.put(NoteColumns.OBJECT_ID, objectId);
-			values.put(NoteColumns.CONTENT, content);
-			values.put(NoteColumns.GROUP, mGroup);
-			values.put(NoteColumns.TIME, System.currentTimeMillis());
-			getContentResolver().insert(NoteColumns.CONTENT_URI, values);
-			
 			//upload to cloud
 			mNoteBook.setContent(content);
 			mNoteBook.setTime(System.currentTimeMillis());
 			mNoteBook.setGroup(mGroup);
-			mFrontiaManager.insertData(mNoteBook, mHandler);
+			mNoteBook.save(this, new SaveListener() {
+				
+				@Override
+				public void onSuccess() {
+					String objectId = mNoteBook.getObjectId();
+					LogUtils.d(TAG, "save.success:" + objectId);
+					
+					ContentValues values = new ContentValues();
+					values.put(NoteColumns.OBJECT_ID, objectId);
+					values.put(NoteColumns.CONTENT, mNoteBook.getContent());
+					values.put(NoteColumns.GROUP, mNoteBook.getGroup());
+					values.put(NoteColumns.TIME, mNoteBook.getTime());
+					getContentResolver().insert(NoteColumns.CONTENT_URI, values);
+					
+					Message message = new Message();
+					message.what = MSG_UPLOAD_OVER;
+					message.arg1 = 0;
+					message.setTarget(mHandler);
+					message.sendToTarget();
+				}
+				
+				@Override
+				public void onFailure(int arg0, String arg1) {
+					LogUtils.e(TAG, "save.failed:" + arg1);
+					
+					Message message = new Message();
+					message.what = MSG_UPLOAD_OVER;
+					message.arg1 = -1;
+					message.setTarget(mHandler);
+					message.sendToTarget();
+				}
+			});
 			
 			setResult(RESULT_OK);
 			Toast.makeText(this, R.string.note_saved, Toast.LENGTH_SHORT).show();
@@ -215,16 +224,31 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 		getContentResolver().update(uri, values, null, null);
 		
 		LogUtils.d(TAG, "updateNote.objectId:" + mNoteBook.getObjectId());
-		FrontiaQuery frontiaQuery = new FrontiaQuery();
-		frontiaQuery.equals(Note.FRONTIA_KEY, Note.FRONTIA_VALUE);
-		frontiaQuery.equals(Note.OBJECTID, mNoteBook.getObjectId());
 		
-		FrontiaData frontiaData = new FrontiaData();
-		frontiaData.put(Note.OBJECTID, mNoteBook.getObjectId());
-		frontiaData.put(Note.CONTENT, content);
-		frontiaData.put(Note.GROUP, group);
-		frontiaData.put(Note.TIME, mTime);
-		mFrontiaManager.update(frontiaQuery, frontiaData, mHandler);
+		mNoteBook.update(this, mNoteBook.getObjectId(), new UpdateListener() {
+			
+			@Override
+			public void onSuccess() {
+				LogUtils.d(TAG, "update.success");
+				
+				Message message = new Message();
+				message.what = MSG_UPDATE_OVER;
+				message.arg1 = 0;
+				message.setTarget(mHandler);
+				message.sendToTarget();
+			}
+			
+			@Override
+			public void onFailure(int arg0, String arg1) {
+				LogUtils.e(TAG, "update failed:" + arg1);
+				
+				Message message = new Message();
+				message.what = MSG_UPDATE_OVER;
+				message.arg1 = -1;
+				message.setTarget(mHandler);
+				message.sendToTarget();
+			}
+		});
 	}
 	
 	@Override
@@ -240,31 +264,11 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case NoteUtil.MENU_SAVE:
-			mTime = System.currentTimeMillis();
-			
-			if (mTitle.equals("")) {
-				NoteUtil.showToast(EditNoteActivity.this, R.string.title_cannot_null);
-			}else {
-				mContent = mContentEdit.getText().toString().trim();
-				ContentValues values = new ContentValues();
-				values.put(MetaData.NoteColumns.CONTENT, mContent);
-				values.put(MetaData.NoteColumns.TIME, mTime);
-				values.put(NoteColumns.GROUP, mGroup);
-				
-				Uri uri = Uri.parse(MetaData.NoteColumns.CONTENT_URI + "/" + itemId);
-				getContentResolver().update(uri, values, null, null);
-				
-				Intent intent = new Intent();
-				intent.putExtra("time", mTime);
-				setResult(RESULT_OK,intent);
-				EditNoteActivity.this.finish();
-			}
-
+			doSaveAction();
 			break;
 		case android.R.id.home://
 			//点击左上角应用图标，返回，默认情况下，图标的ID是android.R.id.home
 			noteFinish();
-			
 			break;
 		}
 		return true;

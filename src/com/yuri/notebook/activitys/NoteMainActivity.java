@@ -55,8 +55,12 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.DeleteListener;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 
-import com.baidu.frontia.Frontia;
 import com.yuri.notebook.DbHelper;
 import com.yuri.notebook.R;
 import com.yuri.notebook.adapter.DrawerAdapter;
@@ -65,8 +69,6 @@ import com.yuri.notebook.bean.Note;
 import com.yuri.notebook.db.MetaData;
 import com.yuri.notebook.db.MetaData.NoteColumns;
 import com.yuri.notebook.db.MetaData.NoteColumns2;
-import com.yuri.notebook.net.FrontiaManager;
-import com.yuri.notebook.utils.Constants;
 import com.yuri.notebook.utils.LogUtils;
 import com.yuri.notebook.utils.NoteUtil;
 
@@ -122,8 +124,6 @@ public class NoteMainActivity extends ListActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homepage);
-
-		Frontia.init(getApplicationContext(), Constants.BAIDU_API_KEY);
 
 		GROUP_ALL = getString(R.string.type_all);
 		mGroup = GROUP_ALL;
@@ -331,8 +331,18 @@ public class NoteMainActivity extends ListActivity implements
 			break;
 		case R.id.menu_test2:
 			LogUtils.d(TAG, "Menu_Query");
-			FrontiaManager frontiaManager = new FrontiaManager();
-			frontiaManager.queryAll(null);
+			BmobQuery<Note> query = new BmobQuery<Note>();
+			query.findObjects(this, new FindListener<Note>() {
+				@Override
+				public void onSuccess(List<Note> arg0) {
+					LogUtils.d(TAG, "query.success.count:" + arg0.size());
+				}
+				
+				@Override
+				public void onError(int arg0, String arg1) {
+					LogUtils.e(TAG, "error:" + arg1);
+				}
+			});
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -631,23 +641,80 @@ public class NoteMainActivity extends ListActivity implements
 										}
 										
 										//delete cloud data
-										new FrontiaManager().delete(null, objectIdStrings);
+										List<BmobObject> notes = new ArrayList<BmobObject>();
+										Note note = null;
+										for (int i = 0; i < objectIdStrings.size(); i++) {
+											note = new Note();
+											note.setObjectId(objectIdStrings.get(i));
+											notes.add(note);
+										}
+										
+										new BmobObject().deleteBatch(NoteMainActivity.this, notes, new DeleteListener() {
+											
+											@Override
+											public void onSuccess() {
+												LogUtils.d(TAG, "delete success");
+											}
+											
+											@Override
+											public void onFailure(int arg0, String arg1) {
+												LogUtils.e(TAG, "delete failed:" + arg1);
+											}
+										});
+										
 									}
 								})
 						.setNegativeButton(android.R.string.cancel, null)
 						.create().show();
 				break;
 			case R.id.actionbar_backup:
-				Note note = null;
-				FrontiaManager frontiaManager = new FrontiaManager();
 				for (int pos = getListView().getCount() - 1; pos >= 0; pos--) {
 					if (mAdapter.isSelected(pos)) {
 						cursor.moveToPosition(pos);
-						
-						note = Note.getNoteFromCursor(cursor);
-						frontiaManager.insertData(note, null);
+						final Note note = Note.getNoteFromCursor(cursor);
+						note.save(NoteMainActivity.this, new SaveListener() {
+							
+							@Override
+							public void onSuccess() {
+								String objectId = note.getObjectId();
+								LogUtils.d(TAG, "insert.success:" + objectId);
+								
+								ContentValues values = new ContentValues();
+								values.put(NoteColumns.OBJECT_ID, objectId);
+								
+								Uri uri = Uri.parse(MetaData.NoteColumns.CONTENT_URI + "/" + note.getId());
+								getContentResolver().update(uri, values, null, null);
+								
+							}
+							
+							@Override
+							public void onFailure(int arg0, String arg1) {
+								LogUtils.e(TAG, "insert.faile:" + arg1);
+							}
+						});
 					}
 				}
+//				List<BmobObject> notes = new ArrayList<BmobObject>();
+//				Note note = null;
+//				for (int pos = getListView().getCount() - 1; pos >= 0; pos--) {
+//					if (mAdapter.isSelected(pos)) {
+//						cursor.moveToPosition(pos);
+//						note = Note.getNoteFromCursor(cursor);
+//						notes.add(note);
+//					}
+//				}
+//				
+//				new BmobObject().insertBatch(NoteMainActivity.this, notes, new SaveListener() {
+//					@Override
+//					public void onSuccess() {
+//						LogUtils.d(TAG, "backup success");
+//					}
+//					
+//					@Override
+//					public void onFailure(int arg0, String arg1) {
+//						LogUtils.e(TAG, "backup failed:" + arg1);
+//					}
+//				});
 				break;
 
 			default:

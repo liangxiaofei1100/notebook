@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -13,11 +12,14 @@ import android.view.MenuItem;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
+import cn.bmob.v3.listener.DeleteListener;
+
 import com.yuri.notebook.NoteManager;
 import com.yuri.notebook.R;
 import com.yuri.notebook.bean.Note;
 import com.yuri.notebook.db.MetaData;
 import com.yuri.notebook.utils.DateFormatUtils;
+import com.yuri.notebook.utils.LogUtils;
 import com.yuri.notebook.utils.NoteUtil;
 
 public class CheckNoteActivity extends Activity {
@@ -25,16 +27,9 @@ public class CheckNoteActivity extends Activity {
 	private TextView mContentTv;
 	private TextView mGroupTv;
 	private TextView mDateTv;
-
 	private long itemId;
 
-	private NoteManager mNoteManager;
-
 	private Note mNoteBook;
-	
-	private long mTime = 0;
-	
-	private SharedPreferences sp = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +70,6 @@ public class CheckNoteActivity extends Activity {
 		
 		DateFormatUtils dateFormatUtils = new DateFormatUtils(getApplicationContext(), System.currentTimeMillis());
 		mDateTv.setText(dateFormatUtils.getDateFormatString(mNoteBook.getTime()));
-//		sp = getSharedPreferences(NoteUtil.SHARED_NAME, MODE_PRIVATE);
-//		int font_size = sp.getInt(NoteUtil.FONT_SET, 1);
-//		NoteUtil.setFontSize(contentText, font_size);
-//		int color = sp.getInt(NoteUtil.COLOR_SET, 3);
-//		NoteUtil.setBackgroundColor(contentText, color);
 		setResult(RESULT_CANCELED);
 	}
 
@@ -124,6 +114,20 @@ public class CheckNoteActivity extends Activity {
 							getContentResolver().delete(uri, null, null);
 							
 							setResult(RESULT_OK);
+							
+							mNoteBook.delete(CheckNoteActivity.this, new DeleteListener() {
+								
+								@Override
+								public void onSuccess() {
+									LogUtils.d(TAG, "delete.success");
+								}
+								
+								@Override
+								public void onFailure(int arg0, String arg1) {
+									LogUtils.e(TAG, "delete.failed:" + arg1);
+								}
+							});
+							
 							CheckNoteActivity.this.finish();
 						}
 					}).setNegativeButton(android.R.string.cancel, null).create().show();

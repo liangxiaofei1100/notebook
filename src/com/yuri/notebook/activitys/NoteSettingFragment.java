@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -15,6 +17,8 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.os.Parcelable;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -25,11 +29,14 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.widget.Toast;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindCallback;
+import cn.bmob.v3.listener.FindListener;
+
 import com.yuri.notebook.R;
 import com.yuri.notebook.bean.Note;
 import com.yuri.notebook.db.MetaData;
 import com.yuri.notebook.db.MetaData.NoteColumns;
-import com.yuri.notebook.net.FrontiaManager;
 import com.yuri.notebook.utils.LogUtils;
 import com.yuri.notebook.utils.NoteUtil;
 
@@ -109,8 +116,29 @@ public class NoteSettingFragment extends PreferenceFragment implements OnPrefere
 			mProgressDialog.setCancelable(false);
 			mProgressDialog.show();
 			
-			FrontiaManager frontiaManager = new FrontiaManager();
-			frontiaManager.queryAll(mHandler);
+			BmobQuery<Note> query = new BmobQuery<Note>();
+			query.findObjects(getActivity(), new FindListener<Note>() {
+				
+				@Override
+				public void onSuccess(List<Note> arg0) {
+					LogUtils.d(TAG, "query.success:" + arg0.size());
+					Message message = new Message();
+					message.what  = MSG_QUERY_ALL_OVER;
+					Bundle bundle = new Bundle();
+					bundle.putParcelableArrayList("notelist", (ArrayList<? extends Parcelable>) arg0);
+					message.setData(bundle);
+					message.setTarget(mHandler);
+					message.sendToTarget();
+				}
+				
+				@Override
+				public void onError(int arg0, String arg1) {
+					// TODO Auto-generated method stub
+					LogUtils.e(TAG, "query.failed:" + arg1);
+				}
+			});
+			
+			
 		}else if (mUsePwPref == preference) {
 			Editor editor = sp.edit();
 			editor.putBoolean(NoteUtil.USE_PASSWORD, mUsePwPref.isChecked());
