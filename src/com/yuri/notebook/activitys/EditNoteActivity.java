@@ -5,14 +5,12 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,16 +43,12 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 	private EditText mContentEdit;
 
 	private long mTime;
-	private String mTitle = "";
 	private String mContent = "";
 	private String mGroup = "";
 	
 	long itemId = -1;
 	
 	private Note mNoteBook;
-	
-	private SharedPreferences sp = null;
-	
 	private Spinner mSpinner;
 	
 	private String[] mGroups = null;
@@ -275,11 +269,9 @@ public class EditNoteActivity extends Activity implements OnItemSelectedListener
 	}
 	
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (KeyEvent.KEYCODE_BACK == keyCode) {
-			doSaveAction();
-		}
-		return super.onKeyDown(keyCode, event);
+	public void onBackPressed() {
+		doSaveAction();
+		super.onBackPressed();
 	}
 	
 	private void noteFinish(){

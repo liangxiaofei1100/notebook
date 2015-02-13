@@ -18,3 +18,20 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-ignorewarnings
+-libraryjars libs/BmobSDK_V3.3.3_0211.jar
+
+-keepattributes Signature
+-keep class cn.bmob.v3.** {*;}
+-keep class cn.bmob.push.** {*;}
+
+
+# 保证继承自BmobObject、BmobUser类的JavaBean不被混淆
+-keep class com.example.bmobexample.bean.Person{*;}
+-keep class com.example.bmobexample.bean.MyUser{*;}
+-keep class com.example.bmobexample.bean.BankCard{*;}
+-keep class com.example.bmobexample.file.Movie{*;}
+-keep class com.example.bmobexample.file.Song{*;}
+-keep class com.example.bmobexample.relationaldata.Weibo{*;}
+-keep class com.example.bmobexample.relationaldata.Comment{*;}

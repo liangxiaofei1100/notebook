@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yuri.notebook"
     android:versionCode="2"
-    android:versionName="2.0" >
+    android:versionName="3.0(Bmob)" >
 
     <uses-sdk
         android:minSdkVersion="14"

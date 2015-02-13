@@ -266,84 +266,84 @@ public class NoteMainActivity extends ListActivity implements
 			editor3.putString(NoteUtil.LIST_SORT, mSort);
 			editor3.commit();
 			break;
-		case R.id.menu_test:
-			
-			// 只要第一次创建一下database目录就可以了
-			File databaseDir = new File("/data/data/com.yuri.notebook/files/database");
-			if (!databaseDir.exists()) {
-				databaseDir.mkdirs();
-			}
-			
-			String srcFileName = "notebook.db";
-			File desFile = new File("/data/data/com.yuri.notebook/files/database/notebook.db");
-
-			if (desFile.exists() && desFile.isFile()) {
-				Log.d(TAG, desFile.getName() + " is exist");
-			} else if (!desFile.exists()) {
-				
-				FileOutputStream fos = null;
-				try {
-					desFile.createNewFile();
-					byte[] buffer = new byte[4096];
-					InputStream inputStream = getAssets().open(srcFileName);
-					fos = new FileOutputStream(desFile);
-					int count;
-					count = inputStream.read(buffer);
-					while (count > 0) {
-						fos.write(buffer);
-						count = inputStream.read(buffer);
-					}
-
-					fos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-					Log.e(TAG, "doCopyDB.fail exception : " + e.toString());
-				}
-			}
-			break;
-		case R.id.menu_test1:
-			ContentResolver contentResolver = getContentResolver();
-			SQLiteDatabase sqLiteDatabase = new DbHelper().getReadDb();
-			Cursor cursor = sqLiteDatabase.query(NoteColumns2.TABLE_NAME, NoteUtil.COLUMNS, null, null, null, null, NoteColumns2.SORT_ORDER_DEFAULT);
-//			Cursor cursor = contentResolver.query(NoteColumns2.CONTENT_URI, NoteUtil.COLUMNS, null, null, NoteColumns.SORT_ORDER_DEFAULT);
-			if (cursor != null && cursor.moveToFirst()) {
-				String objectId = "";
-				String content = "";
-				String group = "";
-				long time = 0;
-				
-				ContentValues values = null;
-				do {
-					objectId = cursor.getString(cursor.getColumnIndex(NoteColumns.OBJECT_ID));
-					content = cursor.getString(cursor.getColumnIndex(NoteColumns.CONTENT));
-					group = cursor.getString(cursor.getColumnIndex(NoteColumns.GROUP));
-					time = cursor.getLong(cursor.getColumnIndex(NoteColumns.TIME));
-					
-					values = new ContentValues();
-					values.put(NoteColumns.OBJECT_ID, objectId);
-					values.put(NoteColumns.CONTENT, content);
-					values.put(NoteColumns.GROUP, group);
-					values.put(NoteColumns.TIME, time);
-					
-					contentResolver.insert(NoteColumns.CONTENT_URI, values);
-				} while (cursor.moveToNext());
-			}
-			break;
-		case R.id.menu_test2:
-			LogUtils.d(TAG, "Menu_Query");
-			BmobQuery<Note> query = new BmobQuery<Note>();
-			query.findObjects(this, new FindListener<Note>() {
-				@Override
-				public void onSuccess(List<Note> arg0) {
-					LogUtils.d(TAG, "query.success.count:" + arg0.size());
-				}
-				
-				@Override
-				public void onError(int arg0, String arg1) {
-					LogUtils.e(TAG, "error:" + arg1);
-				}
-			});
-			break;
+//		case R.id.menu_test:
+//			
+//			// 只要第一次创建一下database目录就可以了
+//			File databaseDir = new File("/data/data/com.yuri.notebook/files/database");
+//			if (!databaseDir.exists()) {
+//				databaseDir.mkdirs();
+//			}
+//			
+//			String srcFileName = "notebook.db";
+//			File desFile = new File("/data/data/com.yuri.notebook/files/database/notebook.db");
+//
+//			if (desFile.exists() && desFile.isFile()) {
+//				Log.d(TAG, desFile.getName() + " is exist");
+//			} else if (!desFile.exists()) {
+//				
+//				FileOutputStream fos = null;
+//				try {
+//					desFile.createNewFile();
+//					byte[] buffer = new byte[4096];
+//					InputStream inputStream = getAssets().open(srcFileName);
+//					fos = new FileOutputStream(desFile);
+//					int count;
+//					count = inputStream.read(buffer);
+//					while (count > 0) {
+//						fos.write(buffer);
+//						count = inputStream.read(buffer);
+//					}
+//
+//					fos.close();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//					Log.e(TAG, "doCopyDB.fail exception : " + e.toString());
+//				}
+//			}
+//			break;
+//		case R.id.menu_test1:
+//			ContentResolver contentResolver = getContentResolver();
+//			SQLiteDatabase sqLiteDatabase = new DbHelper().getReadDb();
+//			Cursor cursor = sqLiteDatabase.query(NoteColumns2.TABLE_NAME, NoteUtil.COLUMNS, null, null, null, null, NoteColumns2.SORT_ORDER_DEFAULT);
+////			Cursor cursor = contentResolver.query(NoteColumns2.CONTENT_URI, NoteUtil.COLUMNS, null, null, NoteColumns.SORT_ORDER_DEFAULT);
+//			if (cursor != null && cursor.moveToFirst()) {
+//				String objectId = "";
+//				String content = "";
+//				String group = "";
+//				long time = 0;
+//				
+//				ContentValues values = null;
+//				do {
+//					objectId = cursor.getString(cursor.getColumnIndex(NoteColumns.OBJECT_ID));
+//					content = cursor.getString(cursor.getColumnIndex(NoteColumns.CONTENT));
+//					group = cursor.getString(cursor.getColumnIndex(NoteColumns.GROUP));
+//					time = cursor.getLong(cursor.getColumnIndex(NoteColumns.TIME));
+//					
+//					values = new ContentValues();
+//					values.put(NoteColumns.OBJECT_ID, objectId);
+//					values.put(NoteColumns.CONTENT, content);
+//					values.put(NoteColumns.GROUP, group);
+//					values.put(NoteColumns.TIME, time);
+//					
+//					contentResolver.insert(NoteColumns.CONTENT_URI, values);
+//				} while (cursor.moveToNext());
+//			}
+//			break;
+//		case R.id.menu_test2:
+//			LogUtils.d(TAG, "Menu_Query");
+//			BmobQuery<Note> query = new BmobQuery<Note>();
+//			query.findObjects(this, new FindListener<Note>() {
+//				@Override
+//				public void onSuccess(List<Note> arg0) {
+//					LogUtils.d(TAG, "query.success.count:" + arg0.size());
+//				}
+//				
+//				@Override
+//				public void onError(int arg0, String arg1) {
+//					LogUtils.e(TAG, "error:" + arg1);
+//				}
+//			});
+//			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
